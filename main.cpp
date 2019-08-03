@@ -2,6 +2,6 @@
 
 int main()
 {
-    T1::test();
+    T5::test();
     return 0;
 }
