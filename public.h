@@ -1,6 +1,10 @@
+#pragma once
+
 #include <algorithm>
 #include <iostream>
+#include <map>
 #include <queue>
+#include <set>
 #include <sstream>
 #include <stack>
 #include <string>
@@ -30,6 +34,7 @@ struct TreeNode {
     {
     }
 };
+
 void trimLeftTrailingSpaces(string& input)
 {
     input.erase(input.begin(), find_if(input.begin(), input.end(), [](int ch) {
@@ -200,5 +205,24 @@ void test2()
         TreeNode* root = stringToTreeNode(line);
         prettyPrintTree(root);
     }
+}
+} // namespace util
+
+void split(vector<string>& vs, const string& s, const char delim = ' ')
+{
+    string temp;
+    istringstream iss(s);
+    while (getline(iss, temp, delim)) {
+        vs.push_back(temp);
+    }
+}
+
+namespace util {
+void test3()
+{
+    vector<string> res;
+    split(res, "I am a student.");
+    for (auto s : res)
+        cout << s << endl;
 }
 } // namespace util

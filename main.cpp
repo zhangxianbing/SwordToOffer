@@ -1,7 +1,10 @@
+#include "dji.h"
+#include "ex.h"
 #include "solution.h"
 
 int main()
 {
-    T5::test();
+    // OrderIter::test();
+    EX2::test();
     return 0;
 }
