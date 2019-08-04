@@ -1,4 +1,3 @@
-// 练习用
 #include "public.h"
 /*
 * 常用头文件
@@ -19,6 +18,23 @@ using namespace std;
 
 // 例：采购单（京东2017秋招真题）https://exercise.acmcoder.com/online/online_judge_ques?ques_id=3378&konwledgeId=41
 // 这道题算法简单，主要难点是处理样例的输入
+/*
+样例输入(不含虚线):
+---------------------
+5 3
+4 2 1 10 5
+apple
+orange
+mango
+6 5
+3 5 1 6 8 1
+peach
+grapefruit
+banana
+orange
+orange
+---------------------
+ */
 namespace EX1 {
 void test()
 {
@@ -77,7 +93,7 @@ void test()
         for (int i = 0; i < int(V.size()) - 1; i++)
             cout << V[i] << " ";
         cout << V.back() << endl;
-        }
+    }
 }
 } // namespace EX2
 
