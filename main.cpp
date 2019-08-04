@@ -5,6 +5,6 @@
 int main()
 {
     // OrderIter::test();
-    EX2::test();
+    DJI1::test();
     return 0;
 }

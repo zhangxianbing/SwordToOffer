@@ -1,5 +1,21 @@
 // 练习用
 #include "public.h"
+/*
+* 常用头文件
+#include <algorithm>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
+* 数据结构
+#include <map>
+#include <queue>
+#include <set>
+#include <stack>
+#include <unordered_map>
+*
+using namespace std;
+ */
 
 // 例：采购单（京东2017秋招真题）https://exercise.acmcoder.com/online/online_judge_ques?ques_id=3378&konwledgeId=41
 // 这道题算法简单，主要难点是处理样例的输入
@@ -61,6 +77,11 @@ void test()
         for (int i = 0; i < int(V.size()) - 1; i++)
             cout << V[i] << " ";
         cout << V.back() << endl;
-    }
+        }
 }
 } // namespace EX2
+
+// 字典序（今日头条2017秋招真题） https://exercise.acmcoder.com/online/online_judge_ques?ques_id=3341&konwledgeId=158
+namespace EX3 {
+
+} // namespace EX3
