@@ -164,7 +164,7 @@ int findKthLargest(vector<int>& nums, int K)
 
 //* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ *//
 //* 滑动窗口
-//! 注 LC3(2), LC159,LC340, LC76，LC438异曲同工
+//! 注 LC3(2), LC159, LC340, LC76，LC438异曲同工
 namespace LC3 {
 // 思路1：哈希表记录每个元素最新出现的位置（序号）
 int lengthOfLongestSubstring1(string s)
