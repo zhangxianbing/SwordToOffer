@@ -1,0 +1,14 @@
+#pragma once
+#include "../public.h"
+
+//! 优先队列的底层实现是堆
+// 347. 前 K 个高频元素
+namespace LC347 {
+
+} // namespace LC347
+
+// 23. 合并K个排序链表
+// 思路：利用优先队列实现k路归并
+namespace LC23 {
+
+} // namespace LC23
