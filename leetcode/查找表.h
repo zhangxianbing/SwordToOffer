@@ -133,6 +133,12 @@ int fourSumCount(vector<int>& A, vector<int>& B, vector<int>& C, vector<int>& D)
 } // namespace LC454
 
 namespace LC447 {
+int dist(vector<int>& p, vector<int>& q)
+{
+    int dx = p[0] - q[0];
+    int dy = p[1] - q[1];
+    return dx * dx + dy * dy;
+}
 int numberOfBoomerangs(vector<vector<int>>& points)
 {
     int res = 0;
@@ -144,13 +150,6 @@ int numberOfBoomerangs(vector<vector<int>>& points)
             res += it.second * (it.second - 1);
     }
     return res;
-}
-
-int dist(vector<int>& p, vector<int>& q)
-{
-    int dx = p[0] - q[0];
-    int dy = p[1] - q[1];
-    return dx * dx + dy * dy;
 }
 } // namespace LC447
 

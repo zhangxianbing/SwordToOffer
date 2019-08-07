@@ -59,6 +59,7 @@ void trimRightTrailingSpaces(string& input)
         input.end());
 }
 
+//! 其他转string
 string stringToString(string input)
 {
     assert(input.length() >= 2);
@@ -124,6 +125,23 @@ vector<int> stringToIntegerVector(string input)
     return output;
 }
 
+ListNode* stringToListNode(string input)
+{
+    // Generate list from the input
+    vector<int> list = stringToIntegerVector(input);
+
+    // Now convert that list into linked list
+    ListNode* dummyRoot = new ListNode(0);
+    ListNode* ptr = dummyRoot;
+    for (int item : list) {
+        ptr->next = new ListNode(item);
+        ptr = ptr->next;
+    }
+    ptr = dummyRoot->next;
+    delete dummyRoot;
+    return ptr;
+}
+
 string integerVectorToString(vector<int> list, int length = -1)
 {
     if (length == -1) {
@@ -142,21 +160,18 @@ string integerVectorToString(vector<int> list, int length = -1)
     return "[" + result.substr(0, result.length() - 2) + "]";
 }
 
-ListNode* stringToListNode(string input)
+string listNodeToString(ListNode* node)
 {
-    // Generate list from the input
-    vector<int> list = stringToIntegerVector(input);
-
-    // Now convert that list into linked list
-    ListNode* dummyRoot = new ListNode(0);
-    ListNode* ptr = dummyRoot;
-    for (int item : list) {
-        ptr->next = new ListNode(item);
-        ptr = ptr->next;
+    if (node == nullptr) {
+        return "[]";
     }
-    ptr = dummyRoot->next;
-    delete dummyRoot;
-    return ptr;
+
+    string result;
+    while (node) {
+        result += to_string(node->val) + ", ";
+        node = node->next;
+    }
+    return "[" + result.substr(0, result.length() - 2) + "]";
 }
 
 void prettyPrintLinkedList(ListNode* node)

@@ -7,6 +7,6 @@
 int main()
 {
     // OrderIter::test();
-    DJI1::test();
+    LC328::test();
     return 0;
 }
