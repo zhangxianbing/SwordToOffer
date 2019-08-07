@@ -1,7 +1,7 @@
 #pragma once
 #include "public.h"
 
-namespace STO1 {
+namespace ST1 {
 void helper(vector<string>& res, string& str, int k)
 {
     if (k == int(str.size()) - 1) {
@@ -57,7 +57,7 @@ void test()
 } // namespace T1
 
 // 归并排序求逆数堆有两个要注意的地方：1、复制数组在‘分’之后；2、res += m-i+1
-namespace STO2 {
+namespace ST2 {
 long util(vector<int>& raw, vector<int>& data, int l, int r)
 {
     if (l >= r)
@@ -91,7 +91,7 @@ void test()
 }
 } // namespace T2
 
-namespace STO3 {
+namespace ST3 {
 int GetNumberOfK(vector<int> data, int k)
 {
     if (data.empty())
@@ -121,7 +121,7 @@ void test()
 }
 } // namespace T3
 
-namespace STO4 {
+namespace ST4 {
 bool match(char* str, char* pattern)
 {
     if (pattern[0] == 0 && str[0] == 0) {
@@ -145,7 +145,7 @@ bool match(char* str, char* pattern)
 }
 } // namespace T4
 
-namespace STO5 {
+namespace ST5 {
 ListNode* deleteDuplication(ListNode* head)
 {
     if (!head)
