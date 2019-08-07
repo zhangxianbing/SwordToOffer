@@ -1,8 +1,6 @@
 #pragma once
 #include "../public.h"
 
-//! 链表穿针引线
-
 namespace LC206 {
 ListNode* reverseList(ListNode* head)
 {

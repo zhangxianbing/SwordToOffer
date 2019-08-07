@@ -1,6 +1,5 @@
 #pragma once
 #include "../public.h"
-//! 查找表
 
 // 349. 两个数组的交集
 namespace LC349 {
