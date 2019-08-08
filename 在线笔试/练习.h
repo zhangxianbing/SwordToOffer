@@ -1,3 +1,4 @@
+#pragma once
 #include "../public.h"
 /*
 * 常用头文件
