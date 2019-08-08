@@ -4,39 +4,37 @@
 
  */
 namespace DJI1 {
-void test()
-{
-    int N, A, X;
-    while (cin >> N >> A >> X) {
-        int t;
-        vector<int> v;
-        for (int i = 0; i < N; i++)
-            cin >> t, v.push_back(t);
-        sort(v.begin(), v.end());
+void test() {
+  int N, A, X;
+  while (cin >> N >> A >> X) {
+    int t;
+    vector<int> v;
+    for (int i = 0; i < N; i++) cin >> t, v.push_back(t);
+    sort(v.begin(), v.end());
 
-        int s = 0, cost = 0, i = N - 1;
-        for (; i >= 0; i--) {
-            s += v[i];
-            t = (s + A - 1) / A;
-            if (t <= X * 60) {
-                cost = t;
-            } else {
-                int d = X * 60 - cost;
-                cost = 60 * X + (v[i] - A * d);
-                break;
-            }
-        }
-        for (i--; i >= 0; i--) {
-            cost += v[i];
-        }
-
-        if (cost > 480)
-            cout << 0 << endl;
-        else
-            cout << cost << endl;
+    int s = 0, cost = 0, i = N - 1;
+    for (; i >= 0; i--) {
+      s += v[i];
+      t = (s + A - 1) / A;
+      if (t <= X * 60) {
+        cost = t;
+      } else {
+        int d = X * 60 - cost;
+        cost = 60 * X + (v[i] - A * d);
+        break;
+      }
     }
+    for (i--; i >= 0; i--) {
+      cost += v[i];
+    }
+
+    if (cost > 480)
+      cout << 0 << endl;
+    else
+      cout << cost << endl;
+  }
 }
-} // namespace DJI1
+}  // namespace DJI1
 
 /*
 应该吃哪个呢
@@ -52,9 +50,11 @@ void test()
 输入
 输入包含多组测试数据，每组数组:
 
-第一行有两个正整数 N, T, 分别表示，零食的种类数目 和 小A最多用于购买零食的钱。（1 <= N <= 100, 1 <= T <= 10000）
+第一行有两个正整数 N, T, 分别表示，零食的种类数目 和
+小A最多用于购买零食的钱。（1 <= N <= 100, 1 <= T <= 10000）
 
-接下来有N行，每行有三个正整数用空格隔开，按顺序表示 零食需要的价格v，满意度l 和 零食的数量c。(1 <= v <= 100, 1 <= l <= 100 ,1 <= c <= 100)
+接下来有N行，每行有三个正整数用空格隔开，按顺序表示 零食需要的价格v，满意度l 和
+零食的数量c。(1 <= v <= 100, 1 <= l <= 100 ,1 <= c <= 100)
 
 输出
 对于每组测试数据:
@@ -76,34 +76,35 @@ void test()
 
  */
 namespace DJI2 {
-int test()
-{
-    int N, T;
-    while (cin >> N >> T) {
-        int t1, t2, t3;
-        vector<int> v, l, c;
-        vector<float> a;
-        for (int i = 0; i < N; i++) {
-            cin >> t1 >> t2 >> t3;
-            for (int j = 0; j < t3; j++) {
-                v.push_back(t1);
-                l.push_back(t2);
-                a.push_back((float)t2 / (float)t1);
-            }
-        }
+int test() {
+  int N, T;
+  while (cin >> N >> T) {
+    int t1, t2, t3;
+    vector<int> v, l, c;
+    vector<float> a;
+    for (int i = 0; i < N; i++) {
+      cin >> t1 >> t2 >> t3;
+      for (int j = 0; j < t3; j++) {
+        v.push_back(t1);
+        l.push_back(t2);
+        a.push_back((float)t2 / (float)t1);
+      }
     }
-    return 0;
+  }
+  return 0;
 }
-} // namespace DJI2
+}  // namespace DJI2
 
 /*
 机器人大战
 时间限制：C/C++语言 1000MS；其他语言 3000MS
 内存限制：C/C++语言 65536KB；其他语言 589824KB
 题目描述：
-最近DJI发布了一款Robomaster S1机器人，小伙伴们都沉迷其中不能自拔。小J为了能够在竞速比赛中迅速获胜，他决定利用开发的优势，在里面植入一套最优化的寻路算法。
+最近DJI发布了一款Robomaster
+S1机器人，小伙伴们都沉迷其中不能自拔。小J为了能够在竞速比赛中迅速获胜，他决定利用开发的优势，在里面植入一套最优化的寻路算法。
 
-小伙伴们为了提高难度，决定调整规则如下: 在比赛场地内预先设置N个路标，路标编号从0到N-1，S1只能沿直线在两个路标之间移动，且规定部分路标点之间是不能进行移动的。
+小伙伴们为了提高难度，决定调整规则如下:
+在比赛场地内预先设置N个路标，路标编号从0到N-1，S1只能沿直线在两个路标之间移动，且规定部分路标点之间是不能进行移动的。
 
 比赛场地内的S1机器人从编号为0的路标出发，然后裁判给出随机一个路标，要求S1机器人以尽可能快的速度达到路标位置，每轮比赛都会从头开始，最终总时间最短者获胜。
 
@@ -114,11 +115,15 @@ int test()
 输入
 输入包含多组测试数据，每组数组:
 
-第一行有三个正整数 N, P，C， 分别表示 路标的数目， 可以移动的路标的通路的数目， 以及裁判进行比赛的轮数。 (1 < N <= 200,  N * (N - 1) / 2 <= P <= 400, N - 1 <= C <= 10)
+第一行有三个正整数 N, P，C， 分别表示 路标的数目， 可以移动的路标的通路的数目，
+以及裁判进行比赛的轮数。 (1 < N <= 200,  N * (N - 1) / 2 <= P <= 400, N - 1 <= C
+<= 10)
 
-接下来的P行，每行输入三个正整数 A, B, T，表示从 路标A到路标B需要时间T。 (0 <= A, B < N, 1 <= T <= 100)
+接下来的P行，每行输入三个正整数 A, B, T，表示从 路标A到路标B需要时间T。 (0 <= A,
+B < N, 1 <= T <= 100)
 
-然后接下来的C行，每行输入一个正整数 X，表示裁判每轮比赛给出的要达到的路标编号 (0 < X < N)
+然后接下来的C行，每行输入一个正整数 X，表示裁判每轮比赛给出的要达到的路标编号 (0
+< X < N)
 
 输出
 对于每组测试数据:
@@ -143,6 +148,4 @@ int test()
 10
 85
  */
-namespace T3 {
-
-} // namespace T3
+namespace T3 {}  // namespace T3
