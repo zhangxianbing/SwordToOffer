@@ -6,8 +6,11 @@
 //! 滑动窗口本质也是双指针
 //* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ *//
 
+//! 哈希表+滑动窗口
+
+// TODO 3.无重复字符的最长子串
 namespace LC3 {
-// 思路1：哈希表记录每个元素最新出现的位置（序号）
+//* 思路1：哈希表记录每个元素最新出现的位置（序号）
 int lengthOfLongestSubstring1(string s) {
   unordered_map<char, int> m;
   int start = 0, ret = 0;
@@ -20,7 +23,7 @@ int lengthOfLongestSubstring1(string s) {
   }
   return ret;
 }
-// 思路2：
+//* 思路2：哈希表+滑动窗口
 int lengthOfLongestSubstring(string s) {
   unordered_map<char, int> m;
   int i = 0, j = 0, res = 0, n = 0;
@@ -34,7 +37,9 @@ int lengthOfLongestSubstring(string s) {
 }
 }  // namespace LC3
 
+// TODO [ 159] 至多包含两个不同字符的最长子串
 namespace LC159 {
+//* 思路：哈希表+滑动窗口
 int lengthOfLongestSubstringTwoDistinct(string s) {
   unordered_map<char, int> m;
   int i = 0, j = 0, res = 0, n = 0;
@@ -48,7 +53,9 @@ int lengthOfLongestSubstringTwoDistinct(string s) {
 }
 }  // namespace LC159
 
+// TODO [ 340] 至多包含 K 个不同字符的最长子串
 namespace LC340 {
+//* 思路：哈希表+滑动窗口
 int lengthOfLongestSubstringKDistinct(string s, int k) {
   unordered_map<char, int> m;
   int i = 0, j = 0, res = 0, n = 0;
@@ -62,33 +69,39 @@ int lengthOfLongestSubstringKDistinct(string s, int k) {
 }
 }  // namespace LC340
 
-// 30. 串联所有单词的子串
+// TODO 30. 串联所有单词的子串
 namespace LC30 {
+//* 思路：哈希表+滑动窗口
 vector<int> findSubstring(string s, vector<string>& words) {
-  if (words.empty()) return {};
   vector<int> res;
-  unordered_map<string, int> M;
-  for (auto& word : words) ++M[word];
+  if (words.empty()) return res;
   int m = words.size(), n = words[0].size(), l = s.size();
-  int i = 0, j = 0, c = m;
-  while (j + n <= l) {
-    if (M[s.substr(j++, n)]-- > 0) c--;
-    while (c == 0) {
-      if (j - 1 - i == n * (m - 1)) res.push_back(i);
-      while (i + n <= l && M[s.substr(i++, n)]++ == 0) c++;
+  for (int k = 0; k < n; k++) {
+    unordered_map<string, int> M;
+    for (auto& word : words) ++M[word];
+    int i = k, j = k, c = m;
+    while (j + n <= l) {
+      if (M[s.substr(j, n)]-- > 0) c--;
+      j += n;
+      while (c == 0) {
+        if (j - i == n * m) res.push_back(i);
+        if (i + n <= l && M[s.substr(i, n)]++ == 0) c++;
+        i += n;
+      }
     }
   }
   return res;
 }
 void test() {
-  string s = "aaa";
-  vector<string> words = {"a", "a"};
+  string s = "a";
+  vector<string> words = {"a"};
   findSubstring(s, words);
 }
 }  // namespace LC30
 
-// 76. 最小覆盖子串
+// TODO 76. 最小覆盖子串
 namespace LC76 {
+//* 思路：哈希表+滑动窗口 模板
 string minWindow(string s, string t) {
   unordered_map<char, int> m;
   for (auto c : t) ++m[c];
@@ -104,9 +117,7 @@ string minWindow(string s, string t) {
 }
 }  // namespace LC76
 
-namespace LC159 {}  // namespace LC159
-
-// 209. 长度最小的子数组
+// TODO 209. 长度最小的子数组
 namespace LC209 {
 int minSubArrayLen(int s, vector<int>& nums) {
   int n = nums.size(), i = 0, j = 0, t = 0, res = INT32_MAX;
@@ -123,7 +134,7 @@ int minSubArrayLen(int s, vector<int>& nums) {
 
 namespace LC239 {}  // namespace LC239
 
-// 438. 找到字符串中所有字母异位词
+// TODO 438. 找到字符串中所有字母异位词
 namespace LC438 {
 vector<int> findAnagrams(string s, string p) {
   vector<int> ret;
@@ -141,8 +152,17 @@ vector<int> findAnagrams(string s, string p) {
 }
 }  // namespace LC438
 
+// TODO
 namespace LC567 {}  // namespace LC567
 
+// TODO
 namespace LC632 {}  // namespace LC632
 
+// TODO
 namespace LC727 {}  // namespace LC727
+
+// TODO 1100. 长度为 K 的无重复字符子串
+namespace LC1100 {}  // namespace LC1100
+
+// TODO 995. K 连续位的最小翻转次数
+namespace LC995 {}  // namespace LC995
