@@ -1,5 +1,8 @@
 #pragma once
-#include "public.h"
+#include "../public.h"
+//* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ *//
+//! 剑指Offer部分题
+//* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ *//
 
 namespace ST1 {
 void helper(vector<string>& res, string& str, int k) {

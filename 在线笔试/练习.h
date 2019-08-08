@@ -1,4 +1,4 @@
-#include "public.h"
+#include "../public.h"
 /*
 * 常用头文件
 #include <algorithm>

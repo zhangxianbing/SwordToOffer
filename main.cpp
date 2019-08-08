@@ -1,11 +1,9 @@
-#include "dji.h"
-#include "ex.h"
 #include "leetcode/include.h"
-#include "solution.h"
-#include "sword_to_offer.h"
+#include "在线笔试/include.h"
+#include "算法面试/include.h"
 
 int main() {
   // OrderIter::test();
-  LC30::test();
+  // LC992::test();
   return 0;
 }

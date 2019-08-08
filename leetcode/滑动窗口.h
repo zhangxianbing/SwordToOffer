@@ -99,7 +99,7 @@ void test() {
 }
 }  // namespace LC30
 
-// TODO 76. 最小覆盖子串
+// TODO 76. 最小覆盖子串 （经典题☆☆☆☆☆）
 namespace LC76 {
 //* 思路：哈希表+滑动窗口 模板
 string minWindow(string s, string t) {
@@ -132,7 +132,22 @@ int minSubArrayLen(int s, vector<int>& nums) {
 }
 }  // namespace LC209
 
-namespace LC239 {}  // namespace LC239
+// TODO 239. 滑动窗口最大值
+namespace LC239 {
+// 一开始的思路是建立一个最大堆，麻烦！而C++STL中的priority_queue不好删除元素
+// 可以考虑使用双向队列
+vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+  vector<int> res;
+  deque<int> dq;
+  for (int i = 0; i < nums.size(); i++) {
+    while (!dq.empty() && nums[i] > nums[dq.back()]) dq.pop_back();
+    dq.push_back(i);
+    while (!dq.empty() && dq.front() <= i - k) dq.pop_front();
+    if (i >= k - 1) res.push_back(nums[dq.front()]);
+  }
+  return res;
+}
+}  // namespace LC239
 
 // TODO 438. 找到字符串中所有字母异位词
 namespace LC438 {
@@ -152,13 +167,27 @@ vector<int> findAnagrams(string s, string p) {
 }
 }  // namespace LC438
 
-// TODO
-namespace LC567 {}  // namespace LC567
+// TODO 567. 字符串的排列
+namespace LC567 {
+bool checkInclusion(string s1, string s2) {
+  unordered_map<char, int> m;
+  for (auto& c : s1) ++m[c];
+  int i = 0, j = 0, c = s1.size();
+  while (j < s2.size()) {
+    if (m[s2[j++]]-- > 0) c--;
+    while (c == 0) {
+      if (j - i == s1.size()) return true;
+      if (m[s2[i++]]++ == 0) c++;
+    }
+  }
+  return false;
+}
+}  // namespace LC567
 
-// TODO
+// TODO 632. 最小区间
 namespace LC632 {}  // namespace LC632
 
-// TODO
+// TODO 727. 最小窗口子序列
 namespace LC727 {}  // namespace LC727
 
 // TODO 1100. 长度为 K 的无重复字符子串
@@ -166,3 +195,45 @@ namespace LC1100 {}  // namespace LC1100
 
 // TODO 995. K 连续位的最小翻转次数
 namespace LC995 {}  // namespace LC995
+
+// TODO 992. K 个不同整数的子数组 (待debug)
+namespace LC992 {
+int subarraysWithKDistinct(vector<int>& A, int K) {
+  int res = 0;
+  unordered_map<int, int> m;
+  int n = A.size(), i = 0, j = 0, c = 0;
+  while (j < n) {
+    if (m[A[j++]]++ == 0) c++;
+    if (c == K) {
+      res++;
+      // 先右边扩张，再左边缩放
+      while (j < n && m[A[j++]]++ > 0) res++;
+      while (i < n && m[A[i++]]-- != 1) res++;
+      c--;
+    }
+  }
+  return res;
+}
+void test() {
+  string line;
+  vector<int> A = {1, 2, 1, 2, 3};
+  int ret = subarraysWithKDistinct(A, 2);
+  string out = to_string(ret);
+  cout << out << endl;
+}
+}  // namespace LC992
+
+// TODO 674. 最长连续递增序列
+namespace LC674 {
+int findLengthOfLCIS(vector<int>& nums) {
+  int res = 0;
+  int i = 0, j = 0, n = nums.size();
+  while (j < n) {
+    while (j + 1 < n && nums[j + 1] > nums[j]) j++;
+    res = max(res, j - i + 1);
+    j++;
+    i = j;
+  }
+  return res;
+}
+}  // namespace LC674

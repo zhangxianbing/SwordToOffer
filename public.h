@@ -1,13 +1,13 @@
 #pragma once
-
-// 包含以下内容：
-// 链表、树的统一定义、生成、打印函数
-// split
+//* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ *//
+//! 包含各种辅助函数
+//* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ *//
 
 #include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <iostream>
+#include <list>
 #include <map>
 #include <numeric>
 #include <queue>

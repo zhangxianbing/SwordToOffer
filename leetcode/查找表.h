@@ -135,9 +135,6 @@ int numberOfBoomerangs(vector<vector<int>>& points) {
 }
 }  // namespace LC447
 
-// TODO 149. 直线上最多的点数
-namespace LC149 {}  // namespace LC149
-
 // TODO 217. 存在重复元素
 namespace LC217 {
 bool containsDuplicate(vector<int>& nums) {
@@ -201,3 +198,6 @@ bool containsNearbyAlmostDuplicate(vector<int>& nums, int k, int t) {
 }
 }  // namespace LC220
 }  // namespace LC217
+
+// TODO 149. 直线上最多的点数
+namespace LC149 {}  // namespace LC149

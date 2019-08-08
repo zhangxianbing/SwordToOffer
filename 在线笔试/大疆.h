@@ -1,4 +1,4 @@
-#include "public.h"
+#include "../public.h"
 
 /*
 
