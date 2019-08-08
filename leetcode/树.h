@@ -166,10 +166,61 @@ vector<vector<int>> levelOrder(Node* root) {
 }
 }  // namespace LC429
 
+// TODO 255. 验证前序遍历序列二叉搜索树
+namespace LC255 {}  // namespace LC255
+
 // TODO 314. 二叉树的垂直遍历
 namespace LC314 {
-vector<vector<int>> verticalOrder(TreeNode* root) {}
+//* 思路：此题本质还是一个层序遍历，每个节点附加一个偏移量
+vector<vector<int>> verticalOrder(TreeNode* root) {
+  if (!root) return {};
+  vector<vector<int>> res;
+  map<int, vector<int>> hash;
+  queue<pair<TreeNode*, int>> Q;
+  Q.push(make_pair(root, 1));
+  while (!Q.empty()) {
+    auto node = Q.front();
+    Q.pop();
+    hash[node.second].push_back(node.first->val);
+    auto left = node.first->left, right = node.first->right;
+    if (left) Q.push(make_pair(left, node.second - 1));
+    if (right) Q.push(make_pair(right, node.second + 1));
+  }
+  for (auto val : hash) res.push_back(val.second);
+  return res;
+}
 }  // namespace LC314
+
+// TODO 987. 二叉树的垂序遍历
+namespace LC987 {
+vector<vector<int>> verticalTraversal(TreeNode* root) {
+  if (!root) return {};
+  vector<vector<int>> res;
+  map<int, vector<pair<int, int>>> M;  // 先按x排序，再按y排序，再按val排序
+  queue<pair<TreeNode*, pair<int, int>>> Q;  // 节点及坐标
+  Q.push(make_pair(root, make_pair(0, 0)));
+  while (!Q.empty()) {
+    auto item = Q.front();
+    Q.pop();
+    auto node = item.first, left = node->left, right = node->right;
+    auto x = item.second.first, y = item.second.second;
+    M[x].push_back(make_pair(y, node->val));
+    if (left) Q.push(make_pair(left, make_pair(x - 1, y + 1)));
+    if (right) Q.push(make_pair(right, make_pair(x + 1, y + 1)));
+  }
+  for (auto& item : M) {
+    auto& v = item.second;
+    sort(v.begin(), v.end(),
+         [](const pair<int, int>& a, const pair<int, int>& b) {
+           return a.first == b.first ? a.second < b.second : a.first < b.first;
+         });
+    vector<int> tmp;
+    for (auto i : v) tmp.push_back(i.second);
+    res.push_back(tmp);
+  }
+  return res;
+}
+}  // namespace LC987
 
 // TODO 199. 二叉树的右视图
 namespace LC199 {
