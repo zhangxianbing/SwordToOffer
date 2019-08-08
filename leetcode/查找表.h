@@ -1,6 +1,8 @@
 #pragma once
 #include "../public.h"
-
+//* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ *//
+//! 查找表：包括map,set,unordered_map,unordered_set
+//* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ *//
 // 349. 两个数组的交集
 namespace LC349 {
 vector<int> intersection(vector<int>& nums1, vector<int>& nums2)
