@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-09 11:29:43
- * @LastEditTime: 2019-08-09 17:26:57
+ * @LastEditTime: 2019-08-09 23:55:10
  * @LastEditors: zhangxianbing
  */
 #pragma once
@@ -14,9 +14,10 @@
 //! 注意有的递归问题可以在自底向上时提前截断，防止重复不必要的遍历计算
 //! 二叉树一般涉及的问题类型有：
 //!     常规遍历、变种遍历以及遍历衍生而来的问题（其实基本所有树的问题都涉及到遍历）
-//!     树的路径、距离相关问题
+//!     路径相关问题：路径、距离以及衍生的路径和、路径数字、路径字符等等
 //!     遍历序列相关问题
 //!     深度优先遍历（前中后序遍历）和广度优先遍历（层序遍历）
+//!     动态规划问题(本质也是遍历问题,详见动态规划部分)
 //* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ *//
 
 //! 二叉树的各种遍历以及衍生遍历
@@ -181,9 +182,6 @@ vector<vector<int>> levelOrder(Node* root) {
 }
 }  // namespace LC429
 
-// TODO 255. 验证前序遍历序列二叉搜索树
-namespace LC255 {}  // namespace LC255
-
 // TODO 314. 二叉树的垂直遍历
 namespace LC314 {
 //* 思路：此题本质还是一个层序遍历，每个节点附加一个偏移量
@@ -301,64 +299,6 @@ bool isSameTree(TreeNode* p, TreeNode* q) {
 }
 }  // namespace LC100
 
-// TODO 572. 另一个树的子树
-namespace LC572 {
-bool isSameTree(TreeNode* p, TreeNode* q) {
-  if (!p && !q) return true;
-  if (bool(p) != bool(q)) return false;
-  return p->val == q->val && isSameTree(p->left, q->left) &&
-         isSameTree(p->right, q->right);
-}
-bool isSubtree(TreeNode* s, TreeNode* t) {
-  if (!s) return false;
-  return isSameTree(s, t) || isSubtree(s->left, t) || isSubtree(s->right, t);
-}
-}  // namespace LC572
-
-// TODO 250. 统计同值子树
-namespace LC250 {
-// 这里实际是前序遍历了一遍树来判断是否root树为同值树
-// 也可以用中序遍历，后序遍历，只要是深度优先遍历就行
-int helper(TreeNode* root, int val) {
-  if (!root) return 0;
-  if (root->val != val) return -1;
-  int l = helper(root->left, val);
-  if (l == -1) return -1;
-  int r = helper(root->right, val);
-  if (r == -1) return -1;
-  return 1;
-}
-int countUnivalSubtrees(TreeNode* root) {
-  if (!root) return 0;
-  return countUnivalSubtrees(root->left) + countUnivalSubtrees(root->right) +
-         (helper(root, root->val) > 0);
-}
-}  // namespace LC250
-
-// TODO 508. 出现次数最多的子树元素和
-namespace LC508 {
-//* 思路： 后序遍历求各子树的和,并存入一个map中
-int dfs(unordered_map<int, int>& M, TreeNode* root) {
-  if (!root) return 0;
-  int left = dfs(M, root->left);
-  int right = dfs(M, root->right);
-  int sum = left + right + root->val;
-  M[sum]++;
-  return sum;
-}
-vector<int> findFrequentTreeSum(TreeNode* root) {
-  if (!root) return {};
-  vector<int> res;
-  unordered_map<int, int> M;
-  dfs(M, root);
-  int maxTime = 0;
-  for (auto item : M) maxTime = max(maxTime, item.second);
-  for (auto item : M)
-    if (item.second == maxTime) res.push_back(item.first);
-  return res;
-}
-}  // namespace LC508
-
 // TODO 101. 对称二叉树
 namespace LC101 {
 bool isMirror(TreeNode* p, TreeNode* q) {
@@ -437,22 +377,24 @@ vector<string> binaryTreePaths(TreeNode* root) {
 }
 }  // namespace LC257
 
-namespace LC113 {}  // namespace LC113
+// TODO 129. 求根到叶子节点数字之和
+namespace LC129 {
+//* 思路：自顶向下的dfs，考虑前序遍历
+void dfs(vector<int>& nums, int tmp, TreeNode* root) {
+  if (!root) return;
+  tmp = tmp * 10 + root->val;
+  if (!root->left && !root->right) nums.push_back(tmp);
+  dfs(nums, tmp, root->left);
+  dfs(nums, tmp, root->right);
+}
+int sumNumbers(TreeNode* root) {
+  vector<int> nums;
+  dfs(nums, 0, root);
+  return accumulate(nums.begin(), nums.end(), 0);
+}
+}  // namespace LC129
 
-namespace LC129 {}  // namespace LC129
-
-// TODO 96. 不同的二叉搜索树 （见 动态规划 部分）
-namespace LC96 {}  // namespace LC96
-
-// TODO 95. 不同的二叉搜索树 II （见 动态规划 部分）
-namespace LC95 {}  // namespace LC95
-
-//! 遍历序列相关问题
-
-// TODO 1028. 从先序遍历还原二叉树
-namespace LC1028 {}  // namespace LC1028
-
-//! 与距离和路径相关的二叉树问题
+//! 与路径相关问题：路径和、路径数字、路径字符、路径序列等等
 
 // TODO 112. 路径总和
 namespace LC112 {
@@ -530,16 +472,201 @@ int longestUnivaluePath(TreeNode* root) {
 }  // namespace LC687
 
 // TODO 124. 二叉树中的最大路径和
-namespace LC124 {}  // namespace LC124
+namespace LC124 {
+//* 思路：此题其实就两个点：
+//* 1.分解问题：求从root出发的解+左右子树的完整解
+//* 2.用dfs求从root出发的解,最好自底向上，先求从底层节点出发的最大路径和，再往上推算，故采用后序遍历
+int dfs(int& res, TreeNode* root) {
+  if (!root) return 0;
+  int left_max = dfs(res, root->left);
+  int right_max = dfs(res, root->right);
+  int mid_max = (left_max > 0 ? left_max : 0) +
+                (right_max > 0 ? right_max : 0) + root->val;
+  res = max(res, mid_max);
+  return max(max(left_max, right_max) + root->val, root->val);
+}
+int maxPathSum(TreeNode* root) {
+  int res = INT32_MIN;
+  dfs(res, root);
+  return res;
+}
+}  // namespace LC124
+
+// TODO 988. 从叶结点开始的最小字符串
+namespace LC988 {
+//* 思路：需要从根开始dfs,考虑前序遍历；结果存入map中
+void dfs(map<string, int>& M, string s, TreeNode* root) {
+  if (!root) return;
+  s += root->val + 'a';
+  if (!root->left && !root->right) {
+    reverse(s.begin(), s.end());
+    M[s]++;
+  }
+  dfs(M, s, root->left);
+  dfs(M, s, root->right);
+}
+string smallestFromLeaf(TreeNode* root) {
+  map<string, int> M;
+  dfs(M, {}, root);
+  return M.begin()->first;
+}
+}  // namespace LC988
+
+// TODO 298. 二叉树最长连续序列
+namespace LC298 {}  // namespace LC298
+
+// TODO 549. 二叉树中最长的连续序列
+namespace LC549 {}  // namespace LC549
+
+//! 子树问题
+// TODO 572. 另一个树的子树
+namespace LC572 {
+bool isSameTree(TreeNode* p, TreeNode* q) {
+  if (!p && !q) return true;
+  if (bool(p) != bool(q)) return false;
+  return p->val == q->val && isSameTree(p->left, q->left) &&
+         isSameTree(p->right, q->right);
+}
+bool isSubtree(TreeNode* s, TreeNode* t) {
+  if (!s) return false;
+  return isSameTree(s, t) || isSubtree(s->left, t) || isSubtree(s->right, t);
+}
+}  // namespace LC572
+
+// TODO 250. 统计同值子树
+namespace LC250 {
+// 这里实际是前序遍历了一遍树来判断是否root树为同值树
+// 也可以用中序遍历，后序遍历，只要是深度优先遍历就行
+int helper(TreeNode* root, int val) {
+  if (!root) return 0;
+  if (root->val != val) return -1;
+  int l = helper(root->left, val);
+  if (l == -1) return -1;
+  int r = helper(root->right, val);
+  if (r == -1) return -1;
+  return 1;
+}
+int countUnivalSubtrees(TreeNode* root) {
+  if (!root) return 0;
+  return countUnivalSubtrees(root->left) + countUnivalSubtrees(root->right) +
+         (helper(root, root->val) > 0);
+}
+}  // namespace LC250
+
+// TODO 508. 出现次数最多的子树元素和
+namespace LC508 {
+//* 思路： 后序遍历求各子树的和,并存入一个map中
+int dfs(unordered_map<int, int>& M, TreeNode* root) {
+  if (!root) return 0;
+  int left = dfs(M, root->left);
+  int right = dfs(M, root->right);
+  int sum = left + right + root->val;
+  M[sum]++;
+  return sum;
+}
+vector<int> findFrequentTreeSum(TreeNode* root) {
+  if (!root) return {};
+  vector<int> res;
+  unordered_map<int, int> M;
+  dfs(M, root);
+  int maxTime = 0;
+  for (auto item : M) maxTime = max(maxTime, item.second);
+  for (auto item : M)
+    if (item.second == maxTime) res.push_back(item.first);
+  return res;
+}
+}  // namespace LC508
+
+// TODO 333. 最大 BST 子树
+namespace LC333 {}  // namespace LC333
+
+// TODO 652. 寻找重复的子树
+namespace LC652 {}  // namespace LC652
+
+// TODO 1120. 子树的最大平均值
+namespace LC1120 {}  // namespace LC1120
+
+// TODO 663. 均匀树划分
+namespace LC663 {}  // namespace LC663
+
+//! 距离问题（本质还是路径问题）
+// TODO 834. 树中距离之和
+namespace LC834 {}  // namespace LC834
+
+// TODO 783. 二叉搜索树结点最小距离
+namespace LC783 {}  // namespace LC783
 
 // TODO 863. 二叉树中所有距离为 K 的结点
 namespace LC863 {}  // namespace LC863
 
-// TODO 988. 从叶结点开始的最小字符串
-namespace LC988 {}  // namespace LC988
+// TODO 742. 二叉树最近的叶节点
+namespace LC742 {}  // namespace LC742
+
+// TODO 865. 具有所有最深结点的最小子树
+namespace LC865 {}  // namespace LC865
+
+// TODO 235. 二叉搜索树的最近公共祖先
+namespace LC235 {}  // namespace LC235
+
+// TODO 236. 二叉树的最近公共祖先
+namespace LC236 {}  // namespace LC236
+
+// TODO 1026. 节点与其祖先之间的最大差值
+namespace LC1026 {}  // namespace LC1026
+
+//! 遍历序列相关问题
+
+// TODO 105. 从前序与中序遍历序列构造二叉树
+namespace LC105 {}  // namespace LC105
+
+// TODO 106. 从中序与后序遍历序列构造二叉树
+namespace LC106 {}  // namespace LC106
+
+// TODO 889. 根据前序和后序遍历构造二叉树
+namespace LC889 {}  // namespace LC889
+
+// TODO 1008. 先序遍历构造二叉树
+namespace LC1008 {}  // namespace LC1008
+
+// TODO 971. 翻转二叉树以匹配先序遍历
+namespace LC971 {}  // namespace LC971
+
+// TODO 255. 验证前序遍历序列二叉搜索树
+namespace LC255 {}  // namespace LC255
+
+// TODO 1028. 从先序遍历还原二叉树
+namespace LC1028 {}  // namespace LC1028
+
+//! 树的转换问题(将树结构转换为其他形式)
+
+// TODO 449. 序列化和反序列化二叉搜索树
+namespace LC449 {}  // namespace LC449
+
+// TODO 428. 序列化和反序列化 N 叉树
+namespace LC428 {}  // namespace LC428
+
+// TODO 297. 二叉树的序列化与反序列化
+namespace LC297 {}  // namespace LC297
+
+// TODO 114. 二叉树展开为链表
+namespace LC114 {}  // namespace LC114
+
+// TODO 426. 将二叉搜索树转化为排序的双向链表
+namespace LC426 {}  // namespace LC426
+
+// TODO 538. 把二叉搜索树转换为累加树
+namespace LC538 {}  // namespace LC538
+
+// TODO 655. 输出二叉树
+namespace LC655 {}  // namespace LC655
+
+// TODO 814. 二叉树剪枝
+namespace LC814 {}  // namespace LC814
+
+// TODO 637. 二叉树的层平均值
+namespace LC637 {}  // namespace LC637
 
 //! 二分搜索树
-namespace LC235 {}  // namespace LC235
 
 namespace LC98 {}  // namespace LC98
 
@@ -550,3 +677,16 @@ namespace LC108 {}  // namespace LC108
 namespace LC230 {}  // namespace LC230
 
 namespace LC236 {}  // namespace LC236
+
+//! 其他
+
+// TODO 654. 最大二叉树
+namespace LC654 {}  // namespace LC654
+
+// TODO 606. 根据二叉树创建字符串
+namespace LC606 {}  // namespace LC606
+
+// TODO 968. 监控二叉树
+namespace LC968 {}  // namespace LC968
+
+//! 特殊性较强（言外之意：参考性不强的）放这↓
