@@ -1,3 +1,10 @@
+/*
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-08-09 11:29:43
+ * @LastEditTime: 2019-08-09 11:42:48
+ * @LastEditors: zhangxianbing
+ */
 #pragma once
 #include "../public.h"
 //* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ *//
@@ -224,6 +231,7 @@ vector<vector<int>> verticalTraversal(TreeNode* root) {
 
 // TODO 199. 二叉树的右视图
 namespace LC199 {
+//* 思路：本质是根-右-左的遍历顺序
 vector<int> rightSideView(TreeNode* root) {
   if (!root) return {};
   vector<int> res;
@@ -244,6 +252,8 @@ vector<int> rightSideView(TreeNode* root) {
 }
 }  // namespace LC199
 
+//! 二叉树的其他递归相关问题
+
 // TODO 104. 二叉树的最大深度
 namespace LC104 {
 int maxDepth(TreeNode* root) {
@@ -252,24 +262,68 @@ int maxDepth(TreeNode* root) {
 }
 }  // namespace LC104
 
-// TODO 96. 不同的二叉搜索树
-namespace LC96 {}  // namespace LC96
+// TODO 111. 二叉树的最小深度
+namespace LC111 {
+int minDepth(TreeNode* root) {
+  if (!root) return 0;
+  if (!root->left) return minDepth(root->right) + 1;
+  if (!root->right) return minDepth(root->left) + 1;
+  return min(minDepth(root->left), minDepth(root->right)) + 1;
+}
+}  // namespace LC111
 
-// TODO 95. 不同的二叉搜索树 II
-namespace LC95 {}  // namespace LC95
+// TODO 226.反转二叉树
+namespace LC226 {
+TreeNode* invertTree(TreeNode* root) {
+  if (!root) return NULL;
+  root->left = invertTree(root->left);
+  root->right = invertTree(root->right);
+  swap(root->left, root->right);
+  return root;
+}
+}  // namespace LC226
 
-namespace LC111 {}  // namespace LC111
+// TODO 100. 相同的树
+namespace LC100 {
+bool isSameTree(TreeNode* p, TreeNode* q) {
+  if (!p && !q) return true;
+  if (bool(p) != bool(q)) return false;
+  return p->val == q->val && isSameTree(p->left, q->left) &&
+         isSameTree(p->right, q->right);
+}
+}  // namespace LC100
 
-// 226.反转二叉树
-namespace LC226 {}  // namespace LC226
+// TODO 101. 对称二叉树
+namespace LC101 {
+bool isMirror(TreeNode* p, TreeNode* q) {
+  if (!p && !q) return true;
+  if (bool(p) != bool(q)) return false;
+  return p->val == q->val && isMirror(p->left, q->right) &&
+         isMirror(p->right, q->left);
+}
+bool isSymmetric(TreeNode* root) {
+  if (!root) return true;
+  return isMirror(root->left, root->right);
+}
+}  // namespace LC101
 
-namespace LC100 {}  // namespace LC100
-
-namespace LC101 {}  // namespace LC101
+// TODO 110. 平衡二叉树
+namespace LC110 {
+//* 思路1： 自顶向下
+int maxDepth(TreeNode* root) {
+  if (!root) return 0;
+  return max(maxDepth(root->left), maxDepth(root->right)) + 1;
+}
+bool isBalanced(TreeNode* root) {
+  if (!root) return true;
+  if (abs(maxDepth(root->left) - maxDepth(root->right)) > 1) return false;
+  return isBalanced(root->left) && isBalanced(root->right);
+}
+//* 思路2： 自底向上
+bool isBalanced2(TreeNode* root) {}
+}  // namespace LC110
 
 namespace LC222 {}  // namespace LC222
-
-namespace LC110 {}  // namespace LC110
 
 namespace LC112 {}  // namespace LC112
 
@@ -283,6 +337,12 @@ namespace LC129 {}  // namespace LC129
 
 namespace LC437 {}  // namespace LC437
 
+// TODO 96. 不同的二叉搜索树 （见 动态规划 部分）
+namespace LC96 {}  // namespace LC96
+
+// TODO 95. 不同的二叉搜索树 II （见 动态规划 部分）
+namespace LC95 {}  // namespace LC95
+
 //! 二分搜索树
 namespace LC235 {}  // namespace LC235
 
@@ -295,3 +355,10 @@ namespace LC108 {}  // namespace LC108
 namespace LC230 {}  // namespace LC230
 
 namespace LC236 {}  // namespace LC236
+
+//! 与遍历序列相关的的二叉树问题
+
+// TODO 1028. 从先序遍历还原二叉树
+namespace LC1028 {
+TreeNode* recoverFromPreorder(string S) {}
+}  // namespace LC1028

@@ -1,3 +1,10 @@
+/*
+ * @Author: zhangxianbing
+ * @Date: 2019-08-09 11:37:21
+ * @LastEditors: zhangxianbing
+ * @LastEditTime: 2019-08-09 11:42:35
+ * @Description: file content
+ */
 #pragma once
 #include "../public.h"
 //* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ *//
@@ -17,4 +24,26 @@ int numTrees(int n) {
 }  // namespace LC96
 
 // TODO 95. 不同的二叉搜索树 II
-namespace LC95 {}  // namespace LC95
+namespace LC95 {
+vector<TreeNode*> generateTrees(int start, int end) {
+  if (start > end) return {NULL};
+  if (start == end) return {new TreeNode(start)};
+  vector<TreeNode*> res;
+  for (int i = start; i <= end; i++) {
+    auto left = generateTrees(start, i - 1);
+    auto right = generateTrees(i + 1, end);
+    for (auto lnode : left)
+      for (auto rnode : right) {
+        auto root = new TreeNode(i);
+        root->left = lnode;
+        root->right = rnode;
+        res.push_back(root);
+      }
+  }
+  return res;
+}
+vector<TreeNode*> generateTrees(int n) {
+  if (n == 0) return {};
+  return generateTrees(1, n);
+}
+}  // namespace LC95
