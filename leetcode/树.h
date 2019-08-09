@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-09 11:29:43
- * @LastEditTime: 2019-08-09 16:20:38
+ * @LastEditTime: 2019-08-09 17:26:57
  * @LastEditors: zhangxianbing
  */
 #pragma once
@@ -336,7 +336,28 @@ int countUnivalSubtrees(TreeNode* root) {
 }  // namespace LC250
 
 // TODO 508. 出现次数最多的子树元素和
-namespace LC508 {}  // namespace LC508
+namespace LC508 {
+//* 思路： 后序遍历求各子树的和,并存入一个map中
+int dfs(unordered_map<int, int>& M, TreeNode* root) {
+  if (!root) return 0;
+  int left = dfs(M, root->left);
+  int right = dfs(M, root->right);
+  int sum = left + right + root->val;
+  M[sum]++;
+  return sum;
+}
+vector<int> findFrequentTreeSum(TreeNode* root) {
+  if (!root) return {};
+  vector<int> res;
+  unordered_map<int, int> M;
+  dfs(M, root);
+  int maxTime = 0;
+  for (auto item : M) maxTime = max(maxTime, item.second);
+  for (auto item : M)
+    if (item.second == maxTime) res.push_back(item.first);
+  return res;
+}
+}  // namespace LC508
 
 // TODO 101. 对称二叉树
 namespace LC101 {
@@ -383,9 +404,38 @@ int countNodes(TreeNode* root) {
 }
 }  // namespace LC222
 
-namespace LC404 {}  // namespace LC404
+// TODO 404. 左叶子之和
+namespace LC404 {
+//* 思路：自底向上的dfs,考虑后序遍历
+int sumOfLeftLeaves(TreeNode* root) {
+  if (!root) return 0;
+  int res = 0;
+  if (root->left && !root->left->left && !root->left->right)
+    res = root->left->val;
+  return res + sumOfLeftLeaves(root->left) + sumOfLeftLeaves(root->right);
+}
+}  // namespace LC404
 
-namespace LC257 {}  // namespace LC257
+// TODO 257. 二叉树的所有路径
+namespace LC257 {
+//* 思路：从根出发的dfs，考虑前序遍历
+void dfs(vector<string>& res, string path, TreeNode* root) {
+  if (!root) return;
+  path += to_string(root->val);
+  if (!root->left && !root->right) {
+    res.push_back(path);
+  } else {
+    path += "->";
+    dfs(res, path, root->left);
+    dfs(res, path, root->right);
+  }
+}
+vector<string> binaryTreePaths(TreeNode* root) {
+  vector<string> res;
+  dfs(res, {}, root);
+  return res;
+}
+}  // namespace LC257
 
 namespace LC113 {}  // namespace LC113
 
@@ -416,19 +466,19 @@ bool hasPathSum(TreeNode* root, int sum) {
 
 // TODO 路径总和 II
 namespace LC113 {
-void pathSum(vector<vector<int>>& res, vector<int> path, TreeNode* root,
-             int sum) {
+//* 思路：自顶向下的dfs，考虑前序遍历
+void dfs(vector<vector<int>>& res, vector<int> path, TreeNode* root, int sum) {
   if (!root) return;
   path.push_back(root->val);
   if (sum == root->val && !root->left && !root->right) {
     res.push_back(path);
   }
-  pathSum(res, path, root->left, sum - root->val);
-  pathSum(res, path, root->right, sum - root->val);
+  dfs(res, path, root->left, sum - root->val);
+  dfs(res, path, root->right, sum - root->val);
 }
 vector<vector<int>> pathSum(TreeNode* root, int sum) {
   vector<vector<int>> res;
-  pathSum(res, {}, root, sum);
+  dfs(res, {}, root, sum);
   return res;
 }
 }  // namespace LC113
@@ -484,6 +534,9 @@ namespace LC124 {}  // namespace LC124
 
 // TODO 863. 二叉树中所有距离为 K 的结点
 namespace LC863 {}  // namespace LC863
+
+// TODO 988. 从叶结点开始的最小字符串
+namespace LC988 {}  // namespace LC988
 
 //! 二分搜索树
 namespace LC235 {}  // namespace LC235
