@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-09 11:29:43
- * @LastEditTime: 2019-08-10 18:48:31
+ * @LastEditTime: 2019-08-10 19:58:30
  * @LastEditors: zhangxianbing
  */
 #pragma once
@@ -631,6 +631,21 @@ int minDepth(TreeNode* root) {
 }
 }  // namespace LC111
 
+// TODO 101. 对称二叉树
+namespace LC101 {
+//* 思路：考虑到效率的话，应该首先比较根节点的值，故采用前序遍历
+bool isMirror(TreeNode* p, TreeNode* q) {
+  if (!p && !q) return true;
+  if (bool(p) != bool(q)) return false;
+  return p->val == q->val && isMirror(p->left, q->right) &&
+         isMirror(p->right, q->left);
+}
+bool isSymmetric(TreeNode* root) {
+  if (!root) return true;
+  return isMirror(root->left, root->right);
+}
+}  // namespace LC101
+
 // TODO 226.反转二叉树
 namespace LC226 {
 //* 思路：自底向上，考虑后序遍历
@@ -742,6 +757,26 @@ int dfs(int tmp, TreeNode* root) {
 int sumNumbers(TreeNode* root) { return dfs(0, root); }
 }  // namespace LC129
 
+// TODO 988. 从叶结点开始的最小字符串
+namespace LC988 {
+//* 思路：需要从根开始dfs,考虑前序遍历；结果存入map中
+void dfs(map<string, int>& M, string s, TreeNode* root) {
+  if (!root) return;
+  s += root->val + 'a';
+  if (!root->left && !root->right) {
+    reverse(s.begin(), s.end());
+    M[s]++;
+  }
+  dfs(M, s, root->left);
+  dfs(M, s, root->right);
+}
+string smallestFromLeaf(TreeNode* root) {
+  map<string, int> M;
+  dfs(M, {}, root);
+  return M.begin()->first;
+}
+}  // namespace LC988
+
 // TODO 508. 出现次数最多的子树元素和
 namespace LC508 {
 //* 思路： 后序遍历求各子树的和,并存入一个map中
@@ -769,9 +804,6 @@ vector<int> findFrequentTreeSum(TreeNode* root) {
 //! 双层dfs遍历问题：
 //! 内层一般根据题目要求，可灵活选择前序或后序(中序不常见)
 //! 外层一般选前、中、后序均可，效率和内存方面差别不是特别明显，不过最终也得根据题目要求而定
-//! 注意：1)有时内层采用前序会产生许多不必要的遍历操作，可改进为后序遍历，参见LC110
-//!      2)有些题目可简化为单层，(见LC110，LC124,LC298)
-//!      3)内层dfs需要附加信息的，一般都是转化不了单层dfs的
 //!
 //! 典型问题如：
 //!   路径问题（路径和、路径数字、路径字符、路径序列等）
@@ -783,23 +815,9 @@ vector<int> findFrequentTreeSum(TreeNode* root) {
 //! 分解问题通式：
 //!   根树的解 = func(左子树的解，右子树的解，dfs(root)的解)
 //!
-// TODO 101. 对称二叉树
-namespace LC101 {
-//* 思路：考虑到效率的话，应该首先比较根节点的值，故采用前序遍历
-bool isMirror(TreeNode* p, TreeNode* q) {
-  if (!p && !q) return true;
-  if (bool(p) != bool(q)) return false;
-  return p->val == q->val && isMirror(p->left, q->right) &&
-         isMirror(p->right, q->left);
-}
-bool isSymmetric(TreeNode* root) {
-  if (!root) return true;
-  return isMirror(root->left, root->right);
-}
-}  // namespace LC101
-
 // TODO 572. 另一个树的子树
 namespace LC572 {
+//* 需要从根开始验证，故选前序遍历，外层同样也选前序遍历
 bool isSameTree(TreeNode* p, TreeNode* q) {
   if (!p && !q) return true;
   if (bool(p) != bool(q)) return false;
@@ -812,27 +830,84 @@ bool isSubtree(TreeNode* s, TreeNode* t) {
 }
 }  // namespace LC572
 
+// TODO 437. 路径总和 III
+namespace LC437 {
+//* 思路：双层遍历问题
+// 内层：dfs，求从根出发的路径和等于target的路径数，前序遍历；
+// 外层：分解问题：根树的解 =
+// func(左子树的解，右子树的解，dfs(root)的解)，前中后序遍历均可
+int dfs(int sum, TreeNode* root) {
+  if (!root) return 0;
+  return (root->val == sum) + dfs(sum - root->val, root->left) +
+         dfs(sum - root->val, root->right);
+}
+int pathSum(TreeNode* root, int sum) {
+  if (!root) return 0;
+  return pathSum(root->left, sum) + pathSum(root->right, sum) + dfs(sum, root);
+}
+}  // namespace LC437
+
+// TODO 250. 统计同值子树
+namespace LC250 {
+// 这里实际是前序遍历了一遍树来判断是否root树为同值树
+// 也可以用中序遍历，后序遍历，只要是深度优先遍历就行
+int dfs(TreeNode* root, int val) {
+  if (!root) return 0;
+  if (root->val != val) return -1;
+  int l = dfs(root->left, val);
+  if (l == -1) return -1;
+  int r = dfs(root->right, val);
+  if (r == -1) return -1;
+  return 1;
+}
+int countUnivalSubtrees(TreeNode* root) {
+  if (!root) return 0;
+  return countUnivalSubtrees(root->left) + countUnivalSubtrees(root->right) +
+         (dfs(root, root->val) > 0);
+}
+}  // namespace LC250
+
+// TODO 333. 最大 BST 子树
+namespace LC333 {}  // namespace LC333
+
+// TODO 652. 寻找重复的子树
+namespace LC652 {}  // namespace LC652
+
+// TODO 1120. 子树的最大平均值
+namespace LC1120 {}  // namespace LC1120
+
+// TODO 865. 具有所有最深结点的最小子树
+namespace LC865 {}  // namespace LC865
+
+// TODO 663. 均匀树划分
+namespace LC663 {}  // namespace LC663
+
+//! 可以转化为单层后序遍历的双层dfs问题
+//! 自顶向上信息传递的逻辑是解决这类题的关键
+//! 选择遍历方式时，不能只看题目表面意思，比如从根节点出发的XXX，不一定非得用前序，有时采用后序是更好的选择，
+//! 纵观(LC110，LC124,LC298)，受到的启发是：可以自底向上传递信息(即通过左右子树的结果能推导出根树的结果)的问题宜采用后序遍历，
+//! 尤其注意的是从根节点出发的最大路径和，表面上看用前序遍历做很合理，但实际采用后序遍历更有效率，而有的信息很难自底向上传递，比如LC437的路径和，典型的双层dfs问题
+//!
 // TODO 110. 平衡二叉树
 namespace LC110 {
-//* 思路2：双层遍历转换为单层遍历
-// 内层dfs：当左右子树不平衡时，直接向上传递-1，表示此树不为平衡树，这样就不用遍历所有其他节点求深度了，相当于提前截断此次内层遍历
+//* 思路2：单层后序遍历
+// 内层改进后序遍历，当左右子树不平衡时，直接向上传递-1，表示此树不为平衡树，这样就不用遍历所有其他节点求深度了，相当于提前截断此次内层遍历
 // 这样实际是将两层遍历降为单层dfs遍历问题
 int dfs(TreeNode* root) {
   if (!root) return 0;
-  int left = dfs(root->left), right = dfs(root->right);
-  if (left == -1 || right == -1) return -1;
+  int left = dfs(root->left);
+  if (left == -1) return -1;  // 提前截断
+  int right = dfs(root->right);
+  if (right == -1) return -1;  // 提前截断
   int res = abs(left - right);
   return res > 1 ? -1 : (max(left, right) + 1);
 }
 bool isBalanced(TreeNode* root) {
   if (!root) return true;
-  // return isBalanced(root->left) && isBalanced(root->right) && dfs(root) !=
-  // -1;
-  return dfs(root) != -1;  // 改进此处可减少一般内存消耗
+  return dfs(root) != -1;
 }
 //* 思路1： 双层遍历
 // 内层是求根树的最大深度，后续遍历
-// 外层是从根出发，比较左右子树最大深度，采用的前序遍历，是自顶向下的，这没啥毛病，但问题出在求每个节点最大深度会产生很多冗余操作，会带来效率问题！
 // int dfs(TreeNode* root) {
 //   if (!root) return 0;
 //   return max(dfs(root->left), dfs(root->right)) + 1;
@@ -846,17 +921,17 @@ bool isBalanced(TreeNode* root) {
 
 // TODO 124. 二叉树中的最大路径和
 namespace LC124 {
-//* 思路3： 可优化为单层 耗时：40ms
+//* 思路3： 单层后序遍历 耗时：40ms
 // dfs返回从根节点出发的最大路径和
-// 同时计算经过该节点的最大路径和，用全局变量res维护求得的最大值
 int dfs(int& res, TreeNode* root) {
   if (!root) return 0;
   int left_max = dfs(res, root->left);
   int right_max = dfs(res, root->right);
   int mid_max = (left_max > 0 ? left_max : 0) +
-                (right_max > 0 ? right_max : 0) + root->val;
+                (right_max > 0 ? right_max : 0) + root->val;  //! 关键点
+  // 计算经过该节点的最大路径和，用全局变量res维护求得的最大值
   res = max(res, mid_max);
-  return max(max(left_max, right_max) + root->val, root->val);
+  return max(max(left_max, right_max) + root->val, root->val);  //! 关键点
 }
 int maxPathSum(TreeNode* root) {
   int res = INT32_MIN;
@@ -900,73 +975,52 @@ int maxPathSum(TreeNode* root) {
 // }
 }  // namespace LC124
 
-// TODO 437. 路径总和 III
-namespace LC437 {
-//* 思路：双层遍历问题
-// 内层：dfs，求从根出发的路径和等于target的路径数，前序遍历；
-// 外层：分解问题：根树的解 =
-// func(左子树的解，右子树的解，dfs(root)的解)，前中后序遍历均可
-int dfs(int sum, TreeNode* root) {
-  if (!root) return 0;
-  return (root->val == sum) + dfs(sum - root->val, root->left) +
-         dfs(sum - root->val, root->right);
-}
-int pathSum(TreeNode* root, int sum) {
-  if (!root) return 0;
-  return pathSum(root->left, sum) + pathSum(root->right, sum) + dfs(sum, root);
-}
-}  // namespace LC437
-
 // TODO 687. 最长同值路径
 namespace LC687 {
-//* 两层：
-//* 一层是求从根出发的最长同值路径，前序遍历
-// 外层：分解问题：根树的解 =
-// func(左子树的解，右子树的解，dfs(root)的解)，前中后序遍历均可
-int dfs(int val, TreeNode* root) {
-  if (!root || root->val != val) return 0;
-  return 1 + max(dfs(val, root->left), dfs(val, root->right));
+//* 单层后序遍历 耗时：170ms
+// dfs返回的是从当前根节点出发的最长同值路径
+int dfs(int& res, TreeNode* root) {
+  if (!root) return 0;
+  int L = dfs(res, root->left);
+  int R = dfs(res, root->right);
+  L = (root->left && root->left->val == root->val) ? L + 1 : 0;    //! 关键点
+  R = (root->right && root->right->val == root->val) ? R + 1 : 0;  //! 关键点
+  res = max(res, L + R);
+  return max(L, R);  //! 关键点
 }
 int longestUnivaluePath(TreeNode* root) {
-  if (!root) return 0;
-  int sub =
-      max(longestUnivaluePath(root->left), longestUnivaluePath(root->right));
-  return max(sub, dfs(root->val, root->left) + dfs(root->val, root->right));
+  int res = 0;
+  dfs(res, root);
+  return res;
 }
+//* 两层遍历：  耗时：200ms
+// 内层：求从根出发的最长同值路径，前序遍历
+// 外层：分解问题，前中后序遍历均可
+// int dfs(int val, TreeNode* root) {
+//   if (!root || root->val != val) return 0;
+//   return 1 + max(dfs(val, root->left), dfs(val, root->right));
+// }
+// int longestUnivaluePath(TreeNode* root) {
+//   if (!root) return 0;
+//   int sub =
+//       max(longestUnivaluePath(root->left), longestUnivaluePath(root->right));
+//   return max(sub, dfs(root->val, root->left) + dfs(root->val, root->right));
+// }
 }  // namespace LC687
-
-// TODO 988. 从叶结点开始的最小字符串
-namespace LC988 {
-//* 思路：需要从根开始dfs,考虑前序遍历；结果存入map中
-void dfs(map<string, int>& M, string s, TreeNode* root) {
-  if (!root) return;
-  s += root->val + 'a';
-  if (!root->left && !root->right) {
-    reverse(s.begin(), s.end());
-    M[s]++;
-  }
-  dfs(M, s, root->left);
-  dfs(M, s, root->right);
-}
-string smallestFromLeaf(TreeNode* root) {
-  map<string, int> M;
-  dfs(M, {}, root);
-  return M.begin()->first;
-}
-}  // namespace LC988
 
 // TODO 298. 二叉树最长连续序列
 namespace LC298 {
-//* 思路：单层dfs后序遍历解决 耗时：44ms
+//* 思路3：单层dfs后序遍历解决 耗时：44ms
+// dfs返回的是从当前根节点出发的最长连续序列长
 int dfs(int& res, TreeNode* root) {
   if (!root) return 0;
   int L = dfs(res, root->left) + 1;
   int R = dfs(res, root->right) + 1;
-  if (root->left && root->left->val != root->val + 1) L = 1;
-  if (root->right && root->right->val != root->val + 1) R = 1;
+  if (root->left && root->left->val != root->val + 1) L = 1;    //! 关键点
+  if (root->right && root->right->val != root->val + 1) R = 1;  //! 关键点
   int len = max(L, R);
   res = max(res, len);
-  return len;
+  return len;  //! 关键点
 }
 int longestConsecutive(TreeNode* root) {
   int res = 0;
@@ -974,7 +1028,7 @@ int longestConsecutive(TreeNode* root) {
   return res;
 }
 
-//* 思路：单层dfs前序遍历解决 耗时：50ms
+//* 思路2：单层dfs前序遍历解决 耗时：50ms
 // void dfs(int& res, TreeNode* pre, int len, TreeNode* root) {
 //   if (!root) return;
 //   len = (pre && pre->val + 1 == root->val) ? len + 1 : 1;
@@ -988,7 +1042,7 @@ int longestConsecutive(TreeNode* root) {
 //   return res;
 // }
 
-//* 思路：内层后序遍历，求从根出发的最长连续序列长度 耗时：1100ms
+//* 思路1：内层后序遍历，求从根出发的最长连续序列长度 耗时：1100ms
 // int dfs(int val, TreeNode* root) {
 //   if (!root || root->val != val) return 0;
 //   int l = dfs(val + 1, root->left);
@@ -1006,41 +1060,6 @@ int longestConsecutive(TreeNode* root) {
 
 // TODO 549. 二叉树中最长的连续序列
 namespace LC549 {}  // namespace LC549
-
-// TODO 250. 统计同值子树
-namespace LC250 {
-// 这里实际是前序遍历了一遍树来判断是否root树为同值树
-// 也可以用中序遍历，后序遍历，只要是深度优先遍历就行
-int dfs(TreeNode* root, int val) {
-  if (!root) return 0;
-  if (root->val != val) return -1;
-  int l = dfs(root->left, val);
-  if (l == -1) return -1;
-  int r = dfs(root->right, val);
-  if (r == -1) return -1;
-  return 1;
-}
-int countUnivalSubtrees(TreeNode* root) {
-  if (!root) return 0;
-  return countUnivalSubtrees(root->left) + countUnivalSubtrees(root->right) +
-         (dfs(root, root->val) > 0);
-}
-}  // namespace LC250
-
-// TODO 333. 最大 BST 子树
-namespace LC333 {}  // namespace LC333
-
-// TODO 652. 寻找重复的子树
-namespace LC652 {}  // namespace LC652
-
-// TODO 1120. 子树的最大平均值
-namespace LC1120 {}  // namespace LC1120
-
-// TODO 865. 具有所有最深结点的最小子树
-namespace LC865 {}  // namespace LC865
-
-// TODO 663. 均匀树划分
-namespace LC663 {}  // namespace LC663
 
 //! 距离问题（本质还是路径问题）
 //!
