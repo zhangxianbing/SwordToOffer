@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-09 11:29:43
- * @LastEditTime: 2019-08-10 20:31:55
+ * @LastEditTime: 2019-08-10 23:39:44
  * @LastEditors: zhangxianbing
  */
 #pragma once
@@ -19,6 +19,7 @@
 //!
 //* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ *//
 
+//? ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ?//
 //! 各种遍历的基础考察（基础的前序、中序、后序、层序，以及衍生的变种遍历、简单遍历题）
 //!
 // TODO 144. 二叉树的前序遍历
@@ -349,6 +350,7 @@ vector<vector<int>> verticalTraversal(TreeNode* root) {
 }
 }  // namespace LC987
 
+//? ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ?//
 //! bfs遍历(层序)相关问题
 //!
 // TODO 637. 二叉树的层平均值
@@ -418,12 +420,35 @@ vector<int> rightSideView(TreeNode* root) {
   return res;
 }
 //* 思路2:
-// 按根-右-左遍历，同时记录当前层数，每新到一层记录第一个节点的值，略显繁琐
+// 按根-右-左遍历，同时记录当前层数，每新到一层记录第一个节点的值，略显繁琐，在此略去
 }  // namespace LC199
 
+//? ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ?//
 //! 单层dfs遍历 - 中序遍历相关问题
 //! dfs中序遍历问题一般结合二叉搜索树(BST)考察，因为二叉搜索树有个特性：其中序遍历序列一定是有序的，由此可以衍生很多问题
 //!
+// TODO 98. 验证二叉搜索树
+namespace LC98 {
+//* 思路：中序遍历，若出现逆序数，不为二叉搜索树
+bool isValidBST(TreeNode* root) {
+  stack<TreeNode*> s;
+  TreeNode* pre = NULL;
+  while (root || !s.empty()) {
+    if (root) {
+      s.push(root);
+      root = root->left;
+    } else {
+      root = s.top();
+      s.pop();
+      if (pre && pre->val >= root->val) return false;
+      pre = root;  //! 这里经常忘！！！
+      root = root->right;
+    }
+  }
+  return true;
+}
+}  // namespace LC98
+
 // TODO 230. 二叉搜索树中第K小的元素
 namespace LC230 {
 int kthSmallest(TreeNode* root, int k) {
@@ -602,6 +627,7 @@ int rangeSumBST(TreeNode* root, int L, int R) {
 }
 }  // namespace LC938
 
+//? ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ?//
 //! 单层dfs遍历 - 前序遍历相关问题
 //!
 // TODO 222. 完全二叉树的节点个数
@@ -726,6 +752,7 @@ string smallestFromLeaf(TreeNode* root) {
 }
 }  // namespace LC988
 
+//? ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ?//
 //! 单层dfs遍历 - 后序遍历相关问题
 //!
 // TODO 404. 左叶子之和
@@ -799,6 +826,7 @@ vector<int> findFrequentTreeSum(TreeNode* root) {
 }
 }  // namespace LC508
 
+//? ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ?//
 //! 双层dfs遍历问题：
 //! 内层一般根据题目要求，可灵活选择前序或后序(中序不常见)
 //! 外层一般选前、中、后序均可，效率和内存方面差别不是特别明显，不过最终也得根据题目要求而定
@@ -845,9 +873,6 @@ int pathSum(TreeNode* root, int sum) {
 }
 }  // namespace LC437
 
-// TODO 333. 最大 BST 子树
-namespace LC333 {}  // namespace LC333
-
 // TODO 652. 寻找重复的子树
 namespace LC652 {}  // namespace LC652
 
@@ -860,6 +885,7 @@ namespace LC865 {}  // namespace LC865
 // TODO 663. 均匀树划分
 namespace LC663 {}  // namespace LC663
 
+//? ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ?//
 //! 可以转化为单层后序遍历的双层dfs问题
 //! 自顶向上信息传递的逻辑是解决这类题的关键
 //! 选择遍历方式时，不能只看题目表面意思，比如从根节点出发的XXX，不一定非得用前序，有时采用后序是更好的选择，
@@ -1078,6 +1104,41 @@ int longestConsecutive(TreeNode* root) {
 // TODO 549. 二叉树中最长的连续序列
 namespace LC549 {}  // namespace LC549
 
+// TODO 333. 最大 BST 子树
+namespace LC333 {
+//* 思路：后序遍历
+// dfs返回以该节点为根的二叉搜索树的节点个数，若本树不符合二叉搜索树，则返回-1,若为空则返回0
+int dfs(int& res, int& minV, int& maxV, TreeNode* root) {
+  if (!root) return 0;
+  if (!root->left && !root->right) {
+    minV = root->val;
+    maxV = root->val;
+    return 1;
+  }
+  int lmin, lmax, rmin, rmax;
+  bool isBST = true;
+  int L = dfs(res, lmin, lmax, root->left);
+  int R = dfs(res, rmin, rmax, root->right);
+  if (L == -1 || R == -1) return -1;  //! 提前截断
+  if ((L != 0 && root->val <= lmax) || R != 0 && root->val >= rmin)
+    return -1;  //! 提前截断
+  // 若此时本树还符合二叉搜索树，则继续维护最大最小值
+  minV = L ? lmin : root->val;  //! 关键在于如何维护最大最小值！！！
+  maxV = R ? rmax : root->val;  //! 关键在于如何维护最大最小值！！！
+  int N = L + R + 1;
+  res = max(res, N);
+  return N;
+}
+int largestBSTSubtree(TreeNode* root) {
+  if (!root) return 0;
+  int res = 1, minV, maxV;
+  dfs(res, minV, maxV, root);
+  return res;
+}
+//* 思路2：双层遍历，因繁琐忽略
+}  // namespace LC333
+
+//? ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ?//
 //! 距离问题（本质还是路径问题）
 //!
 // TODO 834. 树中距离之和
@@ -1101,6 +1162,7 @@ namespace LC1026 {}  // namespace LC1026
 // TODO 1123. 最深叶节点的最近公共祖先
 namespace LC1123 {}  // namespace LC1123
 
+//? ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ?//
 //! 遍历序列相关问题
 //!
 // TODO 105. 从前序与中序遍历序列构造二叉树
@@ -1124,6 +1186,7 @@ namespace LC255 {}  // namespace LC255
 // TODO 1028. 从先序遍历还原二叉树
 namespace LC1028 {}  // namespace LC1028
 
+//? ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ?//
 //! 树的转换问题(将树结构转换为其他形式)
 //!
 // TODO 449. 序列化和反序列化二叉搜索树
@@ -1159,10 +1222,9 @@ namespace LC108 {}  // namespace LC108
 // TODO 431. 将 N 叉树编码为二叉树
 namespace LC431 {}  // namespace LC431
 
+//? ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ?//
 //! 二叉搜索树
 //!
-// TODO 98. 验证二叉搜索树
-namespace LC98 {}  // namespace LC98
 
 // TODO 450. 删除二叉搜索树中的节点
 namespace LC450 {}  // namespace LC450
@@ -1192,6 +1254,7 @@ namespace LC156 {}  // namespace LC156
 // TODO 337. 打家劫舍 III
 namespace LC337 {}  // namespace LC337
 
+//? ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ?//
 //! 待分类
 
 // TODO 662. 二叉树最大宽度
