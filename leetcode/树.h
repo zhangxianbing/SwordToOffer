@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-09 11:29:43
- * @LastEditTime: 2019-08-10 17:41:34
+ * @LastEditTime: 2019-08-10 18:48:31
  * @LastEditors: zhangxianbing
  */
 #pragma once
@@ -11,7 +11,6 @@
 //! 二叉树
 //! 二叉树天然具有递归的结构，因此涉及很多问题都和遍历、递归有关，
 //! 递归的关键是如何抽象出左右子树的解和母树的解之间的关系,这有点类似动态规划的思想
-//! 注意有的递归问题可以在自底向上时提前截断，防止重复不必要的遍历计算
 //! 二叉树一般涉及的问题类型有：
 //!     常规遍历、变种遍历以及遍历衍生而来的问题（其实基本所有树的问题都涉及到遍历）
 //!     路径相关问题：路径、距离以及衍生的路径和、路径数字、路径字符等等
@@ -21,6 +20,7 @@
 //* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ *//
 
 //! 各种遍历的基础考察（基础的前序、中序、后序、层序，以及衍生的变种遍历）
+//!
 // TODO 144. 二叉树的前序遍历
 namespace LC144 {
 //* 递归写法：
@@ -350,6 +350,7 @@ vector<vector<int>> verticalTraversal(TreeNode* root) {
 }  // namespace LC987
 
 //! bfs遍历(层序)相关问题
+//!
 // TODO 637. 二叉树的层平均值
 namespace LC637 {
 vector<double> averageOfLevels(TreeNode* root) {
@@ -422,6 +423,7 @@ vector<int> rightSideView(TreeNode* root) {
 
 //! dfs遍历 - 中序遍历相关问题
 //! dfs中序遍历问题一般结合二叉搜索树(BST)考察，因为二叉搜索树有个特性：其中序遍历序列一定是有序的，由此可以衍生很多问题
+//!
 // TODO 230. 二叉搜索树中第K小的元素
 namespace LC230 {
 int kthSmallest(TreeNode* root, int k) {
@@ -606,6 +608,7 @@ int rangeSumBST(TreeNode* root, int L, int R) {
 //! 若结果形式比较简单，比如是bool,int这类的：
 //!   int dfs(AddtionalType ..., TreeNode* root){...}
 //! 其中AddtionalType为附加信息
+//!
 // TODO 104. 二叉树的最大深度
 namespace LC104 {
 //* 思路：自底向上，采用后序遍历
@@ -767,7 +770,7 @@ vector<int> findFrequentTreeSum(TreeNode* root) {
 //! 内层一般根据题目要求，可灵活选择前序或后序(中序不常见)
 //! 外层一般选前、中、后序均可，效率和内存方面差别不是特别明显，不过最终也得根据题目要求而定
 //! 注意：1)有时内层采用前序会产生许多不必要的遍历操作，可改进为后序遍历，参见LC110
-//!      2)有些题目可简化为单层，(见LC110，LC124)，受这两题启发：凡是能在dfs过程中获得最终解的问题，都可以转换为单层dfs！
+//!      2)有些题目可简化为单层，(见LC110，LC124,LC298)
 //!      3)内层dfs需要附加信息的，一般都是转化不了单层dfs的
 //!
 //! 典型问题如：
@@ -780,7 +783,6 @@ vector<int> findFrequentTreeSum(TreeNode* root) {
 //! 分解问题通式：
 //!   根树的解 = func(左子树的解，右子树的解，dfs(root)的解)
 //!
-
 // TODO 101. 对称二叉树
 namespace LC101 {
 //* 思路：考虑到效率的话，应该首先比较根节点的值，故采用前序遍历
@@ -955,20 +957,51 @@ string smallestFromLeaf(TreeNode* root) {
 
 // TODO 298. 二叉树最长连续序列
 namespace LC298 {
-//* 思路：内层后序遍历，求从根出发的最长连续序列长度
-int dfs(int val, TreeNode* root) {
-  if (!root || root->val != val) return 0;
-  int l = dfs(val + 1, root->left);
-  int r = dfs(val + 1, root->right);
-  return max(l, r) + 1;
+//* 思路：单层dfs后序遍历解决 耗时：44ms
+int dfs(int& res, TreeNode* root) {
+  if (!root) return 0;
+  int L = dfs(res, root->left) + 1;
+  int R = dfs(res, root->right) + 1;
+  if (root->left && root->left->val != root->val + 1) L = 1;
+  if (root->right && root->right->val != root->val + 1) R = 1;
+  int len = max(L, R);
+  res = max(res, len);
+  return len;
 }
 int longestConsecutive(TreeNode* root) {
-  if (!root) return 0;
-  int res = dfs(root->val, root);
-  res = max(res, longestConsecutive(root->left));
-  res = max(res, longestConsecutive(root->right));
+  int res = 0;
+  dfs(res, root);
   return res;
 }
+
+//* 思路：单层dfs前序遍历解决 耗时：50ms
+// void dfs(int& res, TreeNode* pre, int len, TreeNode* root) {
+//   if (!root) return;
+//   len = (pre && pre->val + 1 == root->val) ? len + 1 : 1;
+//   res = max(res, len);
+//   dfs(res, root, len, root->left);
+//   dfs(res, root, len, root->right);
+// }
+// int longestConsecutive(TreeNode* root) {
+//   int res = 0;
+//   dfs(res, NULL, 0, root);
+//   return res;
+// }
+
+//* 思路：内层后序遍历，求从根出发的最长连续序列长度 耗时：1100ms
+// int dfs(int val, TreeNode* root) {
+//   if (!root || root->val != val) return 0;
+//   int l = dfs(val + 1, root->left);
+//   int r = dfs(val + 1, root->right);
+//   return max(l, r) + 1;
+// }
+// int longestConsecutive(TreeNode* root) {
+//   if (!root) return 0;
+//   int res = dfs(root->val, root);
+//   res = max(res, longestConsecutive(root->left));
+//   res = max(res, longestConsecutive(root->right));
+//   return res;
+// }
 }  // namespace LC298
 
 // TODO 549. 二叉树中最长的连续序列
@@ -1010,6 +1043,7 @@ namespace LC865 {}  // namespace LC865
 namespace LC663 {}  // namespace LC663
 
 //! 距离问题（本质还是路径问题）
+//!
 // TODO 834. 树中距离之和
 namespace LC834 {}  // namespace LC834
 
@@ -1032,6 +1066,7 @@ namespace LC1026 {}  // namespace LC1026
 namespace LC1123 {}  // namespace LC1123
 
 //! 遍历序列相关问题
+//!
 // TODO 105. 从前序与中序遍历序列构造二叉树
 namespace LC105 {}  // namespace LC105
 
@@ -1054,6 +1089,7 @@ namespace LC255 {}  // namespace LC255
 namespace LC1028 {}  // namespace LC1028
 
 //! 树的转换问题(将树结构转换为其他形式)
+//!
 // TODO 449. 序列化和反序列化二叉搜索树
 namespace LC449 {}  // namespace LC449
 
@@ -1088,6 +1124,7 @@ namespace LC108 {}  // namespace LC108
 namespace LC431 {}  // namespace LC431
 
 //! 二叉搜索树
+//!
 // TODO 98. 验证二叉搜索树
 namespace LC98 {}  // namespace LC98
 
