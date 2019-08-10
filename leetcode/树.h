@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-09 11:29:43
- * @LastEditTime: 2019-08-10 08:28:37
+ * @LastEditTime: 2019-08-10 12:35:07
  * @LastEditors: zhangxianbing
  */
 #pragma once
@@ -20,9 +20,22 @@
 //!     动态规划问题(本质也是遍历问题,详见动态规划部分)
 //* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ *//
 
-//! 二叉树的各种遍历以及衍生遍历
+//! 各种遍历的基础考察（基础的前序、中序、后序、层序，以及衍生的变种遍历）
 // TODO 144. 二叉树的前序遍历
 namespace LC144 {
+//* 递归写法：
+void dfs(vector<int>& res, TreeNode* root) {
+  if (!root) return;
+  res.push_back(root->val);
+  if (root->left) dfs(res, root->left);
+  if (root->right) dfs(res, root->right);
+}
+vector<int> preorderTraversal1(TreeNode* root) {
+  vector<int> res;
+  dfs(res, root);
+  return res;
+}
+//* 非递归写法：
 vector<int> preorderTraversal(TreeNode* root) {
   vector<int> res;
   stack<TreeNode*> s;
@@ -43,6 +56,19 @@ vector<int> preorderTraversal(TreeNode* root) {
 
 // TODO 94. 二叉树的中序遍历
 namespace LC94 {
+//* 递归写法：
+void dfs(vector<int>& res, TreeNode* root) {
+  if (!root) return;
+  if (root->left) dfs(res, root->left);
+  res.push_back(root->val);
+  if (root->right) dfs(res, root->right);
+}
+vector<int> inorderTraversal1(TreeNode* root) {
+  vector<int> res;
+  dfs(res, root);
+  return res;
+}
+//* 非递归写法：
 vector<int> inorderTraversal(TreeNode* root) {
   vector<int> res;
   stack<TreeNode*> s;
@@ -62,7 +88,62 @@ vector<int> inorderTraversal(TreeNode* root) {
 }  // namespace LC94
 
 // TODO 145. 二叉树的后序遍历
-namespace LC145 {}  // namespace LC145
+namespace LC145 {
+//* 递归写法：
+void dfs(vector<int>& res, TreeNode* root) {
+  if (!root) return;
+  if (root->left) dfs(res, root->left);
+  if (root->right) dfs(res, root->right);
+  res.push_back(root->val);
+}
+vector<int> postorderTraversal1(TreeNode* root) {
+  vector<int> res;
+  dfs(res, root);
+  return res;
+}
+//* 非递归写法：
+vector<int> postorderTraversal2(TreeNode* root) {
+  if (!root) return {};
+  vector<int> res;
+  stack<TreeNode*> s;
+  s.push(root);
+  TreeNode* pre = NULL;
+  while (!s.empty()) {
+    root = s.top();
+    // 若
+    if ((!root->left && !root->right) ||
+        (pre && (pre == root->left || pre == root->right))) {
+      res.push_back(root->val);
+      s.pop();
+      pre = root;
+    } else {
+      if (root->right) s.push(root->right);
+      if (root->left) s.push(root->left);
+    }
+  }
+  return res;
+}
+//* 思路2：根-右-左的遍历顺序遍历压入所有节点到栈
+//* 从栈里弹出的顺序便是左-右-根了
+vector<int> postorderTraversal(TreeNode* root) {
+  if (!root) return {};
+  vector<int> res;
+  stack<TreeNode*> s, t;
+  s.push(root);
+  while (!s.empty()) {
+    root = s.top();
+    s.pop();
+    t.push(root);
+    if (root->left) s.push(root->left);
+    if (root->right) s.push(root->right);
+  }
+  while (!t.empty()) {
+    res.push_back(t.top()->val);
+    t.pop();
+  }
+  return res;
+}
+}  // namespace LC145
 
 // TODO 102. 二叉树的层次遍历
 namespace LC102 {
@@ -185,7 +266,35 @@ vector<vector<int>> levelOrder(Node* root) {
 }  // namespace LC429
 
 // TODO 590. N叉树的后序遍历
-namespace LC590 {}  // namespace LC590
+namespace LC590 {
+vector<int> postorder(Node* root) {
+  if (!root) return {};
+  vector<int> res;
+  stack<Node*> s;
+  s.push(root);
+  Node* pre = NULL;
+  while (!s.empty()) {
+    root = s.top();
+    bool visit = false;
+    if (pre)
+      for (auto item : root->children)
+        if (pre == item) {
+          visit = true;
+          break;
+        }
+
+    if ((root->children.empty()) || visit) {
+      res.push_back(root->val);
+      s.pop();
+      pre = root;
+    } else {
+      for (auto it = root->children.rbegin(); it != root->children.rend(); ++it)
+        if (*it != NULL) s.push(*it);
+    }
+  }
+  return res;
+}
+}  // namespace LC590
 
 // TODO 314. 二叉树的垂直遍历
 namespace LC314 {
@@ -240,9 +349,55 @@ vector<vector<int>> verticalTraversal(TreeNode* root) {
 }
 }  // namespace LC987
 
+//! bfs遍历(or 层序遍历)问题
+// TODO 637. 二叉树的层平均值
+namespace LC637 {
+vector<double> averageOfLevels(TreeNode* root) {
+  if (!root) return {};
+  vector<double> res;
+  queue<TreeNode*> q;
+  q.push(root);
+  while (!q.empty()) {
+    double sum = 0;
+    int n = q.size();
+    for (int i = 0; i < n; i++) {
+      root = q.front();
+      sum += root->val;
+      q.pop();
+      if (root->left) q.push(root->left);
+      if (root->right) q.push(root->right);
+    }
+    res.push_back(sum / n);
+  }
+  return res;
+}
+}  // namespace LC637
+
+// TODO 515. 在每个树行中找最大值
+namespace LC515 {
+vector<int> largestValues(TreeNode* root) {
+  if (!root) return {};
+  vector<int> res;
+  queue<TreeNode*> q;
+  q.push(root);
+  while (!q.empty()) {
+    int n = q.size(), maxV = INT32_MIN;
+    for (int i = 0; i < n; i++) {
+      root = q.front();
+      maxV = max(maxV, root->val);
+      q.pop();
+      if (root->left) q.push(root->left);
+      if (root->right) q.push(root->right);
+    }
+    res.push_back(maxV);
+  }
+  return res;
+}
+}  // namespace LC515
+
 // TODO 199. 二叉树的右视图
 namespace LC199 {
-//* 思路：本质是根-右-左的遍历顺序
+//* 思路：显然此题要用层序遍历,找最右边的数
 vector<int> rightSideView(TreeNode* root) {
   if (!root) return {};
   vector<int> res;
@@ -261,19 +416,30 @@ vector<int> rightSideView(TreeNode* root) {
   }
   return res;
 }
+//* 思路2:
+// 按根-右-左遍历，同时记录当前层数，每新到一层记录第一个节点的值，略显繁琐
 }  // namespace LC199
 
-//! 二叉树的其他递归相关问题，关键是分解问题
+//! 单层dfs遍历问题
+//! dfs通式：
+//!   void dfs(ResultType & res，AddtionalType ..., TreeNode* root){...}
+//! 若结果形式比较简单，比如是bool,int这类的：
+//!   int dfs(AddtionalType ..., TreeNode* root){...}
+//! 其中AddtionalType为附加信息
 // TODO 104. 二叉树的最大深度
 namespace LC104 {
+//* 思路：自底向上，采用后序遍历
+// 先计算出子树的最大深度，后续才好判定母树的最大深度
 int maxDepth(TreeNode* root) {
   if (!root) return 0;
+  // 下句return本质是一个后序遍历，必须先得到子树的解，才能进一步得到母树的解
   return max(maxDepth(root->left), maxDepth(root->right)) + 1;
 }
 }  // namespace LC104
 
 // TODO 111. 二叉树的最小深度
 namespace LC111 {
+//* 思路：同LC104
 int minDepth(TreeNode* root) {
   if (!root) return 0;
   if (!root->left) return minDepth(root->right) + 1;
@@ -284,6 +450,8 @@ int minDepth(TreeNode* root) {
 
 // TODO 226.反转二叉树
 namespace LC226 {
+//* 思路：自底向上，考虑后序遍历
+// 先反转左右两个子树，再反转母树
 TreeNode* invertTree(TreeNode* root) {
   if (!root) return NULL;
   root->left = invertTree(root->left);
@@ -295,6 +463,7 @@ TreeNode* invertTree(TreeNode* root) {
 
 // TODO 100. 相同的树
 namespace LC100 {
+//* 思路：考虑到效率的话，应该首先比较根节点的值，故采用前序遍历
 bool isSameTree(TreeNode* p, TreeNode* q) {
   if (!p && !q) return true;
   if (bool(p) != bool(q)) return false;
@@ -302,43 +471,6 @@ bool isSameTree(TreeNode* p, TreeNode* q) {
          isSameTree(p->right, q->right);
 }
 }  // namespace LC100
-
-// TODO 101. 对称二叉树
-namespace LC101 {
-bool isMirror(TreeNode* p, TreeNode* q) {
-  if (!p && !q) return true;
-  if (bool(p) != bool(q)) return false;
-  return p->val == q->val && isMirror(p->left, q->right) &&
-         isMirror(p->right, q->left);
-}
-bool isSymmetric(TreeNode* root) {
-  if (!root) return true;
-  return isMirror(root->left, root->right);
-}
-}  // namespace LC101
-
-// TODO 110. 平衡二叉树
-namespace LC110 {
-//* 思路1： 自顶向下
-int maxDepth1(TreeNode* root) {
-  if (!root) return 0;
-  return max(maxDepth1(root->left), maxDepth1(root->right)) + 1;
-}
-bool isBalanced1(TreeNode* root) {
-  if (!root) return true;
-  if (abs(maxDepth1(root->left) - maxDepth1(root->right)) > 1) return false;
-  return isBalanced1(root->left) && isBalanced1(root->right);
-}
-//* 思路2： 自底向上(提前截断)
-int maxDepth(TreeNode* root) {
-  if (!root) return 0;
-  int left = maxDepth(root->left), right = maxDepth(root->right);
-  if (left == -1 || right == -1) return -1;
-  int res = abs(left - right);
-  return res > 1 ? -1 : (max(left, right) + 1);
-}
-bool isBalanced(TreeNode* root) { return maxDepth(root) != -1; }
-}  // namespace LC110
 
 // TODO 222. 完全二叉树的节点个数
 namespace LC222 {
@@ -356,13 +488,28 @@ int sumOfLeftLeaves(TreeNode* root) {
   int res = 0;
   if (root->left && !root->left->left && !root->left->right)
     res = root->left->val;
-  return res + sumOfLeftLeaves(root->left) + sumOfLeftLeaves(root->right);
+  return sumOfLeftLeaves(root->left) + sumOfLeftLeaves(root->right) + res;
 }
 }  // namespace LC404
 
-//! 与路径相关问题：路径和、路径数字、路径字符、路径序列等等
+// TODO 101. 对称二叉树
+namespace LC101 {
+//* 思路：考虑到效率的话，应该首先比较根节点的值，故采用前序遍历
+bool isMirror(TreeNode* p, TreeNode* q) {
+  if (!p && !q) return true;
+  if (bool(p) != bool(q)) return false;
+  return p->val == q->val && isMirror(p->left, q->right) &&
+         isMirror(p->right, q->left);
+}
+bool isSymmetric(TreeNode* root) {
+  if (!root) return true;
+  return isMirror(root->left, root->right);
+}
+}  // namespace LC101
+
 // TODO 112. 路径总和
 namespace LC112 {
+//* 思路：需要从根出发，考虑前序遍历，附加信息为当前路径和与target的差值
 bool hasPathSum(TreeNode* root, int sum) {
   if (!root) return false;
   if (sum == root->val && !root->left && !root->right) return true;
@@ -373,7 +520,8 @@ bool hasPathSum(TreeNode* root, int sum) {
 
 // TODO 路径总和 II
 namespace LC113 {
-//* 思路：自顶向下的dfs，考虑前序遍历
+//*
+//思路：从根出发的dfs，考虑前序遍历，附加信息为当前路径及当前路径和与target的差值
 void dfs(vector<vector<int>>& res, vector<int> path, TreeNode* root, int sum) {
   if (!root) return;
   path.push_back(root->val);
@@ -390,40 +538,9 @@ vector<vector<int>> pathSum(TreeNode* root, int sum) {
 }
 }  // namespace LC113
 
-// TODO 437. 路径总和 III
-namespace LC437 {
-int rootSum(TreeNode* root, int sum) {
-  if (!root) return 0;
-  return (root->val == sum) + rootSum(root->left, sum - root->val) +
-         rootSum(root->right, sum - root->val);
-}
-int pathSum(TreeNode* root, int sum) {
-  if (!root) return 0;
-  return rootSum(root, sum) + pathSum(root->left, sum) +
-         pathSum(root->right, sum);
-}
-}  // namespace LC437
-
-// TODO 666. 路径和 IV
-namespace LC666 {
-int pathSum(vector<int>& nums) {
-  int res = 0;
-  unordered_map<int, int> M;
-  for (int i = int(nums.size()) - 1; i >= 0; i--) {
-    int d = nums[i] / 100, p = (nums[i] % 100) / 10, v = nums[i] % 10;
-    M[d * 10 + p] = max(M[d * 10 + p], 1);
-    res += M[d * 10 + p] * v;
-    // 如果一个节点会经过 n 次, 那么这 n 次也一定经过其父节点,
-    // 因此将当前节点的次数加入其父节点中
-    M[(d - 1) * 10 + (p - 1) / 2 + 1] += M[d * 10 + p];
-  }
-  return res;
-}
-}  // namespace LC666
-
 // TODO 257. 二叉树的所有路径
 namespace LC257 {
-//* 思路：从根出发的dfs，考虑前序遍历
+//* 思路：从根出发的dfs，考虑前序遍历，附带信息：当前路径
 void dfs(vector<string>& res, string path, TreeNode* root) {
   if (!root) return;
   path += to_string(root->val);
@@ -444,41 +561,103 @@ vector<string> binaryTreePaths(TreeNode* root) {
 
 // TODO 129. 求根到叶子节点数字之和
 namespace LC129 {
-//* 思路：自顶向下的dfs，考虑前序遍历
-void dfs(vector<int>& nums, int tmp, TreeNode* root) {
-  if (!root) return;
+//* 思路：从根出发的dfs，考虑前序遍历
+int dfs(int tmp, TreeNode* root) {
+  if (!root) return 0;
+  int res = 0;
   tmp = tmp * 10 + root->val;
-  if (!root->left && !root->right) nums.push_back(tmp);
-  dfs(nums, tmp, root->left);
-  dfs(nums, tmp, root->right);
+  if (!root->left && !root->right) res += tmp;
+  res += dfs(tmp, root->left);
+  res += dfs(tmp, root->right);
+  return res;
 }
-int sumNumbers(TreeNode* root) {
-  vector<int> nums;
-  dfs(nums, 0, root);
-  return accumulate(nums.begin(), nums.end(), 0);
-}
+int sumNumbers(TreeNode* root) { return dfs(0, root); }
 }  // namespace LC129
+
+//! 双层遍历问题： 内层是dfs，外层是分解问题,
+//! 一般内外层根据题目要求，可灵活选择前序和后序(中序一般不常见)
+//! 注意：有时采用前序会产生许多不必要的遍历操作，可改进为后序遍历，参见LC110
+//!
+//! 典型问题如：
+//!   (不一定从根出发的)路径问题（路径和、路径数字、路径字符、路径序列等）
+//! dfs通式：
+//!   void dfs(ResultType & res，AddtionalType ..., TreeNode* root){...}
+//! 若结果形式比较简单，比如是bool,int这类的：
+//!   int dfs(AddtionalType ..., TreeNode* root){...}
+//! 分解问题通式：
+//!   根的解 = func(左子树的解，右子树的解，dfs(root)的解)
+// TODO 110. 平衡二叉树
+namespace LC110 {
+//* 思路1： 双层遍历问题
+// 内层是求根树的最大深度，后续遍历
+// 外层是从根出发，比较左右子树最大深度，采用的前序遍历，是自顶向下的，这没啥毛病，但问题出在求每个节点最大深度会产生很多冗余操作，会带来效率问题！
+int dfs1(TreeNode* root) {
+  if (!root) return 0;
+  return max(dfs1(root->left), dfs1(root->right)) + 1;
+}
+bool isBalanced1(TreeNode* root) {
+  if (!root) return true;
+  if (abs(dfs1(root->left) - dfs1(root->right)) > 1) return false;
+  return isBalanced1(root->left) && isBalanced1(root->right);
+}
+//* 思路2：提前截断
+// 内层：当左右子树不平衡时，直接向上传递-1，表示此树不为平衡树，这样就不用遍历所有其他节点求深度了，相当于提前截断此次内层遍历
+// 这样实际是将两层遍历降为单层dfs遍历问题
+int dfs(TreeNode* root) {
+  if (!root) return 0;
+  int left = dfs(root->left), right = dfs(root->right);
+  if (left == -1 || right == -1) return -1;
+  int res = abs(left - right);
+  return res > 1 ? -1 : (max(left, right) + 1);
+}
+bool isBalanced(TreeNode* root) {
+  if (!root) return true;
+  // return isBalanced(root->left) && isBalanced(root->right) && dfs(root) !=
+  // -1;
+  return dfs(root) != -1;  // 改进此处可减少一般内存消耗
+}
+}  // namespace LC110
+
+// TODO 437. 路径总和 III
+namespace LC437 {
+//* 思路：双层遍历问题
+// 内层：dfs，求从跟出发路径和等于target的路径数，前序遍历；
+// 外层：自底向上，后续遍历
+int dfs(TreeNode* root, int sum) {
+  if (!root) return 0;
+  return (root->val == sum) + dfs(root->left, sum - root->val) +
+         dfs(root->right, sum - root->val);
+}
+int pathSum(TreeNode* root, int sum) {
+  if (!root) return 0;
+  return pathSum(root->left, sum) + pathSum(root->right, sum) + dfs(root, sum);
+}
+}  // namespace LC437
 
 // TODO 687. 最长同值路径
 namespace LC687 {
-int helper(TreeNode* root, int val) {
+//* 两层：
+//* 一层是求从根出发的最长同值路径，前序遍历
+//* 二层是自底向上，后序遍历
+int dfs(int val, TreeNode* root) {
   if (!root || root->val != val) return 0;
-  return 1 + max(helper(root->left, val), helper(root->right, val));
+  return 1 + max(dfs(val, root->left), dfs(val, root->right));
 }
+
 int longestUnivaluePath(TreeNode* root) {
   if (!root) return 0;
   int sub =
       max(longestUnivaluePath(root->left), longestUnivaluePath(root->right));
-  return max(sub,
-             helper(root->left, root->val) + helper(root->right, root->val));
+  return max(sub, dfs(root->val, root->left) + dfs(root->val, root->right));
 }
 }  // namespace LC687
 
 // TODO 124. 二叉树中的最大路径和
 namespace LC124 {
-//* 思路：此题其实就两个点：
-//* 1.分解问题：求从root出发的解+左右子树的完整解
-//* 2.用dfs求从root出发的解,最好自底向上，先求从底层节点出发的最大路径和，再往上推算，故采用后序遍历
+//* 思路：两层：
+//* 1.求从根出发的最大路径和,
+//这里可以采用前序遍历，也可以采用自底向上的后序遍历，先求从底层节点出发的最大路径和，再往上推算，显然后者效率更高
+//* 2.分解问题：左右子树的完整解+从根出发的解，后续遍历
 int dfs(int& res, TreeNode* root) {
   if (!root) return 0;
   int left_max = dfs(res, root->left);
@@ -729,13 +908,6 @@ int kthSmallest(TreeNode* root, int k) {
 }
 }  // namespace LC230
 
-//! 层序
-// TODO 637. 二叉树的层平均值
-namespace LC637 {}  // namespace LC637
-
-// TODO 515. 在每个树行中找最大值
-namespace LC515 {}  // namespace LC515
-
 //! 特殊性较强（言外之意：参考性不强的）放这↓
 // TODO 337. 打家劫舍 III
 namespace LC337 {}  // namespace LC337
@@ -854,3 +1026,20 @@ namespace LC510 {}  // namespace LC510
 
 // TODO 366. 寻找完全二叉树的叶子节点
 namespace LC366 {}  // namespace LC366
+
+// TODO 666. 路径和 IV
+namespace LC666 {
+int pathSum(vector<int>& nums) {
+  int res = 0;
+  unordered_map<int, int> M;
+  for (int i = int(nums.size()) - 1; i >= 0; i--) {
+    int d = nums[i] / 100, p = (nums[i] % 100) / 10, v = nums[i] % 10;
+    M[d * 10 + p] = max(M[d * 10 + p], 1);
+    res += M[d * 10 + p] * v;
+    // 如果一个节点会经过 n 次, 那么这 n 次也一定经过其父节点,
+    // 因此将当前节点的次数加入其父节点中
+    M[(d - 1) * 10 + (p - 1) / 2 + 1] += M[d * 10 + p];
+  }
+  return res;
+}
+}  // namespace LC666
