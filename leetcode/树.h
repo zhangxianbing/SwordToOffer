@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-09 11:29:43
- * @LastEditTime: 2019-08-10 19:58:30
+ * @LastEditTime: 2019-08-10 20:31:55
  * @LastEditors: zhangxianbing
  */
 #pragma once
@@ -11,15 +11,15 @@
 //! 二叉树
 //! 二叉树天然具有递归的结构，因此涉及很多问题都和遍历、递归有关，
 //! 递归的关键是如何抽象出左右子树的解和母树的解之间的关系,这有点类似动态规划的思想
-//! 二叉树一般涉及的问题类型有：
-//!     常规遍历、变种遍历以及遍历衍生而来的问题（其实基本所有树的问题都涉及到遍历）
-//!     路径相关问题：路径、距离以及衍生的路径和、路径数字、路径字符等等
-//!     遍历序列相关问题
-//!     深度优先遍历（前中后序遍历）和广度优先遍历（层序遍历）
-//!     动态规划问题(本质也是遍历问题,详见动态规划部分)
+//! dfs通式：
+//!   void dfs(ResultType & res，AddtionalType ..., TreeNode* root){...}
+//! 若结果形式比较简单，比如是bool,int这类的：
+//!   int dfs(AddtionalType ..., TreeNode* root){...}
+//! 其中AddtionalType为附加信息
+//!
 //* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ *//
 
-//! 各种遍历的基础考察（基础的前序、中序、后序、层序，以及衍生的变种遍历）
+//! 各种遍历的基础考察（基础的前序、中序、后序、层序，以及衍生的变种遍历、简单遍历题）
 //!
 // TODO 144. 二叉树的前序遍历
 namespace LC144 {
@@ -421,7 +421,7 @@ vector<int> rightSideView(TreeNode* root) {
 // 按根-右-左遍历，同时记录当前层数，每新到一层记录第一个节点的值，略显繁琐
 }  // namespace LC199
 
-//! dfs遍历 - 中序遍历相关问题
+//! 单层dfs遍历 - 中序遍历相关问题
 //! dfs中序遍历问题一般结合二叉搜索树(BST)考察，因为二叉搜索树有个特性：其中序遍历序列一定是有序的，由此可以衍生很多问题
 //!
 // TODO 230. 二叉搜索树中第K小的元素
@@ -602,34 +602,16 @@ int rangeSumBST(TreeNode* root, int L, int R) {
 }
 }  // namespace LC938
 
-//! dfs遍历 - 前后序遍历相关问题
-//! dfs通式：
-//!   void dfs(ResultType & res，AddtionalType ..., TreeNode* root){...}
-//! 若结果形式比较简单，比如是bool,int这类的：
-//!   int dfs(AddtionalType ..., TreeNode* root){...}
-//! 其中AddtionalType为附加信息
+//! 单层dfs遍历 - 前序遍历相关问题
 //!
-// TODO 104. 二叉树的最大深度
-namespace LC104 {
-//* 思路：自底向上，采用后序遍历
-// 先计算出子树的最大深度，后续才好判定母树的最大深度
-int maxDepth(TreeNode* root) {
+// TODO 222. 完全二叉树的节点个数
+namespace LC222 {
+//* 思路：前中后序区别不大
+int countNodes(TreeNode* root) {
   if (!root) return 0;
-  // 下句return本质是一个后序遍历，必须先得到子树的解，才能进一步得到母树的解
-  return max(maxDepth(root->left), maxDepth(root->right)) + 1;
+  return countNodes(root->left) + countNodes(root->right) + 1;
 }
-}  // namespace LC104
-
-// TODO 111. 二叉树的最小深度
-namespace LC111 {
-//* 思路：同LC104
-int minDepth(TreeNode* root) {
-  if (!root) return 0;
-  if (!root->left) return minDepth(root->right) + 1;
-  if (!root->right) return minDepth(root->left) + 1;
-  return min(minDepth(root->left), minDepth(root->right)) + 1;
-}
-}  // namespace LC111
+}  // namespace LC222
 
 // TODO 101. 对称二叉树
 namespace LC101 {
@@ -646,19 +628,6 @@ bool isSymmetric(TreeNode* root) {
 }
 }  // namespace LC101
 
-// TODO 226.反转二叉树
-namespace LC226 {
-//* 思路：自底向上，考虑后序遍历
-// 先反转左右两个子树，再反转母树
-TreeNode* invertTree(TreeNode* root) {
-  if (!root) return NULL;
-  root->left = invertTree(root->left);
-  root->right = invertTree(root->right);
-  swap(root->left, root->right);
-  return root;
-}
-}  // namespace LC226
-
 // TODO 100. 相同的树
 namespace LC100 {
 //* 思路：考虑到效率的话，应该首先比较根节点的值，故采用前序遍历
@@ -669,26 +638,6 @@ bool isSameTree(TreeNode* p, TreeNode* q) {
          isSameTree(p->right, q->right);
 }
 }  // namespace LC100
-
-// TODO 222. 完全二叉树的节点个数
-namespace LC222 {
-int countNodes(TreeNode* root) {
-  if (!root) return 0;
-  return countNodes(root->left) + countNodes(root->right) + 1;
-}
-}  // namespace LC222
-
-// TODO 404. 左叶子之和
-namespace LC404 {
-//* 思路：自底向上的dfs,考虑后序遍历
-int sumOfLeftLeaves(TreeNode* root) {
-  if (!root) return 0;
-  int res = 0;
-  if (root->left && !root->left->left && !root->left->right)
-    res = root->left->val;
-  return sumOfLeftLeaves(root->left) + sumOfLeftLeaves(root->right) + res;
-}
-}  // namespace LC404
 
 // TODO 112. 路径总和
 namespace LC112 {
@@ -777,6 +726,55 @@ string smallestFromLeaf(TreeNode* root) {
 }
 }  // namespace LC988
 
+//! 单层dfs遍历 - 后序遍历相关问题
+//!
+// TODO 404. 左叶子之和
+namespace LC404 {
+//* 思路：自底向上的dfs,考虑后序遍历
+int sumOfLeftLeaves(TreeNode* root) {
+  if (!root) return 0;
+  int res = 0;
+  if (root->left && !root->left->left && !root->left->right)
+    res = root->left->val;
+  return sumOfLeftLeaves(root->left) + sumOfLeftLeaves(root->right) + res;
+}
+}  // namespace LC404
+
+// TODO 104. 二叉树的最大深度
+namespace LC104 {
+//* 思路：自底向上，采用后序遍历
+// 先计算出子树的最大深度，后续才好判定母树的最大深度
+int maxDepth(TreeNode* root) {
+  if (!root) return 0;
+  // 下句return本质是一个后序遍历，必须先得到子树的解，才能进一步得到母树的解
+  return max(maxDepth(root->left), maxDepth(root->right)) + 1;
+}
+}  // namespace LC104
+
+// TODO 111. 二叉树的最小深度
+namespace LC111 {
+//* 思路：自底向上，采用后序遍历
+int minDepth(TreeNode* root) {
+  if (!root) return 0;
+  if (!root->left) return minDepth(root->right) + 1;
+  if (!root->right) return minDepth(root->left) + 1;
+  return min(minDepth(root->left), minDepth(root->right)) + 1;
+}
+}  // namespace LC111
+
+// TODO 226.反转二叉树
+namespace LC226 {
+//* 思路：自底向上，考虑后序遍历
+// 先反转左右两个子树，再反转母树
+TreeNode* invertTree(TreeNode* root) {
+  if (!root) return NULL;
+  root->left = invertTree(root->left);
+  root->right = invertTree(root->right);
+  swap(root->left, root->right);
+  return root;
+}
+}  // namespace LC226
+
 // TODO 508. 出现次数最多的子树元素和
 namespace LC508 {
 //* 思路： 后序遍历求各子树的和,并存入一个map中
@@ -847,26 +845,6 @@ int pathSum(TreeNode* root, int sum) {
 }
 }  // namespace LC437
 
-// TODO 250. 统计同值子树
-namespace LC250 {
-// 这里实际是前序遍历了一遍树来判断是否root树为同值树
-// 也可以用中序遍历，后序遍历，只要是深度优先遍历就行
-int dfs(TreeNode* root, int val) {
-  if (!root) return 0;
-  if (root->val != val) return -1;
-  int l = dfs(root->left, val);
-  if (l == -1) return -1;
-  int r = dfs(root->right, val);
-  if (r == -1) return -1;
-  return 1;
-}
-int countUnivalSubtrees(TreeNode* root) {
-  if (!root) return 0;
-  return countUnivalSubtrees(root->left) + countUnivalSubtrees(root->right) +
-         (dfs(root, root->val) > 0);
-}
-}  // namespace LC250
-
 // TODO 333. 最大 BST 子树
 namespace LC333 {}  // namespace LC333
 
@@ -918,6 +896,45 @@ bool isBalanced(TreeNode* root) {
 //   return isBalanced(root->left) && isBalanced(root->right);
 // }
 }  // namespace LC110
+
+// TODO 250. 统计同值子树
+namespace LC250 {
+//* 思路2：单层后序遍历
+bool dfs(int& res, TreeNode* root) {
+  if (!root) return true;
+  bool L = dfs(res, root->left);
+  if (root->left && root->left->val != root->val)
+    L = false;  //! 注意不能在这提前截断，否则会遍历不全
+  bool R = dfs(res, root->right);
+  if (root->right && root->right->val != root->val)
+    R = false;  //! 注意不能在这提前截断，否则会遍历不全
+  res += L && R;
+  return L && R;
+}
+int countUnivalSubtrees(TreeNode* root) {
+  int res = 0;
+  dfs(res, root);
+  return res;
+}
+
+//* 思路1：双层遍历
+// 这里实际是前序遍历了一遍树来判断是否root树为同值树
+// 也可以用中序遍历，后序遍历，只要是深度优先遍历就行
+// int dfs(int val, TreeNode* root) {
+//   if (!root) return 0;
+//   if (root->val != val) return -1;
+//   int l = dfs(val, root->left);
+//   if (l == -1) return -1;
+//   int r = dfs(val, root->right);
+//   if (r == -1) return -1;
+//   return 1;
+// }
+// int countUnivalSubtrees(TreeNode* root) {
+//   if (!root) return 0;
+//   return countUnivalSubtrees(root->left) + countUnivalSubtrees(root->right) +
+//          (dfs(root->val, root) > 0);
+// }
+}  // namespace LC250
 
 // TODO 124. 二叉树中的最大路径和
 namespace LC124 {
