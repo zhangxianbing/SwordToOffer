@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-09 11:29:43
- * @LastEditTime: 2019-08-10 00:16:30
+ * @LastEditTime: 2019-08-10 08:28:37
  * @LastEditors: zhangxianbing
  */
 #pragma once
@@ -592,6 +592,9 @@ namespace LC652 {}  // namespace LC652
 // TODO 1120. 子树的最大平均值
 namespace LC1120 {}  // namespace LC1120
 
+// TODO 865. 具有所有最深结点的最小子树
+namespace LC865 {}  // namespace LC865
+
 // TODO 663. 均匀树划分
 namespace LC663 {}  // namespace LC663
 
@@ -608,9 +611,6 @@ namespace LC863 {}  // namespace LC863
 // TODO 742. 二叉树最近的叶节点
 namespace LC742 {}  // namespace LC742
 
-// TODO 865. 具有所有最深结点的最小子树
-namespace LC865 {}  // namespace LC865
-
 // TODO 235. 二叉搜索树的最近公共祖先
 namespace LC235 {}  // namespace LC235
 
@@ -619,6 +619,9 @@ namespace LC236 {}  // namespace LC236
 
 // TODO 1026. 节点与其祖先之间的最大差值
 namespace LC1026 {}  // namespace LC1026
+
+// TODO 1123. 最深叶节点的最近公共祖先
+namespace LC1123 {}  // namespace LC1123
 
 //! 遍历序列相关问题
 // TODO 105. 从前序与中序遍历序列构造二叉树
@@ -658,6 +661,9 @@ namespace LC114 {}  // namespace LC114
 // TODO 426. 将二叉搜索树转化为排序的双向链表
 namespace LC426 {}  // namespace LC426
 
+// TODO 536. 从字符串生成二叉树
+namespace LC536 {}  // namespace LC536
+
 // TODO 538. 把二叉搜索树转换为累加树
 namespace LC538 {}  // namespace LC538
 
@@ -667,6 +673,12 @@ namespace LC655 {}  // namespace LC655
 // TODO 814. 二叉树剪枝
 namespace LC814 {}  // namespace LC814
 
+// TODO 108. 将有序数组转换为二叉搜索树
+namespace LC108 {}  // namespace LC108
+
+// TODO 431. 将 N 叉树编码为二叉树
+namespace LC431 {}  // namespace LC431
+
 //! 二分搜索树
 // TODO 98. 验证二叉搜索树
 namespace LC98 {}  // namespace LC98
@@ -674,6 +686,27 @@ namespace LC98 {}  // namespace LC98
 //! 二叉树操作
 // TODO 450. 删除二叉搜索树中的节点
 namespace LC450 {}  // namespace LC450
+
+// TODO 701. 二叉搜索树中的插入操作
+namespace LC701 {}  // namespace LC701
+
+// TODO 700. 二叉搜索树中的搜索
+namespace LC700 {}  // namespace LC700
+
+// TODO 669. 修剪二叉搜索树
+namespace LC669 {}  // namespace LC669
+
+// TODO 99. 恢复二叉搜索树
+namespace LC99 {}  // namespace LC99
+
+// TODO 776. 拆分二叉搜索树
+namespace LC776 {}  // namespace LC776
+
+// TODO 623. 在二叉树中增加一行
+namespace LC623 {}  // namespace LC623
+
+// TODO 156. 上下翻转二叉树
+namespace LC156 {}  // namespace LC156
 
 //! 中序
 // TODO 230. 二叉搜索树中第K小的元素
@@ -700,6 +733,9 @@ int kthSmallest(TreeNode* root, int k) {
 // TODO 637. 二叉树的层平均值
 namespace LC637 {}  // namespace LC637
 
+// TODO 515. 在每个树行中找最大值
+namespace LC515 {}  // namespace LC515
+
 //! 特殊性较强（言外之意：参考性不强的）放这↓
 // TODO 337. 打家劫舍 III
 namespace LC337 {}  // namespace LC337
@@ -707,6 +743,9 @@ namespace LC337 {}  // namespace LC337
 //! 待分类
 // TODO 270. 最接近的二叉搜索树值
 namespace LC270 {}  // namespace LC270
+
+// TODO 272. 最接近的二叉搜索树值 II
+namespace LC272 {}  // namespace LC272
 
 // TODO 501. 二叉搜索树中的众数
 namespace L501 {}  // namespace L501
@@ -720,6 +759,9 @@ namespace LC559 {}  // namespace LC559
 // TODO 654. 最大二叉树
 namespace LC654 {}  // namespace LC654
 
+// TODO 998. 最大二叉树 II
+namespace LC998 {}  // namespace LC998
+
 // TODO 606. 根据二叉树创建字符串
 namespace LC606 {}  // namespace LC606
 
@@ -729,6 +771,86 @@ namespace LC968 {}  // namespace LC968
 // TODO 938. 二叉搜索树的范围和
 namespace LC938 {}  // namespace LC938
 
-namespace LC108 {}  // namespace LC108
+// TODO 530. 二叉搜索树的最小绝对差
+namespace LC530 {}  // namespace LC530
 
-namespace LC236 {}  // namespace LC236
+// TODO 979. 在二叉树中分配硬币
+namespace LC979 {}  // namespace LC979
+
+// TODO 958. 二叉树的完全性检验
+namespace LC958 {}  // namespace LC958
+
+// TODO 894. 所有可能的满二叉树
+namespace LC894 {}  // namespace LC894
+
+// TODO 993. 二叉树的堂兄弟节点
+namespace LC993 {}  // namespace LC993
+
+// TODO 671. 二叉树中第二小的节点
+namespace LC671 {}  // namespace LC671
+
+// TODO 653. 两数之和 IV - 输入 BST
+namespace LC653 {}  // namespace LC653
+
+// TODO 116. 填充每个节点的下一个右侧节点指针
+namespace LC116 {}  // namespace LC116
+
+// TODO 117. 填充每个节点的下一个右侧节点指针 II
+namespace LC117 {}  // namespace LC117
+
+// TODO 173. 二叉搜索树迭代器
+namespace LC173 {}  // namespace LC173
+
+// TODO 872. 叶子相似的树
+namespace LC872 {}  // namespace LC872
+
+// TODO 513. 找树左下角的值
+namespace LC513 {}  // namespace LC513
+
+// TODO 617. 合并二叉树
+namespace LC617 {}  // namespace LC617
+
+// TODO 1145. 二叉树着色游戏
+namespace LC1145 {}  // namespace LC1145
+
+// TODO 1104. 二叉树寻路
+namespace LC1104 {}  // namespace LC1104
+
+// TODO 1022. 从根到叶的二进制数之和
+namespace LC1022 {}  // namespace LC1022
+
+// TODO 965. 单值二叉树
+namespace LC965 {}  // namespace LC965
+
+// TODO 951. 翻转等价二叉树
+namespace LC951 {}  // namespace LC951
+
+// TODO 919. 完全二叉树插入器
+namespace LC919 {}  // namespace LC919
+
+// TODO 897. 递增顺序查找树
+namespace LC897 {}  // namespace LC897
+
+// TODO 684. 冗余连接
+namespace LC684 {}  // namespace LC684
+
+// TODO 685. 冗余连接 II
+namespace LC685 {}  // namespace LC685
+
+// TODO 582. 杀死进程
+namespace LC582 {}  // namespace LC582
+
+// TODO 563. 二叉树的坡度
+namespace LC563 {}  // namespace LC563
+
+// TODO 545. 二叉树的边界
+namespace LC545 {}  // namespace LC545
+
+// TODO 285. 二叉搜索树中的顺序后继
+namespace LC285 {}  // namespace LC285
+
+// TODO 510. 二叉搜索树中的中序后继 II
+namespace LC510 {}  // namespace LC510
+
+// TODO 366. 寻找完全二叉树的叶子节点
+namespace LC366 {}  // namespace LC366
