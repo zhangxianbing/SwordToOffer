@@ -2,7 +2,7 @@
  * @Author: zhangxianbing
  * @Date: 2019-08-09 11:43:04
  * @LastEditors: zhangxianbing
- * @LastEditTime: 2019-08-10 23:16:59
+ * @LastEditTime: 2019-08-11 09:46:40
  * @Description: file content
  */
 #include "leetcode/include.h"
@@ -11,6 +11,5 @@
 
 int main() {
   // OrderIter::test();
-  LC333::test();
   return 0;
 }

@@ -11,7 +11,7 @@
 //! 栈
 //* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ *//
 
-// TODO 20. 有效的括号
+// LC 20. 有效的括号
 namespace LC20 {
 bool isValid(string s) {
   stack<char> st;
@@ -44,14 +44,14 @@ bool isValid(string s) {
 }
 }  // namespace LC20
 
-// TODO
+// LC
 namespace LC150 {}  // namespace LC150
 
-// TODO
+// LC
 namespace LC71 {}  // namespace LC71
 
-// TODO
+// LC
 namespace LC145 {}  // namespace LC145
 
-// TODO
+// LC
 namespace LC341 {}  // namespace LC341

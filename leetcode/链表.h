@@ -11,7 +11,7 @@
 //! 链表
 //* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ *//
 
-// TODO 206. 反转链表
+// LC 206. 反转链表
 namespace LC206 {
 ListNode* reverseList(ListNode* head) {
   ListNode *rhead = NULL, *curr = head;
@@ -25,7 +25,7 @@ ListNode* reverseList(ListNode* head) {
 }
 }  // namespace LC206
 
-// TODO 92. 反转链表 II
+// LC 92. 反转链表 II
 namespace LC92 {
 ListNode* reverseBetween(ListNode* head, int m, int n) {
   ListNode *root = new ListNode(-1), *pre = root;
@@ -42,7 +42,7 @@ ListNode* reverseBetween(ListNode* head, int m, int n) {
 }
 }  // namespace LC92
 
-// TODO 86. 分隔链表
+// LC 86. 分隔链表
 namespace LC86 {
 ListNode* partition(ListNode* head, int x) {
   ListNode node1(0), node2(0);
@@ -60,7 +60,7 @@ ListNode* partition(ListNode* head, int x) {
 }
 }  // namespace LC86
 
-// TODO 2. 两数相加
+// LC 2. 两数相加
 namespace LC2 {
 ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
   ListNode *ret = new ListNode(-1), *cur = ret;
@@ -76,7 +76,7 @@ ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
 }
 }  // namespace LC2
 
-// TODO 445. 两数相加 II
+// LC 445. 两数相加 II
 namespace LC445 {
 ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
   stack<int> s1, s2;
@@ -110,7 +110,7 @@ ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
 }  // namespace LC445
 // namespace LC445
 
-// TODO 203. 移除链表元素
+// LC 203. 移除链表元素
 namespace LC203 {
 ListNode* removeElements(ListNode* head, int val) {
   ListNode* res = new ListNode(-1);
@@ -129,7 +129,7 @@ ListNode* removeElements(ListNode* head, int val) {
 }
 }  // namespace LC203
 
-// TODO 83. 删除排序链表中的重复元素
+// LC 83. 删除排序链表中的重复元素
 namespace LC83 {
 ListNode* deleteDuplicates(ListNode* head) {
   ListNode* res = new ListNode(-1);
@@ -144,7 +144,7 @@ ListNode* deleteDuplicates(ListNode* head) {
 }
 }  // namespace LC83
 
-// TODO 82. 删除排序链表中的重复元素 II
+// LC 82. 删除排序链表中的重复元素 II
 namespace LC82 {
 ListNode* deleteDuplicates1(ListNode* head) {
   ListNode* res = new ListNode(-1);
@@ -179,7 +179,7 @@ ListNode* deleteDuplicates(ListNode* head) {
 }
 }  // namespace LC82
 
-// TODO 21. 合并两个有序链表
+// LC 21. 合并两个有序链表
 namespace LC21 {
 ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
   ListNode *ret = new ListNode(-1), *cur = ret;
@@ -197,7 +197,7 @@ ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
 }
 }  // namespace LC21
 
-// TODO 328. 奇偶链表
+// LC 328. 奇偶链表
 namespace LC328 {
 ListNode* oddEvenList(ListNode* head) {
   if (!head) return head;
@@ -222,7 +222,7 @@ void test() {
 }
 }  // namespace LC328
 
-// TODO 24. 两两交换链表中的节点
+// LC 24. 两两交换链表中的节点
 namespace LC24 {
 ListNode* swapPairs(ListNode* head) {
   if (head == nullptr || head->next == nullptr) return head;
@@ -253,7 +253,7 @@ ListNode* swapPairs1(ListNode* head) {
 }
 }  // namespace LC24
 
-// TODO 25. K 个一组翻转链表
+// LC 25. K 个一组翻转链表
 namespace LC25 {
 ListNode* reverseKGroup(ListNode* head, int k) {
   ListNode* ret = new ListNode(-1);
@@ -287,16 +287,16 @@ ListNode* reverseKGroup(ListNode* head, int k) {
 }
 }  // namespace LC25
 
-// TODO 147. 对链表进行插入排序
+// LC 147. 对链表进行插入排序
 namespace LC147 {}  // namespace LC147
 
-// TODO 148. 排序链表
+// LC 148. 排序链表
 namespace LC148 {}  // namespace LC148
 
-// TODO 237. 删除链表中的节点
+// LC 237. 删除链表中的节点
 namespace LC237 {}  // namespace LC237
 
-// TODO 19. 删除链表的倒数第N个节点
+// LC 19. 删除链表的倒数第N个节点
 namespace LC19 {
 //* 思路：前后指针
 ListNode* removeNthFromEnd(ListNode* head, int n) {
@@ -315,11 +315,11 @@ ListNode* removeNthFromEnd(ListNode* head, int n) {
 }
 }  // namespace LC19
 
-// TODO 61. 旋转链表
+// LC 61. 旋转链表
 namespace LC61 {}  // namespace LC61
 
-// TODO 143. 重排链表
+// LC 143. 重排链表
 namespace LC143 {}  // namespace LC143
 
-// TODO 234. 回文链表
+// LC 234. 回文链表
 namespace LC234 {}  // namespace LC234

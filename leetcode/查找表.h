@@ -11,7 +11,7 @@
 //! 查找表：包括map,set,unordered_map,unordered_set
 //* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ *//
 
-// TODO 349. 两个数组的交集
+// LC 349. 两个数组的交集
 namespace LC349 {
 vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
   vector<int> res;
@@ -23,7 +23,7 @@ vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
 }
 }  // namespace LC349
 
-// TODO 350. 两个数组的交集 II
+// LC 350. 两个数组的交集 II
 namespace LC350 {
 vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
   unordered_map<int, int> m;
@@ -35,7 +35,7 @@ vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
 }
 }  // namespace LC350
 
-// TODO 202. 快乐数
+// LC 202. 快乐数
 namespace LC202 {
 bool isHappy(int n) {
   unordered_map<int, int> m;
@@ -58,7 +58,7 @@ bool isHappy(int n) {
 }
 }  // namespace LC202
 
-// TODO 205. 同构字符串
+// LC 205. 同构字符串
 namespace LC205 {
 bool isIsomorphic(string s, string t) {
   if (s.size() != t.size()) return false;
@@ -72,7 +72,7 @@ bool isIsomorphic(string s, string t) {
 }
 }  // namespace LC205
 
-// TODO 290. 单词规律
+// LC 290. 单词规律
 namespace LC290 {
 bool wordPattern(string pattern, string str) {
   map<char, int> p2i;
@@ -87,7 +87,7 @@ bool wordPattern(string pattern, string str) {
 }
 }  // namespace LC290
 
-// TODO 451. 根据字符出现频率排序
+// LC 451. 根据字符出现频率排序
 namespace LC451 {
 string frequencySort(string s) {
   unordered_map<char, int> m;
@@ -98,7 +98,7 @@ string frequencySort(string s) {
 }
 }  // namespace LC451
 
-// TODO 1. 两数之和
+// LC 1. 两数之和
 namespace LC1 {
 vector<int> twoSum(vector<int>& nums, int target) {
   unordered_map<int, int> m;
@@ -110,7 +110,7 @@ vector<int> twoSum(vector<int>& nums, int target) {
 }
 }  // namespace LC1
 
-// TODO 454. 四数相加 II
+// LC 454. 四数相加 II
 namespace LC454 {
 int fourSumCount(vector<int>& A, vector<int>& B, vector<int>& C,
                  vector<int>& D) {
@@ -125,7 +125,7 @@ int fourSumCount(vector<int>& A, vector<int>& B, vector<int>& C,
 }
 }  // namespace LC454
 
-// TODO 447. 回旋镖的数量
+// LC 447. 回旋镖的数量
 namespace LC447 {
 int dist(vector<int>& p, vector<int>& q) {
   int dx = p[0] - q[0];
@@ -143,7 +143,7 @@ int numberOfBoomerangs(vector<vector<int>>& points) {
 }
 }  // namespace LC447
 
-// TODO 217. 存在重复元素
+// LC 217. 存在重复元素
 namespace LC217 {
 bool containsDuplicate(vector<int>& nums) {
   unordered_map<int, int> m;
@@ -152,7 +152,7 @@ bool containsDuplicate(vector<int>& nums) {
   return false;
 }
 
-// TODO 219. 存在重复元素 II
+// LC 219. 存在重复元素 II
 namespace LC219 {
 // 思路1：维护一个size==k大小的set作为滑动窗口
 bool containsNearbyDuplicate1(vector<int>& nums, int k) {
@@ -179,7 +179,7 @@ bool containsNearbyDuplicate(vector<int>& nums, int k) {
 }
 }  // namespace LC219
 
-// TODO 220. 存在重复元素 III
+// LC 220. 存在重复元素 III
 namespace LC220 {
 //* 思路1：类似LC219（1）
 bool containsNearbyAlmostDuplicate1(vector<int>& nums, int k, int t) {
@@ -207,5 +207,5 @@ bool containsNearbyAlmostDuplicate(vector<int>& nums, int k, int t) {
 }  // namespace LC220
 }  // namespace LC217
 
-// TODO 149. 直线上最多的点数
+// LC 149. 直线上最多的点数
 namespace LC149 {}  // namespace LC149
