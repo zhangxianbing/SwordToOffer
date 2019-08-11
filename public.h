@@ -2,28 +2,26 @@
  * @Author: zhangxianbing
  * @Date: 2019-08-09 11:43:06
  * @LastEditors: zhangxianbing
- * @LastEditTime: 2019-08-11 10:25:27
+ * @LastEditTime: 2019-08-11 11:42:08
  * @Description: file content
  */
 #pragma once
 
-// LC
-//! FATAL
-//@
-//#
-//$
-//%
-//^
-//&
-//*
-//-
-//+
-///
-//?
-//>
-//<
-//|
-// LC
+//! #FF0000 FATAL
+//@ #FF8C00 ERROR
+//# #BBBB23 WARNING
+//$ #48BB31 INFO
+//% #0070BB DEBUG
+//^ #19CAAD VERBOSE
+//& #8A2BE2 ASSERT
+//* #98C379
+/// #3D9140
+//+ #191970
+//- #872657
+//? #F0E68C NOTE
+//> #FFFF00 NOTE
+//< #00FF00 NOTE
+//| #FFC0CB NOTE
 
 #include <algorithm>
 #include <cassert>
