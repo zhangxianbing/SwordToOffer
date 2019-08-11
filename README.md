@@ -2,10 +2,10 @@
  * @Author: zhangxianbing
  * @Date: 2019-08-11 11:29:12
  * @LastEditors: zhangxianbing
- * @LastEditTime: 2019-08-11 11:45:45
+ * @LastEditTime: 2019-08-11 21:24:12
  * @Description: file content
  -->
-
+思考1：很多时候，如果依赖各种别人做好的动图或写好的代码来理解算法，并不能很好的锻炼自己的思维！
 为增强视图效果，建议安装Better-Comment插件，setting.json里添加：
 ```json
        "better-comments.tags": [

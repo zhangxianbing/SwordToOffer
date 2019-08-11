@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-09 11:29:43
- * @LastEditTime: 2019-08-11 14:30:22
+ * @LastEditTime: 2019-08-12 00:19:50
  * @LastEditors: zhangxianbing
  */
 #pragma once
@@ -855,8 +855,7 @@ vector<int> findFrequentTreeSum(TreeNode* root) {
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
 //$ 双层dfs遍历问题：
 //$ 内层一般根据题目要求，可灵活选择前序或后序(中序不常见)
-//$
-//外层一般选前、中、后序均可，效率和内存方面差别不是特别明显，不过最终也得根据题目要求而定
+//$ 外层一般选前中后序均可，差别不是特别明显，不过最终也得根据题目而定
 //$
 //$ 典型问题如：
 //$   路径问题（路径和、路径数字、路径字符、路径序列等）
@@ -901,9 +900,6 @@ int pathSum(TreeNode* root, int sum) {
 }
 }  // namespace LC437
 
-// LC652. 寻找重复的子树
-namespace LC652 {}  // namespace LC652
-
 // LC1120. 子树的最大平均值
 namespace LC1120 {}  // namespace LC1120
 
@@ -917,11 +913,9 @@ namespace LC663 {}  // namespace LC663
 //$ 可以转化为单层后序遍历的双层dfs问题
 //$ 自顶向上信息传递的逻辑是解决这类题的关键
 //$
-//选择遍历方式时，不能只看题目表面意思，比如从根节点出发的XXX，不一定非得用前序，有时采用后序是更好的选择，
 //$ 纵观(LC110，LC124,LC298)，受到的启发是：
-//$
-// 1)可以自底向上传递信息(即通过左右子树的结果能推导出根树的结果)的问题宜采用后序遍历，尤其注意的是从根节点出发的最大路径和，表面上看用前序遍历做很合理，但实际采用后序遍历更有效率，而有的信息很难自底向上传递，比如LC437的路径和，则需要通过内层前序遍历+外层dfs来做
-//$   2)不要固化思维的认为一个递归函数一定仅仅完成一项工作
+//  $1)可以自底向上传递信息(即通过左右子树的结果能推导出根树的结果)的问题宜采用后序遍历，尤其注意的是从根节点出发的最大路径和，表面上看用前序遍历做很合理，但实际采用后序遍历更有效率，而有的信息很难自底向上传递，比如LC437的路径和，则需要通过内层前序遍历+外层dfs来做
+//  $2)不要固化思维的认为一个递归函数一定仅仅完成一项工作
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
 // LC110. 平衡二叉树
 namespace LC110 {
@@ -1175,16 +1169,6 @@ int largestBSTSubtree(TreeNode* root) {
 // LC834. 树中距离之和
 namespace LC834 {}  // namespace LC834
 
-// LC863. 二叉树中所有距离为 K 的结点
-namespace LC863 {}  // namespace LC863
-
-//# 742. 二叉树最近的叶节点
-namespace LC742 {
-//* 思路：先前序遍历，将每个节点的父节点存入哈希表，同时找到k节点
-// *
-int findClosestLeaf(TreeNode* root, int k) {}
-}  // namespace LC742
-
 // LC1026. 节点与其祖先之间的最大差值
 namespace LC1026 {}  // namespace LC1026
 
@@ -1192,16 +1176,134 @@ namespace LC1026 {}  // namespace LC1026
 namespace LC1123 {}  // namespace LC1123
 
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
-//$ 遍历序列相关问题
+//$ 二叉树的序列问题
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
 // LC105. 从前序与中序遍历序列构造二叉树
-namespace LC105 {}  // namespace LC105
+namespace LC105 {
+//* 思路3：12ms 非递归
+// 从
+TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+  if (preorder.empty()) return NULL;
+  stack<TreeNode*> S;
+  TreeNode *root = new TreeNode(preorder[0]), *cur = root;
+  int i = 0, j = 0;      // i-前序序号，j-中序序号
+  bool turnLeft = true;  // 左分支优先
+  S.push(root);
+  i++;
+  while (i < preorder.size()) {
+    if (!S.empty() && S.top()->val == inorder[j]) {
+      cur = S.top();  // 利用栈这个数据结构回溯
+      S.pop();
+      turnLeft = false;  // 左分支遍历不了了再进右分支
+      j++;
+    } else {
+      if (turnLeft) {
+        cur = cur->left = new TreeNode(preorder[i++]);
+        S.push(cur);
+      } else {
+        turnLeft = true;  // 左分支优先
+        cur = cur->right = new TreeNode(preorder[i++]);
+        S.push(cur);
+      }
+    }
+  }
+  return root;
+}
+
+//* 思路2：12ms
+// 相比思路1，改进了在前序中找左右子树分界位置的处理，由于子树的前序和中序是等长的，而由中序很好求出左右子树的长度，因此改进如下：
+// TreeNode* dfs(vector<int>& P, int pi, int pj, vector<int>& Q, int qi, int qj,
+//               unordered_map<int, int>& M) {
+//   if (pi >= pj || qi >= qj) return NULL;
+//   int pos = M[P[pi]] - qi;  // 从中序序列获取左子树的长度
+//   auto root = new TreeNode(P[pi]);
+//   root->left = dfs(P, pi + 1, pi + pos + 1, Q, qi, qi + pos + 1, M);
+//   root->right = dfs(P, pi + pos + 1, pj, Q, qi + pos + 1, qj, M);
+//   return root;
+// }
+// TreeNode* buildTree(vector<int>& P, vector<int>& Q) {
+//   unordered_map<int, int> M;  //记录各数在中序中的位置
+//   for (int i = 0; i < Q.size(); ++i) M[Q[i]] = i;
+//   return dfs(P, 0, P.size(), Q, 0, Q.size(), M);
+// }
+
+//* 思路1：200ms
+//前序的第一个元素肯定是根节点，中序中根节点左侧全是左子树，右侧全是右子树，由此可以确定根节点以及左右子树的前序和中序，由此可以写成递归
+// TreeNode* dfs(vector<int>& P, int pi, int pj, vector<int>& Q, int qi, int qj,
+//               unordered_map<int, int>& M) {
+//   if (pi > pj) return NULL;
+//   auto root = new TreeNode(P[pi]);
+//   int pm = pi + 1, qm = M[P[pi]];
+//   for (; pm <= pj; pm++)
+//     if (M[P[pm]] >= qm) break;
+//   pm--;
+//   root->left = dfs(P, pi + 1, pm, Q, qi, qm - 1, M);
+//   root->right = dfs(P, pm + 1, pj, Q, qm + 1, qj, M);
+//   return root;
+// }
+// TreeNode* buildTree(vector<int>& P, vector<int>& Q) {
+//   unordered_map<int, int> M;  //记录各数在中序中的位置
+//   for (int i = 0; i < Q.size(); i++) M[Q[i]] = i;
+//   return dfs(P, 0, P.size() - 1, Q, 0, Q.size() - 1, M);
+// }
+}  // namespace LC105
 
 // LC106. 从中序与后序遍历序列构造二叉树
-namespace LC106 {}  // namespace LC106
+namespace LC106 {
+//* 递归版
+TreeNode* dfs(vector<int>& inorder, int i1, int j1, vector<int>& postorder,
+              int i2, int j2, unordered_map<int, int>& M) {
+  if (i1 >= j1 || i2 >= j2) return NULL;
+  auto root = new TreeNode(postorder[j2 - 1]);
+  int rlen = j1 - M[postorder[j2 - 1]] - 1;  // 从中序序列获取右子树的长度
+  root->right =
+      dfs(inorder, j1 - rlen, j1, postorder, j2 - 1 - rlen, j2 - 1, M);
+  root->left = dfs(inorder, i1, j1 - rlen - 1, postorder, i2, j2 - 1 - rlen, M);
+  return root;
+}
+TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+  unordered_map<int, int> M;
+  for (int i = 0; i < inorder.size(); i++) M[inorder[i]] = i;
+  return dfs(inorder, 0, inorder.size(), postorder, 0, postorder.size(), M);
+}
+//* 非递归版
+TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+  if (inorder.empty()) return NULL;
+  stack<TreeNode*> S;
+  TreeNode *root = new TreeNode(postorder.back()), *cur = root;
+  S.push(root);
+  int i = postorder.size() - 2, j = inorder.size() - 1;  // i - 后序，j - 中序
+  bool turnRight = true;                                 // 右分支优先
+  while (i >= 0) {
+    if (!S.empty() && S.top()->val == inorder[j]) {
+      cur = S.top();
+      S.pop();
+      turnRight = false;  // 右分支遍历不了了才进左分支
+      j--;
+    } else {
+      if (turnRight) {
+        cur = cur->right = new TreeNode(postorder[i--]);
+        S.push(cur);
+      } else {
+        turnRight = true;  // 右分支优先
+        cur = cur->left = new TreeNode(postorder[i--]);
+        S.push(cur);
+      }
+    }
+  }
+  return root;
+}
+}  // namespace LC106
 
 // LC889. 根据前序和后序遍历构造二叉树
-namespace LC889 {}  // namespace LC889
+namespace LC889 {
+//* 思路：前序是根-左-右，后序是左-右-根
+// 实际上后序反过来就是根-右-左，根好确定，直接前序第一个或者后序最后一个就是，但左右子树可能就不唯一了，依据题意，任找一个解就行，因此找到一个左右子树的分界线就行
+//   pre = [1,2,4,5,3,6,7]  post = [4,5,2,6,7,3,1]
+// ~post = [1,3,7,6,2,5,4] (~表示翻转)
+//
+TreeNode* constructFromPrePost(vector<int>& pre, vector<int>& post) {}
+}  // namespace LC889
 
 // LC1008. 先序遍历构造二叉树
 namespace LC1008 {}  // namespace LC1008
@@ -1215,11 +1317,12 @@ namespace LC255 {}  // namespace LC255
 // LC1028. 从先序遍历还原二叉树
 namespace LC1028 {}  // namespace LC1028
 
-//$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
-//$ 树的转换问题(将树结构转换为其他形式)
-//$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
 // LC449. 序列化和反序列化二叉搜索树
-namespace LC449 {}  // namespace LC449
+namespace LC449 {
+string serialize(TreeNode* root) {}
+
+TreeNode* deserialize(string data) {}
+}  // namespace LC449
 
 // LC428. 序列化和反序列化 N 叉树
 namespace LC428 {}  // namespace LC428
@@ -1227,6 +1330,14 @@ namespace LC428 {}  // namespace LC428
 // LC297. 二叉树的序列化与反序列化
 namespace LC297 {}  // namespace LC297
 
+// LC652. 寻找重复的子树
+namespace LC652 {
+vector<TreeNode*> findDuplicateSubtrees(TreeNode* root) {}
+}  // namespace LC652
+
+//$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
+//$ 树的转换问题(将树结构转换为其他形式)
+//$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
 // LC114. 二叉树展开为链表
 namespace LC114 {}  // namespace LC114
 
