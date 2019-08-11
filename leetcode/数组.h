@@ -17,7 +17,7 @@
 //* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ *//
 
 //! 前后指针
-// LC 26. 删除排序数组中的重复项
+// LC26. 删除排序数组中的重复项
 namespace LC26 {
 int removeDuplicates(vector<int>& nums) {
   if (nums.empty()) return 0;
@@ -31,7 +31,7 @@ int removeDuplicates(vector<int>& nums) {
 }
 }  // namespace LC26
 
-// LC 80. 删除排序数组中的重复项 II
+// LC80. 删除排序数组中的重复项 II
 namespace LC80 {
 int removeDuplicates(vector<int>& nums) {
   if (nums.size() <= 2) return nums.size();
@@ -43,7 +43,7 @@ int removeDuplicates(vector<int>& nums) {
 }
 }  // namespace LC80
 
-// LC 27. 移除元素
+// LC27. 移除元素
 namespace LC27 {
 int removeElement(vector<int>& nums, int val) {
   int j = 0;
@@ -56,7 +56,7 @@ int removeElement(vector<int>& nums, int val) {
   return j;
 }
 }  // namespace LC27
-// LC 283. 移动零
+// LC283. 移动零
 namespace LC283 {
 void moveZeroes(vector<int>& nums) {
   int j = 0;
@@ -73,7 +73,7 @@ void moveZeroes(vector<int>& nums) {
 }  // namespace LC283
 
 //! 对撞指针
-// LC 167. 两数之和 II - 输入有序数组 (对撞指针)
+// LC167. 两数之和 II - 输入有序数组 (对撞指针)
 namespace LC167 {
 vector<int> twoSum(vector<int>& nums, int target) {
   int n = nums.size(), l = 0, r = n - 1;
@@ -90,7 +90,7 @@ vector<int> twoSum(vector<int>& nums, int target) {
 }
 }  // namespace LC167
 
-// LC 125. 验证回文串 (对撞指针)
+// LC125. 验证回文串 (对撞指针)
 namespace LC125 {
 bool isPalindrome(string s) {
   int n = s.size(), l = 0, r = n - 1;
@@ -105,7 +105,7 @@ bool isPalindrome(string s) {
 }  // namespace LC125
 
 //! 三指针
-// LC 75. 颜色分类 （快排子过程）
+// LC75. 颜色分类 （快排子过程）
 namespace LC75 {
 void sortColors(vector<int>& nums) {
   int n = nums.size();
@@ -122,7 +122,7 @@ void sortColors(vector<int>& nums) {
 }
 }  // namespace LC75
 
-// LC 215. 数组中的第K个最大元素 (利用快排)
+// LC215. 数组中的第K个最大元素 (利用快排)
 namespace LC215 {
 int findKthLargest(vector<int>& nums, int l, int r, int K) {
   int i = l - 1, j = r + 1, k = l;

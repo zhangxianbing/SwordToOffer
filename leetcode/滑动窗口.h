@@ -15,7 +15,7 @@
 
 //! 哈希表+滑动窗口
 
-// LC 3.无重复字符的最长子串
+// LC3.无重复字符的最长子串
 namespace LC3 {
 //* 思路1：哈希表记录每个元素最新出现的位置（序号）
 int lengthOfLongestSubstring1(string s) {
@@ -44,7 +44,7 @@ int lengthOfLongestSubstring(string s) {
 }
 }  // namespace LC3
 
-// LC [ 159] 至多包含两个不同字符的最长子串
+// LC[ 159] 至多包含两个不同字符的最长子串
 namespace LC159 {
 //* 思路：哈希表+滑动窗口
 int lengthOfLongestSubstringTwoDistinct(string s) {
@@ -60,7 +60,7 @@ int lengthOfLongestSubstringTwoDistinct(string s) {
 }
 }  // namespace LC159
 
-// LC [ 340] 至多包含 K 个不同字符的最长子串
+// LC[ 340] 至多包含 K 个不同字符的最长子串
 namespace LC340 {
 //* 思路：哈希表+滑动窗口
 int lengthOfLongestSubstringKDistinct(string s, int k) {
@@ -76,7 +76,7 @@ int lengthOfLongestSubstringKDistinct(string s, int k) {
 }
 }  // namespace LC340
 
-// LC 30. 串联所有单词的子串
+// LC30. 串联所有单词的子串
 namespace LC30 {
 //* 思路：哈希表+滑动窗口
 vector<int> findSubstring(string s, vector<string>& words) {
@@ -106,7 +106,7 @@ void test() {
 }
 }  // namespace LC30
 
-// LC 76. 最小覆盖子串 （经典题☆☆☆☆☆）
+// LC76. 最小覆盖子串 （经典题☆☆☆☆☆）
 namespace LC76 {
 //* 思路：哈希表+滑动窗口 模板
 string minWindow(string s, string t) {
@@ -124,7 +124,7 @@ string minWindow(string s, string t) {
 }
 }  // namespace LC76
 
-// LC 209. 长度最小的子数组
+// LC209. 长度最小的子数组
 namespace LC209 {
 int minSubArrayLen(int s, vector<int>& nums) {
   int n = nums.size(), i = 0, j = 0, t = 0, res = INT32_MAX;
@@ -139,7 +139,7 @@ int minSubArrayLen(int s, vector<int>& nums) {
 }
 }  // namespace LC209
 
-// LC 239. 滑动窗口最大值
+// LC239. 滑动窗口最大值
 namespace LC239 {
 // 一开始的思路是建立一个最大堆，麻烦！而C++STL中的priority_queue不好删除元素
 // 可以考虑使用双向队列
@@ -156,7 +156,7 @@ vector<int> maxSlidingWindow(vector<int>& nums, int k) {
 }
 }  // namespace LC239
 
-// LC 438. 找到字符串中所有字母异位词
+// LC438. 找到字符串中所有字母异位词
 namespace LC438 {
 vector<int> findAnagrams(string s, string p) {
   vector<int> ret;
@@ -174,7 +174,7 @@ vector<int> findAnagrams(string s, string p) {
 }
 }  // namespace LC438
 
-// LC 567. 字符串的排列
+// LC567. 字符串的排列
 namespace LC567 {
 bool checkInclusion(string s1, string s2) {
   unordered_map<char, int> m;
@@ -191,19 +191,19 @@ bool checkInclusion(string s1, string s2) {
 }
 }  // namespace LC567
 
-// LC 632. 最小区间
+// LC632. 最小区间
 namespace LC632 {}  // namespace LC632
 
-// LC 727. 最小窗口子序列
+// LC727. 最小窗口子序列
 namespace LC727 {}  // namespace LC727
 
-// LC 1100. 长度为 K 的无重复字符子串
+// LC1100. 长度为 K 的无重复字符子串
 namespace LC1100 {}  // namespace LC1100
 
-// LC 995. K 连续位的最小翻转次数
+// LC995. K 连续位的最小翻转次数
 namespace LC995 {}  // namespace LC995
 
-// LC 992. K 个不同整数的子数组 (待debug)
+// LC992. K 个不同整数的子数组 (待debug)
 namespace LC992 {
 int subarraysWithKDistinct(vector<int>& A, int K) {
   int res = 0;
@@ -230,7 +230,7 @@ void test() {
 }
 }  // namespace LC992
 
-// LC 674. 最长连续递增序列
+// LC674. 最长连续递增序列
 namespace LC674 {
 int findLengthOfLCIS(vector<int>& nums) {
   int res = 0;

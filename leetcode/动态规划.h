@@ -11,7 +11,7 @@
 //! 动态规划
 //* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ *//
 
-// LC 96. 不同的二叉搜索树
+// LC96. 不同的二叉搜索树
 namespace LC96 {
 int numTrees(int n) {
   if (n == 0) return 1;
@@ -23,7 +23,7 @@ int numTrees(int n) {
 }
 }  // namespace LC96
 
-// LC 95. 不同的二叉搜索树 II
+// LC95. 不同的二叉搜索树 II
 namespace LC95 {
 vector<TreeNode*> generateTrees(int start, int end) {
   if (start > end) return {NULL};
