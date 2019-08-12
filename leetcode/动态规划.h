@@ -2,7 +2,7 @@
  * @Author: zhangxianbing
  * @Date: 2019-08-09 11:37:21
  * @LastEditors: zhangxianbing
- * @LastEditTime: 2019-08-12 23:38:18
+ * @LastEditTime: 2019-08-12 23:42:37
  * @Description: file content
  */
 #pragma once
@@ -34,6 +34,7 @@ int climbStairs(int n) {
     ret[i] = ret[i - 1] + ret[i - 2];
   }
   return ret[n];
+}
 }  // namespace LC70
 
 // LC746. 使用最小花费爬楼梯
@@ -47,6 +48,7 @@ int minCostClimbingStairs(vector<int>& cost) {
     dp[i] = min(dp[i - 1] + cost[i - 1], dp[i - 2] + cost[i - 2]);
   }
   return dp[n];
+}
 }  // namespace LC746
 
 // LC509. 斐波那契数
@@ -57,6 +59,7 @@ int fib(int N) {
   d[1] = 1;
   for (int i = 2; i <= N; i++) d[i] = d[i - 1] + d[i - 2];
   return d[N];
+}
 }  // namespace LC509
 
 // LC1137. 第 N 个泰波那契数
@@ -100,16 +103,16 @@ int maxSubArray(vector<int>& nums) {
 }
 // 思路：dp[i]表示以nums[i]结束的最大和，
 // 则状态转移方程：dp[i] = max(dp[i-1]+nums[i],nums[i])
-int maxSubArray(vector<int>& nums) {
-  vector<int> dp(nums.size());
-  dp[0] = nums[0];
-  int res = dp[0];
-  for (int i = 1; i < nums.size(); i++) {
-    dp[i] = max(dp[i - 1] + nums[i], nums[i]);
-    res = max(res, dp[i]);
-  }
-  return res;
-}
+// int maxSubArray(vector<int>& nums) {
+//   vector<int> dp(nums.size());
+//   dp[0] = nums[0];
+//   int res = dp[0];
+//   for (int i = 1; i < nums.size(); i++) {
+//     dp[i] = max(dp[i - 1] + nums[i], nums[i]);
+//     res = max(res, dp[i]);
+//   }
+//   return res;
+// }
 }  // namespace LC53
 
 // LC121. 买卖股票的最佳时机
@@ -122,6 +125,7 @@ int maxProfit(vector<int>& prices) {
     max_profit = max(max_profit, pre_profit);
   }
   return max_profit;
+}
 }  // namespace LC121
 
 // LC96. 不同的二叉搜索树

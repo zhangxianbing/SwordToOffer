@@ -2,7 +2,7 @@
  * @Author: zhangxianbing
  * @Date: 2019-08-11 11:29:12
  * @LastEditors: zhangxianbing
- * @LastEditTime: 2019-08-12 21:12:10
+ * @LastEditTime: 2019-08-12 23:43:15
  * @Description: file content
  -->
 
@@ -15,7 +15,7 @@
 ```
 为增强视图效果，建议安装Better-Comment插件，setting.json里添加：
 ```json
-       "better-comments.tags": [
+      "better-comments.tags": [
         {
             "tag": "!",
             "color": "#FF0000",
@@ -168,13 +168,37 @@
         },
         {
             "tag": "note",
-            "color": "#F0E68C",
+            "color": "#00FF00",
             "strikethrough": false,
             "backgroundColor": "transparent"
         },
         {
             "tag": "注",
-            "color": "#F0E68C",
+            "color": "#00FF00",
+            "strikethrough": false,
+            "backgroundColor": "transparent"
+        },
+        {
+            "tag": "☆",
+            "color": "#FFFF00",
+            "strikethrough": false,
+            "backgroundColor": "transparent"
+        },
+        {
+            "tag": "推荐度",
+            "color": "#FFFF00",
+            "strikethrough": false,
+            "backgroundColor": "transparent"
+        },
+        {
+            "tag": "划重点",
+            "color": "#00FF00",
+            "strikethrough": false,
+            "backgroundColor": "transparent"
+        },
+        {
+            "tag": "思路",
+            "color": "#98C379",
             "strikethrough": false,
             "backgroundColor": "transparent"
         },
