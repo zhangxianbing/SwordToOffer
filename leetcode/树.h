@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-09 11:29:43
- * @LastEditTime: 2019-08-12 12:41:21
+ * @LastEditTime: 2019-08-12 13:56:46
  * @LastEditors: zhangxianbing
  */
 #pragma once
@@ -24,7 +24,6 @@
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
 // LC144. 二叉树的前序遍历
 namespace LC144 {
-// ☆☆☆☆☆ (经典题解，建议记忆!)
 //* 递归写法：
 void dfs(vector<int>& res, TreeNode* root) {
   if (!root) return;
@@ -37,7 +36,6 @@ vector<int> preorderTraversal1(TreeNode* root) {
   dfs(res, root);
   return res;
 }
-// ☆☆☆☆☆ (经典题解，建议记忆!)
 //* 非递归写法：
 vector<int> preorderTraversal(TreeNode* root) {
   vector<int> res;
@@ -59,7 +57,6 @@ vector<int> preorderTraversal(TreeNode* root) {
 
 // LC94. 二叉树的中序遍历
 namespace LC94 {
-// ☆☆☆☆☆ (经典题解，建议记忆!)
 //* 递归写法：
 void dfs(vector<int>& res, TreeNode* root) {
   if (!root) return;
@@ -72,7 +69,6 @@ vector<int> inorderTraversal1(TreeNode* root) {
   dfs(res, root);
   return res;
 }
-// ☆☆☆☆☆ (经典题解，建议记忆!)
 //* 非递归写法：
 vector<int> inorderTraversal(TreeNode* root) {
   vector<int> res;
@@ -94,7 +90,6 @@ vector<int> inorderTraversal(TreeNode* root) {
 
 // LC145. 二叉树的后序遍历
 namespace LC145 {
-// ☆☆☆☆☆ (经典题解，建议记忆!)
 //* 递归写法：
 void dfs(vector<int>& res, TreeNode* root) {
   if (!root) return;
@@ -107,7 +102,6 @@ vector<int> postorderTraversal1(TreeNode* root) {
   dfs(res, root);
   return res;
 }
-// ☆☆☆☆☆ (经典题解，建议记忆!)
 //* 非递归写法：
 vector<int> postorderTraversal2(TreeNode* root) {
   if (!root) return {};
@@ -130,7 +124,6 @@ vector<int> postorderTraversal2(TreeNode* root) {
   }
   return res;
 }
-// ☆☆☆☆☆ (经典题解，建议记忆!)
 //* 思路2：根-右-左的遍历顺序遍历压入所有节点到栈
 //* 从栈里弹出的顺序便是左-右-根了
 vector<int> postorderTraversal(TreeNode* root) {
@@ -155,7 +148,6 @@ vector<int> postorderTraversal(TreeNode* root) {
 
 // LC102. 二叉树的层次遍历
 namespace LC102 {
-// ☆☆☆☆☆ (经典题解，建议记忆!)
 vector<vector<int>> levelOrder(TreeNode* root) {
   if (!root) return {};
   vector<vector<int>> res;
@@ -180,7 +172,6 @@ vector<vector<int>> levelOrder(TreeNode* root) {
 
 // LC107. 二叉树的层次遍历 II
 namespace LC107 {
-// ☆☆☆☆☆ (经典题解，建议记忆!)
 vector<vector<int>> levelOrderBottom(TreeNode* root) {
   if (!root) return {};
   vector<vector<int>> res;
@@ -330,7 +321,6 @@ vector<vector<int>> verticalOrder(TreeNode* root) {
 
 // LC987. 二叉树的垂序遍历
 namespace LC987 {
-// ☆☆☆☆☆ (经典题解，建议记忆!)
 vector<vector<int>> verticalTraversal(TreeNode* root) {
   if (!root) return {};
   vector<vector<int>> res;
@@ -927,8 +917,8 @@ namespace LC663 {}  // namespace LC663
 //  $1)可以自底向上传递信息(即通过左右子树的结果能推导出根树的结果)的问题宜采用后序遍历，尤其注意的是从根节点出发的最大路径和，表面上看用前序遍历做很合理，但实际采用后序遍历更有效率，而有的信息很难自底向上传递，比如LC437的路径和，则需要通过内层前序遍历+外层dfs来做
 //  $2)不要固化思维的认为一个递归函数一定仅仅完成一项工作
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
-// ☆☆☆☆☆ (经典题解，建议记忆!)
 // LC110. 平衡二叉树
+// 推荐度：★★★★☆
 namespace LC110 {
 //* 思路2：单层后序遍历
 // 内层改进后序遍历，当左右子树不平衡时，直接向上传递-1，表示此树不为平衡树，这样就不用遍历所有其他节点求深度了，相当于提前截断此次内层遍历
@@ -1191,16 +1181,17 @@ namespace LC1123 {}  // namespace LC1123
 //$ 此类题考察的就比较综合了
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
 // LC105. 从前序与中序遍历序列构造二叉树
+// 推荐度：★★★★☆
 namespace LC105 {
-// ☆☆☆☆☆ (经典题解，建议记忆!)
 //* 思路3：12ms 非递归
 TreeNode* buildTree(vector<int>& pre, vector<int>& in) {
   if (pre.empty()) return NULL;
   stack<TreeNode*> S;
   TreeNode* root = new TreeNode(pre[0]);
   S.push(root);
-  for (int i = 1, j = 0; i < pre.size(); i++) {  // i-前序序号，j-中序序号
-    TreeNode *back = NULL, *cur = new TreeNode(pre[i]);
+  int j = 0;              //中序序号
+  for (auto val : pre) {  // i-前序序号，j-中序序号
+    TreeNode *back = NULL, *cur = new TreeNode(val);
     while (!S.empty() && S.top()->val == in[j]) back = S.top(), S.pop(), j++;
     if (back)
       back->right = cur;
@@ -1250,8 +1241,8 @@ TreeNode* buildTree(vector<int>& pre, vector<int>& in) {
 }  // namespace LC105
 
 // LC106. 从中序与后序遍历序列构造二叉树
+// 推荐度：★★★★☆
 namespace LC106 {
-// ☆☆☆☆☆ (经典题解，建议记忆!)
 //* 非递归版
 TreeNode* buildTree(vector<int>& in, vector<int>& post) {
   if (in.empty()) return NULL;
@@ -1288,16 +1279,17 @@ TreeNode* buildTree(vector<int>& in, vector<int>& post) {
 }  // namespace LC106
 
 // LC889. 根据前序和后序遍历构造二叉树
+// 推荐度：★★★★☆
 namespace LC889 {
-// ☆☆☆☆☆ (经典题解，建议记忆!)
 //* 非递归版2
 TreeNode* constructFromPrePost(vector<int>& pre, vector<int>& post) {
   if (pre.empty()) return NULL;
   stack<TreeNode*> S;
   auto root = new TreeNode(pre[0]);
   S.push(root);
-  for (int i = 1, j = 0; i < pre.size(); i++) {
-    auto node = new TreeNode(pre[i]);
+  int j = 0;  // 后序序号
+  for (auto val : pre) {
+    auto node = new TreeNode(val);
     while (S.top()->val == post[j]) S.pop(), j++;  // 回溯
     if (!S.top()->left)
       S.top()->left = node;
@@ -1311,8 +1303,26 @@ TreeNode* constructFromPrePost(vector<int>& pre, vector<int>& post) {
 
 // LC1008. 先序遍历构造二叉搜索树
 namespace LC1008 {
-//* 思路1：排序得到中序遍历序列，再利用LC105. 从前序与中序遍历序列构造二叉树
-//* 思路2：利用二叉树性质递归
+//* 非递归：
+TreeNode* bstFromPreorder(vector<int>& pre) {
+  if (pre.empty()) return NULL;
+  stack<TreeNode*> S;
+  auto root = new TreeNode(pre[0]);
+  S.push(root);
+  for (auto val : pre) {
+    TreeNode* back = NULL;
+    TreeNode* node = new TreeNode(val);
+    while (!S.empty() && S.top()->val < val)
+      back = S.top(), S.pop();  // 若无法在当前位置插入该节点，则回溯父节点
+    if (back)
+      back->right = node;
+    else
+      S.top()->left = node;
+    S.push(node);
+  }
+  return root;
+}
+//* 递归
 // pre和i确定当前节点，(lower, upper) 表示当前位置可以插入的节点的值的上下界。
 // 若pre[i]在该范围内，则说明可以在此创建节点
 // TreeNode* dfs(vector<int>& pre, int& i, int lower, int upper) {
@@ -1329,35 +1339,43 @@ namespace LC1008 {
 //   int i = 0;
 //   return dfs(pre, i, INT32_MIN, INT32_MAX);
 // }
-//* 思路2的非递归：
-TreeNode* bstFromPreorder(vector<int>& pre) {
-  if (pre.empty()) return NULL;
-  stack<TreeNode*> S;
-  auto root = new TreeNode(pre[0]);
-  S.push(root);
-  for (int i = 1; i < pre.size(); i++) {
-    TreeNode* back = NULL;
-    TreeNode* node = new TreeNode(pre[i]);
-    while (!S.empty() && S.top()->val < pre[i])
-      back = S.top(), S.pop();  // 若无法在当前位置插入该节点，则回溯父节点
-    if (back)
-      back->right = node;
-    else
-      S.top()->left = node;
-    S.push(node);
-  }
-  return root;
-}
 }  // namespace LC1008
 
-// LC971. 翻转二叉树以匹配先序遍历
-namespace LC971 {}  // namespace LC971
-
 // LC255. 验证前序遍历序列二叉搜索树
-namespace LC255 {}  // namespace LC255
+// 推荐度：★★★★☆ 理由：复用原数组模拟栈，优化内存
+namespace LC255 {
+/*
+思路：对于一个搜索二叉树的前序序列来说, 如果某段序列为一个递减序列,
+说明这是一段沿着左子树的路径. 直到碰到一个比前一个大的值,
+说明此时已经来到某个结点的右子树上了, 而此时可以得出一个此后序列的下界值,
+^也就是此后序列的任意一个值必须要比这个结点的父结点的值大,
+因为对于搜索二叉树来说根节点左边的都比根节点小, 而根节点右边的都比根节点大,
+所以既然现在已经来到某个结点(设为A)的右子树上,
+那么此后任何结点的值必然比A的值大. 
+那么当我们碰到一个比之前结点大的值如何找到他的父结点呢? 可以借助一个栈,
+即如果当前结点比栈顶元素小, 就入栈, 如果当前值大于栈顶值,
+则让所有比当前结点小的值都出栈, 直到栈顶元素比当前结点大,
+则最后一个出栈的比当前结点小的值就是当前结点的父结点,
+我们只要在栈元素出栈的时候更新最小下界再将当前元素入栈即可.
+另外这样的时间和空间复杂度都是O(n), 但是对于空间复杂度来说,
+很容易复用原数组模拟栈来优化.
+ */
+bool verifyPreorder(vector<int>& pre) {
+  int k = -1, Min = INT32_MIN;
+  for (auto val : pre) {
+    if (val < Min) return false;
+    while (k >= 0 && pre[k] < val) Min = pre[k--];
+    pre[++k] = val;  //<复用原数组模拟栈,以优化内存
+  }
+  return true;
+}
+}  // namespace LC255
 
 // LC1028. 从先序遍历还原二叉树
 namespace LC1028 {}  // namespace LC1028
+
+// LC971. 翻转二叉树以匹配先序遍历
+namespace LC971 {}  // namespace LC971
 
 // LC449. 序列化和反序列化二叉搜索树
 namespace LC449 {

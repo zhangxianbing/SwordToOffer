@@ -2,7 +2,7 @@
  * @Author: zhangxianbing
  * @Date: 2019-08-09 11:43:06
  * @LastEditors: zhangxianbing
- * @LastEditTime: 2019-08-12 11:29:50
+ * @LastEditTime: 2019-08-12 13:23:17
  * @Description: file content
  */
 #pragma once
@@ -22,7 +22,7 @@
 //> #FFFF00 NOTE
 //< #00FF00 NOTE
 //| #FFC0CB NOTE
-// ☆☆☆☆☆
+// 推荐度：★★★★☆
 
 #include <algorithm>
 #include <cassert>
