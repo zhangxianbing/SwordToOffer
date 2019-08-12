@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-09 11:29:43
- * @LastEditTime: 2019-08-12 18:38:27
+ * @LastEditTime: 2019-08-12 21:06:25
  * @LastEditors: zhangxianbing
  */
 #pragma once
@@ -1528,6 +1528,27 @@ vector<TreeNode*> findDuplicateSubtrees(TreeNode* root) {
 // 思路1：先将树序列化为string，再在string里找
 }  // namespace LC652
 
+// LC108. 将有序数组转换为二叉搜索树
+namespace LC108 {
+TreeNode* dfs(vector<int>& nums, int i, int j) {
+  if (i > j) return NULL;
+  int m = (i + j) / 2;
+  auto root = new TreeNode(nums[m]);
+  root->left = dfs(nums, i, m - 1);
+  root->right = dfs(nums, m + 1, j);
+  return root;
+}
+TreeNode* sortedArrayToBST(vector<int>& nums) {
+  return dfs(nums, 0, (int)nums.size() - 1);
+}
+}  // namespace LC108
+
+// LC655. 输出二叉树
+namespace LC655 {}  // namespace LC655
+
+// LC431. 将 N 叉树编码为二叉树
+namespace LC431 {}  // namespace LC431
+
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
 //$ 树的节点操作问题
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
@@ -1554,17 +1575,17 @@ void flatten(TreeNode* root) {
 // LC426. 将二叉搜索树转化为排序的双向链表
 namespace LC426 {}  // namespace LC426
 
-// LC655. 输出二叉树
-namespace LC655 {}  // namespace LC655
+// LC99. 恢复二叉搜索树
+namespace LC99 {}  // namespace LC99
+
+// LC156. 上下翻转二叉树
+namespace LC156 {}  // namespace LC156
+
+// LC776. 拆分二叉搜索树
+namespace LC776 {}  // namespace LC776
 
 // LC814. 二叉树剪枝
 namespace LC814 {}  // namespace LC814
-
-// LC108. 将有序数组转换为二叉搜索树
-namespace LC108 {}  // namespace LC108
-
-// LC431. 将 N 叉树编码为二叉树
-namespace LC431 {}  // namespace LC431
 
 // LC450. 删除二叉搜索树中的节点
 namespace LC450 {}  // namespace LC450
@@ -1578,24 +1599,15 @@ namespace LC700 {}  // namespace LC700
 // LC669. 修剪二叉搜索树
 namespace LC669 {}  // namespace LC669
 
-// LC99. 恢复二叉搜索树
-namespace LC99 {}  // namespace LC99
-
-// LC776. 拆分二叉搜索树
-namespace LC776 {}  // namespace LC776
-
 // LC623. 在二叉树中增加一行
 namespace LC623 {}  // namespace LC623
-
-// LC156. 上下翻转二叉树
-namespace LC156 {}  // namespace LC156
-
-// LC337. 打家劫舍 III
-namespace LC337 {}  // namespace LC337
 
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
 //$ 待分类
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
+// LC337. 打家劫舍 III
+namespace LC337 {}  // namespace LC337
+
 // LC662. 二叉树最大宽度
 namespace LC662 {}  // namespace LC662
 
@@ -1694,20 +1706,3 @@ namespace LC510 {}  // namespace LC510
 
 // LC366. 寻找完全二叉树的叶子节点
 namespace LC366 {}  // namespace LC366
-
-// LC666. 路径和 IV
-namespace LC666 {
-int pathSum(vector<int>& nums) {
-  int res = 0;
-  unordered_map<int, int> M;
-  for (int i = int(nums.size()) - 1; i >= 0; i--) {
-    int d = nums[i] / 100, p = (nums[i] % 100) / 10, v = nums[i] % 10;
-    M[d * 10 + p] = max(M[d * 10 + p], 1);
-    res += M[d * 10 + p] * v;
-    // 如果一个节点会经过 n 次, 那么这 n 次也一定经过其父节点,
-    // 因此将当前节点的次数加入其父节点中
-    M[(d - 1) * 10 + (p - 1) / 2 + 1] += M[d * 10 + p];
-  }
-  return res;
-}
-}  // namespace LC666

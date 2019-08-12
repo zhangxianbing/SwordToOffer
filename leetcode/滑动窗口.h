@@ -2,7 +2,7 @@
  * @Author: zhangxianbing
  * @Date: 2019-08-09 11:42:45
  * @LastEditors: zhangxianbing
- * @LastEditTime: 2019-08-11 14:34:33
+ * @LastEditTime: 2019-08-12 21:05:40
  * @Description: file content
  */
 
@@ -198,9 +198,6 @@ namespace LC632 {}  // namespace LC632
 // LC727. 最小窗口子序列
 namespace LC727 {}  // namespace LC727
 
-// LC1100. 长度为 K 的无重复字符子串
-namespace LC1100 {}  // namespace LC1100
-
 // LC995. K 连续位的最小翻转次数
 namespace LC995 {}  // namespace LC995
 
@@ -245,3 +242,27 @@ int findLengthOfLCIS(vector<int>& nums) {
   return res;
 }
 }  // namespace LC674
+
+// LC424. 替换后的最长重复字符
+namespace LC424 {}  // namespace LC424
+
+// LC480. 滑动窗口中位数
+namespace LC480 {}  // namespace LC480
+
+// LC1004. 最大连续1的个数 III
+namespace LC1004 {}  // namespace LC1004
+
+// LC1040. 移动石子直到连续 II
+namespace LC1040 {}  // namespace LC1040
+
+// LC978. 最长湍流子数组
+namespace LC978 {}  // namespace LC978
+
+// LC1052. 爱生气的书店老板
+namespace LC1052 {}  // namespace LC1052
+
+// LC1074. 元素和为目标值的子矩阵数量
+namespace LC1074 {}  // namespace LC1074
+
+// LC1100. 长度为 K 的无重复字符子串
+namespace LC1100 {}  // namespace LC1100

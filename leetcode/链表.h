@@ -2,7 +2,7 @@
  * @Author: zhangxianbing
  * @Date: 2019-08-09 11:42:46
  * @LastEditors: zhangxianbing
- * @LastEditTime: 2019-08-11 14:32:24
+ * @LastEditTime: 2019-08-12 21:05:57
  * @Description: file content
  */
 #pragma once
@@ -287,15 +287,6 @@ ListNode* reverseKGroup(ListNode* head, int k) {
 }
 }  // namespace LC25
 
-// LC147. 对链表进行插入排序
-namespace LC147 {}  // namespace LC147
-
-// LC148. 排序链表
-namespace LC148 {}  // namespace LC148
-
-// LC237. 删除链表中的节点
-namespace LC237 {}  // namespace LC237
-
 // LC19. 删除链表的倒数第N个节点
 namespace LC19 {
 //* 思路：前后指针
@@ -315,11 +306,68 @@ ListNode* removeNthFromEnd(ListNode* head, int n) {
 }
 }  // namespace LC19
 
-// LC61. 旋转链表
-namespace LC61 {}  // namespace LC61
+// LC23. 合并K个排序链表
+namespace LC23 {}  // namespace LC23
+
+// LC148. 排序链表
+namespace LC148 {}  // namespace LC148
+
+// LC237. 删除链表中的节点
+namespace LC237 {}  // namespace LC237
 
 // LC143. 重排链表
 namespace LC143 {}  // namespace LC143
 
+// LC109. 有序链表转换二叉搜索树
+namespace LC109 {}  // namespace LC109
+
+// LC141. 环形链表
+namespace LC141 {}  // namespace LC141
+
 // LC234. 回文链表
 namespace LC234 {}  // namespace LC234
+
+// LC138. 复制带随机指针的链表
+namespace LC138 {}  // namespace LC138
+
+// LC147. 对链表进行插入排序
+namespace LC147 {}  // namespace LC147
+
+// LC876. 链表的中间结点
+namespace LC876 {}  // namespace LC876
+
+// LC426. 将二叉搜索树转化为排序的双向链表
+namespace LC426 {}  // namespace LC426
+
+// LC160. 相交链表
+namespace LC160 {}  // namespace LC160
+
+// LC61. 旋转链表
+namespace LC61 {}  // namespace LC61
+
+// LC142. 环形链表 II
+namespace LC142 {}  // namespace LC142
+
+// LC1019. 链表中的下一个更大节点
+namespace LC1019 {}  // namespace LC1019
+
+// LC725. 分隔链表
+namespace LC725 {}  // namespace LC725
+
+// LC379. 电话目录管理系统
+namespace LC379 {}  // namespace LC379
+
+// LC430. 扁平化多级双向链表
+namespace LC430 {}  // namespace LC430
+
+// LC817. 链表组件
+namespace LC817 {}  // namespace LC817
+
+// LC708. 循环有序列表的插入
+namespace LC708 {}  // namespace LC708
+
+// LC707. 设计链表
+namespace LC707 {}  // namespace LC707
+
+// LC369. 给单链表加一
+namespace LC369 {}  // namespace LC369
