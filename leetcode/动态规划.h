@@ -2,7 +2,7 @@
  * @Author: zhangxianbing
  * @Date: 2019-08-09 11:37:21
  * @LastEditors: zhangxianbing
- * @LastEditTime: 2019-08-12 22:11:04
+ * @LastEditTime: 2019-08-12 23:38:18
  * @Description: file content
  */
 #pragma once
@@ -26,6 +26,66 @@
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
 //$ 动态规划 - 入门题
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
+// LC70. 爬楼梯
+namespace LC70 {
+int climbStairs(int n) {
+  vector<long long> ret(n + 1, 1);
+  for (int i = 2; i < n + 1; i++) {
+    ret[i] = ret[i - 1] + ret[i - 2];
+  }
+  return ret[n];
+}  // namespace LC70
+
+// LC746. 使用最小花费爬楼梯
+namespace LC746 {
+int minCostClimbingStairs(vector<int>& cost) {
+  int n = cost.size();
+  vector<int> dp(n + 1);
+  dp[0] = 0;
+  dp[1] = 0;
+  for (int i = 2; i <= n; i++) {
+    dp[i] = min(dp[i - 1] + cost[i - 1], dp[i - 2] + cost[i - 2]);
+  }
+  return dp[n];
+}  // namespace LC746
+
+// LC509. 斐波那契数
+namespace LC509 {
+int fib(int N) {
+  int d[31];
+  d[0] = 0;
+  d[1] = 1;
+  for (int i = 2; i <= N; i++) d[i] = d[i - 1] + d[i - 2];
+  return d[N];
+}  // namespace LC509
+
+// LC1137. 第 N 个泰波那契数
+namespace LC1137 {
+int tribonacci(int n) {
+  int l0 = 0;
+  int l1 = 1;
+  int l2 = 1;
+  int l3 = 0;
+
+  if (n == 0) {
+    return l0;
+  } else if (n == 1) {
+    return l1;
+  } else if (n == 2) {
+    return l2;
+  } else {
+    for (int i = 3; i <= n; ++i) {
+      l3 = l0 + l1 + l2;
+      l0 = l1;
+      l1 = l2;
+      l2 = l3;
+    }
+  }
+
+  return l3;
+}
+}  // namespace LC1137
+
 // LC53. 最大子序和
 namespace LC53 {
 // 思路2：同思路1本质是一样的,只不过省去了存dp的内存
@@ -51,6 +111,18 @@ int maxSubArray(vector<int>& nums) {
   return res;
 }
 }  // namespace LC53
+
+// LC121. 买卖股票的最佳时机
+namespace LC121 {
+int maxProfit(vector<int>& prices) {
+  int n = prices.size();
+  int pre_profit = 0, max_profit = 0;
+  for (int i = 0; i < n - 1; i++) {
+    pre_profit = max(0, pre_profit + prices[i + 1] - prices[i]);
+    max_profit = max(max_profit, pre_profit);
+  }
+  return max_profit;
+}  // namespace LC121
 
 // LC96. 不同的二叉搜索树
 namespace LC96 {
@@ -101,14 +173,8 @@ namespace LC10 {}  // namespace LC10
 // LC72. 编辑距离
 namespace LC72 {}  // namespace LC72
 
-// LC70. 爬楼梯
-namespace LC70 {}  // namespace LC70
-
 // LC312. 戳气球
 namespace LC312 {}  // namespace LC312
-
-// LC121. 买卖股票的最佳时机
-namespace LC121 {}  // namespace LC121
 
 // LC818. 赛车
 namespace LC818 {}  // namespace LC818
@@ -160,9 +226,6 @@ namespace LC647 {}  // namespace LC647
 
 // LC300. 最长上升子序列
 namespace LC300 {}  // namespace LC300
-
-// LC746. 使用最小花费爬楼梯
-namespace LC746 {}  // namespace LC746
 
 // LC413. 等差数列划分
 namespace LC413 {}  // namespace LC413

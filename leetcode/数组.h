@@ -2,7 +2,7 @@
  * @Author: zhangxianbing
  * @Date: 2019-08-09 11:42:50
  * @LastEditors: zhangxianbing
- * @LastEditTime: 2019-08-12 20:36:40
+ * @LastEditTime: 2019-08-12 23:36:48
  * @Description: file content
  */
 #pragma once
@@ -276,9 +276,6 @@ namespace LC119 {}  // namespace LC119
 // LC120. 三角形最小路径和
 namespace LC120 {}  // namespace LC120
 
-// LC121. 买卖股票的最佳时机
-namespace LC121 {}  // namespace LC121
-
 // LC122. 买卖股票的最佳时机 II
 namespace LC122 {}  // namespace LC122
 
@@ -483,9 +480,6 @@ namespace LC724 {}  // namespace LC724
 // LC729. 我的日程安排表 I
 namespace LC729 {}  // namespace LC729
 
-// LC746. 使用最小花费爬楼梯
-namespace LC746 {}  // namespace LC746
-
 // LC747. 至少是其他数字两倍的最大数
 namespace LC747 {}  // namespace LC747
 
@@ -590,9 +584,6 @@ namespace LC962 {}  // namespace LC962
 
 // LC969. 煎饼排序
 namespace LC969 {}  // namespace LC969
-
-// LC509. 斐波那契数
-namespace LC509 {}  // namespace LC509
 
 // LC974. 和可被 K 整除的子数组
 namespace LC974 {}  // namespace LC974
