@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-09 11:29:43
- * @LastEditTime: 2019-08-12 00:19:50
+ * @LastEditTime: 2019-08-12 12:41:21
  * @LastEditors: zhangxianbing
  */
 #pragma once
@@ -24,6 +24,7 @@
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
 // LC144. 二叉树的前序遍历
 namespace LC144 {
+// ☆☆☆☆☆ (经典题解，建议记忆!)
 //* 递归写法：
 void dfs(vector<int>& res, TreeNode* root) {
   if (!root) return;
@@ -36,6 +37,7 @@ vector<int> preorderTraversal1(TreeNode* root) {
   dfs(res, root);
   return res;
 }
+// ☆☆☆☆☆ (经典题解，建议记忆!)
 //* 非递归写法：
 vector<int> preorderTraversal(TreeNode* root) {
   vector<int> res;
@@ -57,6 +59,7 @@ vector<int> preorderTraversal(TreeNode* root) {
 
 // LC94. 二叉树的中序遍历
 namespace LC94 {
+// ☆☆☆☆☆ (经典题解，建议记忆!)
 //* 递归写法：
 void dfs(vector<int>& res, TreeNode* root) {
   if (!root) return;
@@ -69,6 +72,7 @@ vector<int> inorderTraversal1(TreeNode* root) {
   dfs(res, root);
   return res;
 }
+// ☆☆☆☆☆ (经典题解，建议记忆!)
 //* 非递归写法：
 vector<int> inorderTraversal(TreeNode* root) {
   vector<int> res;
@@ -90,6 +94,7 @@ vector<int> inorderTraversal(TreeNode* root) {
 
 // LC145. 二叉树的后序遍历
 namespace LC145 {
+// ☆☆☆☆☆ (经典题解，建议记忆!)
 //* 递归写法：
 void dfs(vector<int>& res, TreeNode* root) {
   if (!root) return;
@@ -102,6 +107,7 @@ vector<int> postorderTraversal1(TreeNode* root) {
   dfs(res, root);
   return res;
 }
+// ☆☆☆☆☆ (经典题解，建议记忆!)
 //* 非递归写法：
 vector<int> postorderTraversal2(TreeNode* root) {
   if (!root) return {};
@@ -124,6 +130,7 @@ vector<int> postorderTraversal2(TreeNode* root) {
   }
   return res;
 }
+// ☆☆☆☆☆ (经典题解，建议记忆!)
 //* 思路2：根-右-左的遍历顺序遍历压入所有节点到栈
 //* 从栈里弹出的顺序便是左-右-根了
 vector<int> postorderTraversal(TreeNode* root) {
@@ -148,6 +155,7 @@ vector<int> postorderTraversal(TreeNode* root) {
 
 // LC102. 二叉树的层次遍历
 namespace LC102 {
+// ☆☆☆☆☆ (经典题解，建议记忆!)
 vector<vector<int>> levelOrder(TreeNode* root) {
   if (!root) return {};
   vector<vector<int>> res;
@@ -172,6 +180,7 @@ vector<vector<int>> levelOrder(TreeNode* root) {
 
 // LC107. 二叉树的层次遍历 II
 namespace LC107 {
+// ☆☆☆☆☆ (经典题解，建议记忆!)
 vector<vector<int>> levelOrderBottom(TreeNode* root) {
   if (!root) return {};
   vector<vector<int>> res;
@@ -321,6 +330,7 @@ vector<vector<int>> verticalOrder(TreeNode* root) {
 
 // LC987. 二叉树的垂序遍历
 namespace LC987 {
+// ☆☆☆☆☆ (经典题解，建议记忆!)
 vector<vector<int>> verticalTraversal(TreeNode* root) {
   if (!root) return {};
   vector<vector<int>> res;
@@ -917,6 +927,7 @@ namespace LC663 {}  // namespace LC663
 //  $1)可以自底向上传递信息(即通过左右子树的结果能推导出根树的结果)的问题宜采用后序遍历，尤其注意的是从根节点出发的最大路径和，表面上看用前序遍历做很合理，但实际采用后序遍历更有效率，而有的信息很难自底向上传递，比如LC437的路径和，则需要通过内层前序遍历+外层dfs来做
 //  $2)不要固化思维的认为一个递归函数一定仅仅完成一项工作
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
+// ☆☆☆☆☆ (经典题解，建议记忆!)
 // LC110. 平衡二叉树
 namespace LC110 {
 //* 思路2：单层后序遍历
@@ -1177,35 +1188,25 @@ namespace LC1123 {}  // namespace LC1123
 
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
 //$ 二叉树的序列问题
+//$ 此类题考察的就比较综合了
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
 // LC105. 从前序与中序遍历序列构造二叉树
 namespace LC105 {
+// ☆☆☆☆☆ (经典题解，建议记忆!)
 //* 思路3：12ms 非递归
-// 从
-TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
-  if (preorder.empty()) return NULL;
+TreeNode* buildTree(vector<int>& pre, vector<int>& in) {
+  if (pre.empty()) return NULL;
   stack<TreeNode*> S;
-  TreeNode *root = new TreeNode(preorder[0]), *cur = root;
-  int i = 0, j = 0;      // i-前序序号，j-中序序号
-  bool turnLeft = true;  // 左分支优先
+  TreeNode* root = new TreeNode(pre[0]);
   S.push(root);
-  i++;
-  while (i < preorder.size()) {
-    if (!S.empty() && S.top()->val == inorder[j]) {
-      cur = S.top();  // 利用栈这个数据结构回溯
-      S.pop();
-      turnLeft = false;  // 左分支遍历不了了再进右分支
-      j++;
-    } else {
-      if (turnLeft) {
-        cur = cur->left = new TreeNode(preorder[i++]);
-        S.push(cur);
-      } else {
-        turnLeft = true;  // 左分支优先
-        cur = cur->right = new TreeNode(preorder[i++]);
-        S.push(cur);
-      }
-    }
+  for (int i = 1, j = 0; i < pre.size(); i++) {  // i-前序序号，j-中序序号
+    TreeNode *back = NULL, *cur = new TreeNode(pre[i]);
+    while (!S.empty() && S.top()->val == in[j]) back = S.top(), S.pop(), j++;
+    if (back)
+      back->right = cur;
+    else
+      S.top()->left = cur;
+    S.push(cur);
   }
   return root;
 }
@@ -1250,63 +1251,104 @@ TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
 
 // LC106. 从中序与后序遍历序列构造二叉树
 namespace LC106 {
-//* 递归版
-TreeNode* dfs(vector<int>& inorder, int i1, int j1, vector<int>& postorder,
-              int i2, int j2, unordered_map<int, int>& M) {
-  if (i1 >= j1 || i2 >= j2) return NULL;
-  auto root = new TreeNode(postorder[j2 - 1]);
-  int rlen = j1 - M[postorder[j2 - 1]] - 1;  // 从中序序列获取右子树的长度
-  root->right =
-      dfs(inorder, j1 - rlen, j1, postorder, j2 - 1 - rlen, j2 - 1, M);
-  root->left = dfs(inorder, i1, j1 - rlen - 1, postorder, i2, j2 - 1 - rlen, M);
-  return root;
-}
-TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
-  unordered_map<int, int> M;
-  for (int i = 0; i < inorder.size(); i++) M[inorder[i]] = i;
-  return dfs(inorder, 0, inorder.size(), postorder, 0, postorder.size(), M);
-}
+// ☆☆☆☆☆ (经典题解，建议记忆!)
 //* 非递归版
-TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
-  if (inorder.empty()) return NULL;
+TreeNode* buildTree(vector<int>& in, vector<int>& post) {
+  if (in.empty()) return NULL;
   stack<TreeNode*> S;
-  TreeNode *root = new TreeNode(postorder.back()), *cur = root;
+  TreeNode *root = new TreeNode(post.back()), *cur = root;
   S.push(root);
-  int i = postorder.size() - 2, j = inorder.size() - 1;  // i - 后序，j - 中序
-  bool turnRight = true;                                 // 右分支优先
-  while (i >= 0) {
-    if (!S.empty() && S.top()->val == inorder[j]) {
-      cur = S.top();
-      S.pop();
-      turnRight = false;  // 右分支遍历不了了才进左分支
-      j--;
-    } else {
-      if (turnRight) {
-        cur = cur->right = new TreeNode(postorder[i--]);
-        S.push(cur);
-      } else {
-        turnRight = true;  // 右分支优先
-        cur = cur->left = new TreeNode(postorder[i--]);
-        S.push(cur);
-      }
-    }
+  for (int i = post.size() - 2, j = in.size() - 1; i >= 0; i--) {
+    TreeNode *back = NULL, *cur = new TreeNode(post[i]);
+    while (!S.empty() && S.top()->val == in[j]) back = S.top(), S.pop(), j--;
+    if (back)
+      back->left = cur;
+    else
+      S.top()->right = cur;
+    S.push(cur);
   }
   return root;
 }
+//* 递归版
+// TreeNode* dfs(vector<int>& inorder, int i1, int j1, vector<int>& postorder,
+//               int i2, int j2, unordered_map<int, int>& M) {
+//   if (i1 >= j1 || i2 >= j2) return NULL;
+//   auto root = new TreeNode(postorder[j2 - 1]);
+//   int rlen = j1 - M[postorder[j2 - 1]] - 1;  // 从中序序列获取右子树的长度
+//   root->right =
+//       dfs(inorder, j1 - rlen, j1, postorder, j2 - 1 - rlen, j2 - 1, M);
+//   root->left = dfs(inorder, i1, j1 - rlen - 1, postorder, i2, j2 - 1 - rlen,
+//   M); return root;
+// }
+// TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+//   unordered_map<int, int> M;
+//   for (int i = 0; i < inorder.size(); i++) M[inorder[i]] = i;
+//   return dfs(inorder, 0, inorder.size(), postorder, 0, postorder.size(), M);
+// }
 }  // namespace LC106
 
 // LC889. 根据前序和后序遍历构造二叉树
 namespace LC889 {
-//* 思路：前序是根-左-右，后序是左-右-根
-// 实际上后序反过来就是根-右-左，根好确定，直接前序第一个或者后序最后一个就是，但左右子树可能就不唯一了，依据题意，任找一个解就行，因此找到一个左右子树的分界线就行
-//   pre = [1,2,4,5,3,6,7]  post = [4,5,2,6,7,3,1]
-// ~post = [1,3,7,6,2,5,4] (~表示翻转)
-//
-TreeNode* constructFromPrePost(vector<int>& pre, vector<int>& post) {}
+// ☆☆☆☆☆ (经典题解，建议记忆!)
+//* 非递归版2
+TreeNode* constructFromPrePost(vector<int>& pre, vector<int>& post) {
+  if (pre.empty()) return NULL;
+  stack<TreeNode*> S;
+  auto root = new TreeNode(pre[0]);
+  S.push(root);
+  for (int i = 1, j = 0; i < pre.size(); i++) {
+    auto node = new TreeNode(pre[i]);
+    while (S.top()->val == post[j]) S.pop(), j++;  // 回溯
+    if (!S.top()->left)
+      S.top()->left = node;
+    else
+      S.top()->right = node;
+    S.push(node);
+  }
+  return root;
+}
 }  // namespace LC889
 
-// LC1008. 先序遍历构造二叉树
-namespace LC1008 {}  // namespace LC1008
+// LC1008. 先序遍历构造二叉搜索树
+namespace LC1008 {
+//* 思路1：排序得到中序遍历序列，再利用LC105. 从前序与中序遍历序列构造二叉树
+//* 思路2：利用二叉树性质递归
+// pre和i确定当前节点，(lower, upper) 表示当前位置可以插入的节点的值的上下界。
+// 若pre[i]在该范围内，则说明可以在此创建节点
+// TreeNode* dfs(vector<int>& pre, int& i, int lower, int upper) {
+//   if (i >= pre.size()) return NULL;
+//   int val = pre[i];
+//   if (val < lower || val > upper) return NULL;
+//   auto root = new TreeNode(val);
+//   i++;
+//   root->left = dfs(pre, i, lower, val);
+//   root->right = dfs(pre, i, val, upper);
+//   return root;
+// }
+// TreeNode* bstFromPreorder(vector<int>& pre) {
+//   int i = 0;
+//   return dfs(pre, i, INT32_MIN, INT32_MAX);
+// }
+//* 思路2的非递归：
+TreeNode* bstFromPreorder(vector<int>& pre) {
+  if (pre.empty()) return NULL;
+  stack<TreeNode*> S;
+  auto root = new TreeNode(pre[0]);
+  S.push(root);
+  for (int i = 1; i < pre.size(); i++) {
+    TreeNode* back = NULL;
+    TreeNode* node = new TreeNode(pre[i]);
+    while (!S.empty() && S.top()->val < pre[i])
+      back = S.top(), S.pop();  // 若无法在当前位置插入该节点，则回溯父节点
+    if (back)
+      back->right = node;
+    else
+      S.top()->left = node;
+    S.push(node);
+  }
+  return root;
+}
+}  // namespace LC1008
 
 // LC971. 翻转二叉树以匹配先序遍历
 namespace LC971 {}  // namespace LC971
