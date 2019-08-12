@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-09 11:29:43
- * @LastEditTime: 2019-08-12 13:56:46
+ * @LastEditTime: 2019-08-12 18:38:27
  * @LastEditors: zhangxianbing
  */
 #pragma once
@@ -124,7 +124,7 @@ vector<int> postorderTraversal2(TreeNode* root) {
   }
   return res;
 }
-//* 思路2：根-右-左的遍历顺序遍历压入所有节点到栈
+// 思路2：根-右-左的遍历顺序遍历压入所有节点到栈
 //* 从栈里弹出的顺序便是左-右-根了
 vector<int> postorderTraversal(TreeNode* root) {
   if (!root) return {};
@@ -299,7 +299,7 @@ vector<int> postorder(Node* root) {
 
 // LC314. 二叉树的垂直遍历
 namespace LC314 {
-//* 思路：此题本质还是一个层序遍历，每个节点附加一个偏移量
+// 思路：此题本质还是一个层序遍历，每个节点附加一个偏移量
 vector<vector<int>> verticalOrder(TreeNode* root) {
   if (!root) return {};
   vector<vector<int>> res;
@@ -349,6 +349,44 @@ vector<vector<int>> verticalTraversal(TreeNode* root) {
   return res;
 }
 }  // namespace LC987
+
+// LC538. 把二叉搜索树转换为累加树
+namespace LC538 {
+// 思路2：直接进行逆中序操作
+TreeNode* convertBST(TreeNode* root) {
+  int sum = 0;
+  function<void(TreeNode*)> dfs = [&](TreeNode* root) {
+    if (!root) return;
+    dfs(root->right);
+    sum += root->val;
+    root->val = sum;
+    dfs(root->left);
+  };
+  dfs(root);
+  return root;
+}
+// 思路1：需要右-根-左的遍历,则先中序遍历把节点存到stack中再访问即可
+TreeNode* convertBST(TreeNode* root) {
+  if (!root) return NULL;
+  stack<TreeNode*> S;
+  function<void(stack<TreeNode*>&, TreeNode*)> dfs = [&](stack<TreeNode*>& S,
+                                                         TreeNode* root) {
+    if (!root) return;
+    dfs(S, root->left);
+    S.push(root);
+    dfs(S, root->right);
+  };
+  dfs(S, root);
+  TreeNode* pre = NULL;
+  while (!S.empty()) {
+    auto cur = S.top();
+    S.pop();
+    if (pre) cur->val += pre->val;
+    pre = cur;
+  }
+  return root;
+}
+}  // namespace LC538
 
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
 //$ bfs遍历 - 层序
@@ -400,7 +438,7 @@ vector<int> largestValues(TreeNode* root) {
 
 // LC199. 二叉树的右视图
 namespace LC199 {
-//* 思路：显然此题要用层序遍历,找最右边的数
+// 思路：显然此题要用层序遍历,找最右边的数
 vector<int> rightSideView(TreeNode* root) {
   if (!root) return {};
   vector<int> res;
@@ -419,7 +457,7 @@ vector<int> rightSideView(TreeNode* root) {
   }
   return res;
 }
-//* 思路2:
+// 思路2:
 // 按根-右-左遍历，同时记录当前层数，每新到一层记录第一个节点的值，略显繁琐，在此略去
 }  // namespace LC199
 
@@ -430,7 +468,7 @@ vector<int> rightSideView(TreeNode* root) {
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
 // LC98. 验证二叉搜索树
 namespace LC98 {
-//* 思路：中序遍历，若出现逆序数，不为二叉搜索树
+// 思路：中序遍历，若出现逆序数，不为二叉搜索树
 bool isValidBST(TreeNode* root) {
   stack<TreeNode*> s;
   TreeNode* pre = NULL;
@@ -472,7 +510,7 @@ int kthSmallest(TreeNode* root, int k) {
 
 // LC783. 二叉搜索树结点最小距离
 namespace LC783 {
-//* 思路：中序遍历，记录相邻两节点之间最小差值
+// 思路：中序遍历，记录相邻两节点之间最小差值
 // 非递归写法
 int minDiffInBST(TreeNode* root) {
   stack<TreeNode*> s;
@@ -532,7 +570,7 @@ int getMinimumDifference(TreeNode* root) {
 
 // LC270. 最接近的二叉搜索树值
 namespace LC270 {
-//* 思路1：利用中序遍历
+// 思路1：利用中序遍历
 // int closestValue(TreeNode* root, double target) {
 //   stack<TreeNode*> s;
 //   TreeNode* pre = NULL;
@@ -555,7 +593,7 @@ namespace LC270 {
 //   return (pre->val + root->val < 2 * target) ? root->val : pre->val;
 // }
 
-//* 思路2：利用二叉搜索树的性质,二分查找
+// 思路2：利用二叉搜索树的性质,二分查找
 int closestValue(TreeNode* root, double target) {
   int left = -1;
   int right = -1;
@@ -588,7 +626,7 @@ namespace LC272 {}  // namespace LC272
 
 // LC501. 二叉搜索树中的众数
 namespace L501 {
-//* 思路：中序遍历
+// 思路：中序遍历
 void dfs(vector<int>& res, TreeNode*& pre, int& curTimes, int& maxTimes,
          TreeNode* root) {
   if (!root) return;
@@ -633,7 +671,7 @@ int rangeSumBST(TreeNode* root, int L, int R) {
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
 // LC222. 完全二叉树的节点个数
 namespace LC222 {
-//* 思路：前中后序区别不大
+// 思路：前中后序区别不大
 int countNodes(TreeNode* root) {
   if (!root) return 0;
   return countNodes(root->left) + countNodes(root->right) + 1;
@@ -642,7 +680,7 @@ int countNodes(TreeNode* root) {
 
 // LC101. 对称二叉树
 namespace LC101 {
-//* 思路：考虑到效率的话，应该首先比较根节点的值，故采用前序遍历
+// 思路：考虑到效率的话，应该首先比较根节点的值，故采用前序遍历
 bool isMirror(TreeNode* p, TreeNode* q) {
   if (!p && !q) return true;
   if (bool(p) != bool(q)) return false;
@@ -657,7 +695,7 @@ bool isSymmetric(TreeNode* root) {
 
 // LC100. 相同的树
 namespace LC100 {
-//* 思路：考虑到效率的话，应该首先比较根节点的值，故采用前序遍历
+// 思路：考虑到效率的话，应该首先比较根节点的值，故采用前序遍历
 bool isSameTree(TreeNode* p, TreeNode* q) {
   if (!p && !q) return true;
   if (bool(p) != bool(q)) return false;
@@ -668,7 +706,7 @@ bool isSameTree(TreeNode* p, TreeNode* q) {
 
 // LC112. 路径总和
 namespace LC112 {
-//* 思路：需要从根出发，考虑前序遍历，附加信息为当前路径和与target的差值
+// 思路：需要从根出发，考虑前序遍历，附加信息为当前路径和与target的差值
 bool hasPathSum(TreeNode* root, int sum) {
   if (!root) return false;
   if (sum == root->val && !root->left && !root->right) return true;
@@ -699,7 +737,7 @@ vector<vector<int>> pathSum(TreeNode* root, int sum) {
 
 // LC257. 二叉树的所有路径
 namespace LC257 {
-//* 思路：从根出发的dfs，考虑前序遍历，附带信息：当前路径
+// 思路：从根出发的dfs，考虑前序遍历，附带信息：当前路径
 void dfs(vector<string>& res, string path, TreeNode* root) {
   if (!root) return;
   path += to_string(root->val);
@@ -720,7 +758,7 @@ vector<string> binaryTreePaths(TreeNode* root) {
 
 // LC129. 求根到叶子节点数字之和
 namespace LC129 {
-//* 思路：从根出发的dfs，考虑前序遍历
+// 思路：从根出发的dfs，考虑前序遍历
 int dfs(int tmp, TreeNode* root) {
   if (!root) return 0;
   int res = 0;
@@ -735,7 +773,7 @@ int sumNumbers(TreeNode* root) { return dfs(0, root); }
 
 // LC988. 从叶结点开始的最小字符串
 namespace LC988 {
-//* 思路：需要从根开始dfs,考虑前序遍历；结果存入map中
+// 思路：需要从根开始dfs,考虑前序遍历；结果存入map中
 void dfs(map<string, int>& M, string s, TreeNode* root) {
   if (!root) return;
   s += root->val + 'a';
@@ -755,7 +793,7 @@ string smallestFromLeaf(TreeNode* root) {
 
 // LC235. 二叉搜索树的最近公共祖先
 namespace LC235 {
-//* 思路：利用二叉树的性质
+// 思路：利用二叉树的性质
 TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
   if (p->val < root->val && q->val > root->val) return root;
   if (p->val > root->val && q->val < root->val) return root;
@@ -769,7 +807,7 @@ TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
 
 // LC236. 二叉树的最近公共祖先
 namespace LC236 {
-//* 思路：前序遍历
+// 思路：前序遍历
 TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
   if (!root || root == p || root == q) return root;
   TreeNode* left = lowestCommonAncestor(root->left, p, q);
@@ -783,7 +821,7 @@ TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
 // LC404. 左叶子之和
 namespace LC404 {
-//* 思路：自底向上的dfs,考虑后序遍历
+// 思路：自底向上的dfs,考虑后序遍历
 int sumOfLeftLeaves(TreeNode* root) {
   if (!root) return 0;
   int res = 0;
@@ -795,7 +833,7 @@ int sumOfLeftLeaves(TreeNode* root) {
 
 // LC104. 二叉树的最大深度
 namespace LC104 {
-//* 思路：自底向上，采用后序遍历
+// 思路：自底向上，采用后序遍历
 // 先计算出子树的最大深度，后续才好判定母树的最大深度
 int maxDepth(TreeNode* root) {
   if (!root) return 0;
@@ -806,7 +844,7 @@ int maxDepth(TreeNode* root) {
 
 // LC111. 二叉树的最小深度
 namespace LC111 {
-//* 思路：自底向上，采用后序遍历
+// 思路：自底向上，采用后序遍历
 int minDepth(TreeNode* root) {
   if (!root) return 0;
   if (!root->left) return minDepth(root->right) + 1;
@@ -817,7 +855,7 @@ int minDepth(TreeNode* root) {
 
 // LC226.反转二叉树
 namespace LC226 {
-//* 思路：自底向上，考虑后序遍历
+// 思路：自底向上，考虑后序遍历
 // 先反转左右两个子树，再反转母树
 TreeNode* invertTree(TreeNode* root) {
   if (!root) return NULL;
@@ -830,7 +868,7 @@ TreeNode* invertTree(TreeNode* root) {
 
 // LC508. 出现次数最多的子树元素和
 namespace LC508 {
-//* 思路： 后序遍历求各子树的和,并存入一个map中
+// 思路： 后序遍历求各子树的和,并存入一个map中
 int dfs(unordered_map<int, int>& M, TreeNode* root) {
   if (!root) return 0;
   int left = dfs(M, root->left);
@@ -885,7 +923,7 @@ bool isSubtree(TreeNode* s, TreeNode* t) {
 
 // LC437. 路径总和 III
 namespace LC437 {
-//* 思路：双层遍历问题
+// 思路：双层遍历问题
 // 内层：dfs，求从根出发的路径和等于target的路径数，前序遍历；
 // 外层：分解问题：根树的解 =
 // func(左子树的解，右子树的解，dfs(root)的解)，前中后序遍历均可
@@ -920,7 +958,7 @@ namespace LC663 {}  // namespace LC663
 // LC110. 平衡二叉树
 // 推荐度：★★★★☆
 namespace LC110 {
-//* 思路2：单层后序遍历
+// 思路2：单层后序遍历
 // 内层改进后序遍历，当左右子树不平衡时，直接向上传递-1，表示此树不为平衡树，这样就不用遍历所有其他节点求深度了，相当于提前截断此次内层遍历
 // 这样实际是将两层遍历降为单层dfs遍历问题
 int dfs(TreeNode* root) {
@@ -936,7 +974,7 @@ bool isBalanced(TreeNode* root) {
   if (!root) return true;
   return dfs(root) != -1;
 }
-//* 思路1： 双层遍历
+// 思路1： 双层遍历
 // 内层是求根树的最大深度，后续遍历
 // int dfs(TreeNode* root) {
 //   if (!root) return 0;
@@ -951,7 +989,7 @@ bool isBalanced(TreeNode* root) {
 
 // LC250. 统计同值子树
 namespace LC250 {
-//* 思路2：单层后序遍历
+// 思路2：单层后序遍历
 bool dfs(int& res, TreeNode* root) {
   if (!root) return true;
   bool L = dfs(res, root->left);
@@ -969,7 +1007,7 @@ int countUnivalSubtrees(TreeNode* root) {
   return res;
 }
 
-//* 思路1：双层遍历
+// 思路1：双层遍历
 // 这里实际是前序遍历了一遍树来判断是否root树为同值树
 // 也可以用中序遍历，后序遍历，只要是深度优先遍历就行
 // int dfs(int val, TreeNode* root) {
@@ -990,7 +1028,7 @@ int countUnivalSubtrees(TreeNode* root) {
 
 // LC124. 二叉树中的最大路径和
 namespace LC124 {
-//* 思路3： 单层后序遍历 耗时：40ms
+// 思路3： 单层后序遍历 耗时：40ms
 // dfs返回从根节点出发的最大路径和
 int dfs(int& res, TreeNode* root) {
   if (!root) return 0;
@@ -1007,7 +1045,7 @@ int maxPathSum(TreeNode* root) {
   dfs(res, root);
   return res;
 }
-// //* 思路2：内层前序遍历 + 外层后序遍历 leetcode耗时：800ms
+// // 思路2：内层前序遍历 + 外层后序遍历 leetcode耗时：800ms
 // // dfs返回从根出发的最大路径和
 // void dfs(int& maxSum, int cur, TreeNode* root) {
 //   if (!root) return;
@@ -1026,7 +1064,7 @@ int maxPathSum(TreeNode* root) {
 //   return max(m, lr);
 // }
 
-// //* 思路1： 内层后续，外层后续，leetcode耗时：1100ms
+// // 思路1： 内层后续，外层后续，leetcode耗时：1100ms
 // // dfs返回从根出发的最大路径和
 // int dfs(TreeNode* root) {
 //   if (!root) return 0;
@@ -1079,7 +1117,7 @@ int longestUnivaluePath(TreeNode* root) {
 
 // LC298. 二叉树最长连续序列
 namespace LC298 {
-//* 思路3：单层dfs后序遍历解决 耗时：44ms
+// 思路3：单层dfs后序遍历解决 耗时：44ms
 // dfs返回的是从当前根节点出发的最长连续序列长
 int dfs(int& res, TreeNode* root) {
   if (!root) return 0;
@@ -1097,7 +1135,7 @@ int longestConsecutive(TreeNode* root) {
   return res;
 }
 
-//* 思路2：单层dfs前序遍历解决 耗时：50ms
+// 思路2：单层dfs前序遍历解决 耗时：50ms
 // void dfs(int& res, TreeNode* pre, int len, TreeNode* root) {
 //   if (!root) return;
 //   len = (pre && pre->val + 1 == root->val) ? len + 1 : 1;
@@ -1111,7 +1149,7 @@ int longestConsecutive(TreeNode* root) {
 //   return res;
 // }
 
-//* 思路1：内层后序遍历，求从根出发的最长连续序列长度 耗时：1100ms
+// 思路1：内层后序遍历，求从根出发的最长连续序列长度 耗时：1100ms
 // int dfs(int val, TreeNode* root) {
 //   if (!root || root->val != val) return 0;
 //   int l = dfs(val + 1, root->left);
@@ -1132,7 +1170,7 @@ namespace LC549 {}  // namespace LC549
 
 // LC333. 最大 BST 子树
 namespace LC333 {
-//* 思路：后序遍历
+// 思路：后序遍历
 // dfs返回以该节点为根的二叉搜索树的节点个数，若本树不符合二叉搜索树，则返回-1,若为空则返回0
 int dfs(int& res, int& minV, int& maxV, TreeNode* root) {
   if (!root) return 0;
@@ -1161,7 +1199,7 @@ int largestBSTSubtree(TreeNode* root) {
   dfs(res, minV, maxV, root);
   return res;
 }
-//* 思路2：双层遍历，因繁琐忽略
+// 思路2：双层遍历，因繁琐忽略
 }  // namespace LC333
 
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
@@ -1183,15 +1221,15 @@ namespace LC1123 {}  // namespace LC1123
 // LC105. 从前序与中序遍历序列构造二叉树
 // 推荐度：★★★★☆
 namespace LC105 {
-//* 思路3：12ms 非递归
+// 思路3：12ms 非递归
 TreeNode* buildTree(vector<int>& pre, vector<int>& in) {
   if (pre.empty()) return NULL;
   stack<TreeNode*> S;
   TreeNode* root = new TreeNode(pre[0]);
   S.push(root);
-  int j = 0;              //中序序号
-  for (auto val : pre) {  // i-前序序号，j-中序序号
-    TreeNode *back = NULL, *cur = new TreeNode(val);
+  // i-前序序号，j-中序序号
+  for (int i = 1, j = 0; i < pre.size(); i++) {
+    TreeNode *back = NULL, *cur = new TreeNode(pre[i]);
     while (!S.empty() && S.top()->val == in[j]) back = S.top(), S.pop(), j++;
     if (back)
       back->right = cur;
@@ -1202,7 +1240,7 @@ TreeNode* buildTree(vector<int>& pre, vector<int>& in) {
   return root;
 }
 
-//* 思路2：12ms
+// 思路2：12ms
 // 相比思路1，改进了在前序中找左右子树分界位置的处理，由于子树的前序和中序是等长的，而由中序很好求出左右子树的长度，因此改进如下：
 // TreeNode* dfs(vector<int>& P, int pi, int pj, vector<int>& Q, int qi, int qj,
 //               unordered_map<int, int>& M) {
@@ -1219,7 +1257,7 @@ TreeNode* buildTree(vector<int>& pre, vector<int>& in) {
 //   return dfs(P, 0, P.size(), Q, 0, Q.size(), M);
 // }
 
-//* 思路1：200ms
+// 思路1：200ms
 //前序的第一个元素肯定是根节点，中序中根节点左侧全是左子树，右侧全是右子树，由此可以确定根节点以及左右子树的前序和中序，由此可以写成递归
 // TreeNode* dfs(vector<int>& P, int pi, int pj, vector<int>& Q, int qi, int qj,
 //               unordered_map<int, int>& M) {
@@ -1287,9 +1325,8 @@ TreeNode* constructFromPrePost(vector<int>& pre, vector<int>& post) {
   stack<TreeNode*> S;
   auto root = new TreeNode(pre[0]);
   S.push(root);
-  int j = 0;  // 后序序号
-  for (auto val : pre) {
-    auto node = new TreeNode(val);
+  for (int i = 1, j = 0; i < pre.size(); i++) {
+    auto node = new TreeNode(pre[i]);
     while (S.top()->val == post[j]) S.pop(), j++;  // 回溯
     if (!S.top()->left)
       S.top()->left = node;
@@ -1309,10 +1346,10 @@ TreeNode* bstFromPreorder(vector<int>& pre) {
   stack<TreeNode*> S;
   auto root = new TreeNode(pre[0]);
   S.push(root);
-  for (auto val : pre) {
+  for (int i = 1; i < pre.size(); i++) {
     TreeNode* back = NULL;
-    TreeNode* node = new TreeNode(val);
-    while (!S.empty() && S.top()->val < val)
+    TreeNode* node = new TreeNode(pre[i]);
+    while (!S.empty() && S.top()->val < pre[i])
       back = S.top(), S.pop();  // 若无法在当前位置插入该节点，则回溯父节点
     if (back)
       back->right = node;
@@ -1365,50 +1402,157 @@ bool verifyPreorder(vector<int>& pre) {
   for (auto val : pre) {
     if (val < Min) return false;
     while (k >= 0 && pre[k] < val) Min = pre[k--];
-    pre[++k] = val;  //<复用原数组模拟栈,以优化内存
+    pre[++k] = val;  // 划重点：复用原数组模拟栈,以优化内存
   }
   return true;
 }
 }  // namespace LC255
 
 // LC1028. 从先序遍历还原二叉树
-namespace LC1028 {}  // namespace LC1028
+namespace LC1028 {
+//*
+//思路：若'-'相比前面的增加，则为前个节点的左节点，若'-'相同，则为上个节点的右兄弟，否则，回溯
+void readS(vector<pair<int, int>>& V, string str) {
+  int n = str.size(), i = 0, j = 0, val, dep;
+  while (j < n) {
+    i = j;
+    while (j < n && str[j] == '-') j++;
+    dep = j - i;
+    i = j;
+    while (j < n && str[j] != '-') j++;
+    val = stoi(str.substr(i, j - i));
+    V.push_back(make_pair(val, dep));
+  }
+}
+TreeNode* recoverFromPreorder(string str) {
+  if (str.empty()) return NULL;
+  vector<pair<int, int>> V;  //节点值和深度
+  readS(V, str);
+  auto root = new TreeNode(V[0].first);
+  stack<pair<TreeNode*, int>> S;
+  S.push(make_pair(root, 0));
+  for (int i = 1; i < V.size(); i++) {
+    TreeNode* cur = new TreeNode(V[i].first);
+    while (S.top().second >= V[i].second) S.pop();
+    if (S.top().first->left)
+      S.top().first->right = cur;
+    else
+      S.top().first->left = cur;
+    S.push(make_pair(cur, V[i].second));
+  }
+  return root;
+}
+void test() {
+  string line;
+  while (getline(cin, line)) {
+    string S = stringToString(line);
+
+    TreeNode* ret = recoverFromPreorder(S);
+
+    string out = treeNodeToString(ret);
+    cout << out << endl;
+  }
+}
+}  // namespace LC1028
 
 // LC971. 翻转二叉树以匹配先序遍历
 namespace LC971 {}  // namespace LC971
 
 // LC449. 序列化和反序列化二叉搜索树
+// 推荐度：★★★★☆ 理由：存储数据方式
 namespace LC449 {
-string serialize(TreeNode* root) {}
+void inorderDFS(TreeNode* root, string& order) {
+  if (!root) return;
+  char buf[4];
+  // 划重点：题目要求以string形式存储，为此可以将int转为4字符存为string
+  memcpy(buf, &(root->val), sizeof(int));
+  for (int i = 0; i < sizeof(int); i++) order.push_back(buf[i]);
+  inorderDFS(root->left, order);
+  inorderDFS(root->right, order);
+}
+string serialize(TreeNode* root) {
+  string order;
+  inorderDFS(root, order);
+  return order;
+}
 
-TreeNode* deserialize(string data) {}
+TreeNode* reconstruct(const string& buffer, int& pos, int minValue,
+                      int maxValue) {
+  if (pos >= buffer.size()) return NULL;
+  int value;
+  memcpy(&value, &buffer[pos], sizeof(int));
+  if (value < minValue || value > maxValue) return NULL;
+
+  TreeNode* node = new TreeNode(value);
+  pos += sizeof(int);
+  node->left = reconstruct(buffer, pos, minValue, value);
+  node->right = reconstruct(buffer, pos, value, maxValue);
+  return node;
+}
+TreeNode* deserialize(string data) {
+  int pos = 0;
+  return reconstruct(data, pos, INT32_MIN, INT32_MAX);
+}
 }  // namespace LC449
-
-// LC428. 序列化和反序列化 N 叉树
-namespace LC428 {}  // namespace LC428
 
 // LC297. 二叉树的序列化与反序列化
 namespace LC297 {}  // namespace LC297
 
-// LC652. 寻找重复的子树
-namespace LC652 {
-vector<TreeNode*> findDuplicateSubtrees(TreeNode* root) {}
-}  // namespace LC652
-
-//$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
-//$ 树的转换问题(将树结构转换为其他形式)
-//$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
-// LC114. 二叉树展开为链表
-namespace LC114 {}  // namespace LC114
-
-// LC426. 将二叉搜索树转化为排序的双向链表
-namespace LC426 {}  // namespace LC426
+// LC428. 序列化和反序列化 N 叉树
+namespace LC428 {}  // namespace LC428
 
 // LC536. 从字符串生成二叉树
 namespace LC536 {}  // namespace LC536
 
-// LC538. 把二叉搜索树转换为累加树
-namespace LC538 {}  // namespace LC538
+// LC652. 寻找重复的子树
+namespace LC652 {
+//? 待理解？
+vector<TreeNode*> findDuplicateSubtrees(TreeNode* root) {
+  // 树id，
+  unordered_map<long, pair<int, int>> counts;
+  vector<TreeNode*> ans;
+  function<int(TreeNode*)> getId = [&](TreeNode* r) {
+    if (!r) return 0;
+    long key = (static_cast<long>(static_cast<unsigned>(r->val)) << 32) |
+               (getId(r->left) << 16) | getId(r->right);
+    auto& p = counts[key];
+    if (p.second++ == 0)
+      p.first = counts.size();
+    else if (p.second == 2)
+      ans.push_back(r);
+    return p.first;
+  };
+  getId(root);
+  return ans;
+}
+// 思路1：先将树序列化为string，再在string里找
+}  // namespace LC652
+
+//$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
+//$ 树的节点操作问题
+//$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
+// LC114. 二叉树展开为链表
+//? 待理解
+namespace LC114 {
+// 思路，前序遍历
+void flatten(TreeNode* root) {
+  if (root == nullptr) return;
+  flatten(root->left);
+  flatten(root->right);
+  if (root->left != nullptr) {
+    auto pre = root->left;
+    while (pre->right != nullptr) pre = pre->right;
+    pre->right = root->right;
+    root->right = root->left;
+    root->left = nullptr;
+  }
+  root = root->right;
+  return;
+}
+}  // namespace LC114
+
+// LC426. 将二叉搜索树转化为排序的双向链表
+namespace LC426 {}  // namespace LC426
 
 // LC655. 输出二叉树
 namespace LC655 {}  // namespace LC655
@@ -1422,9 +1566,6 @@ namespace LC108 {}  // namespace LC108
 // LC431. 将 N 叉树编码为二叉树
 namespace LC431 {}  // namespace LC431
 
-//$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
-//$ 二叉搜索树
-//$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
 // LC450. 删除二叉搜索树中的节点
 namespace LC450 {}  // namespace LC450
 
@@ -1449,7 +1590,6 @@ namespace LC623 {}  // namespace LC623
 // LC156. 上下翻转二叉树
 namespace LC156 {}  // namespace LC156
 
-//! 特殊性较强（言外之意：参考性不强的）放这↓
 // LC337. 打家劫舍 III
 namespace LC337 {}  // namespace LC337
 
