@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-09 11:29:43
- * @LastEditTime: 2019-08-12 21:06:25
+ * @LastEditTime: 2019-08-12 21:14:09
  * @LastEditors: zhangxianbing
  */
 #pragma once
@@ -366,26 +366,26 @@ TreeNode* convertBST(TreeNode* root) {
   return root;
 }
 // 思路1：需要右-根-左的遍历,则先中序遍历把节点存到stack中再访问即可
-TreeNode* convertBST(TreeNode* root) {
-  if (!root) return NULL;
-  stack<TreeNode*> S;
-  function<void(stack<TreeNode*>&, TreeNode*)> dfs = [&](stack<TreeNode*>& S,
-                                                         TreeNode* root) {
-    if (!root) return;
-    dfs(S, root->left);
-    S.push(root);
-    dfs(S, root->right);
-  };
-  dfs(S, root);
-  TreeNode* pre = NULL;
-  while (!S.empty()) {
-    auto cur = S.top();
-    S.pop();
-    if (pre) cur->val += pre->val;
-    pre = cur;
-  }
-  return root;
-}
+// TreeNode* convertBST(TreeNode* root) {
+//   if (!root) return NULL;
+//   stack<TreeNode*> S;
+//   function<void(stack<TreeNode*>&, TreeNode*)> dfs = [&](stack<TreeNode*>& S,
+//                                                          TreeNode* root) {
+//     if (!root) return;
+//     dfs(S, root->left);
+//     S.push(root);
+//     dfs(S, root->right);
+//   };
+//   dfs(S, root);
+//   TreeNode* pre = NULL;
+//   while (!S.empty()) {
+//     auto cur = S.top();
+//     S.pop();
+//     if (pre) cur->val += pre->val;
+//     pre = cur;
+//   }
+//   return root;
+// }
 }  // namespace LC538
 
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
