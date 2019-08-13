@@ -2,7 +2,7 @@
  * @Author: zhangxianbing
  * @Date: 2019-08-09 11:37:21
  * @LastEditors: zhangxianbing
- * @LastEditTime: 2019-08-13 12:40:22
+ * @LastEditTime: 2019-08-13 18:14:42
  * @Description: file content
  */
 #pragma once
@@ -10,7 +10,7 @@
 
 //# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ #//
 //# 动态规划
-//# 有些问题用递归会造成很多重复的计算，可利用dp改进
+//# 有些问题用递归会造成很多重复的计算，可修改为备忘录
 //# 动态规划的关键在于如何定义状态，以让状态转移方程好写
 //#
 //#如果状态转移方程中，新状态只和相邻的一个状态有关，可以不用整个dp数组，只需要一个变量储存相邻的那个状态就足够了，这样可以把空间复杂度降到O(1)
@@ -125,42 +125,123 @@ int maxSubArray(vector<int>& nums) {
 //^ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ^//
 // LC121. 买卖股票的最佳时机
 namespace LC121 {
-// 思路：动态规划
+// 思路：状态转移框架
+//<改进:如果状态转移方程中，新状态只和相邻的一个状态有关，可以不用整个dp数组，只需要一个变量储存相邻的那个状态就足够了，这样可以把空间复杂度降到O(1)
 int maxProfit(vector<int>& prices) {
-  int n = prices.size(), pre_profit = 0, max_profit = 0;
-  for (int i = 1; i < n; i++) {
-    pre_profit = max(0, pre_profit + prices[i] - prices[i - 1]);
-    max_profit = max(max_profit, pre_profit);
+  int n = prices.size();
+  // dp0[i],dp1[i]分别表示第i天一开始手上无股票、有股票的最大收益
+  int dp0 = 0, dp1 = INT32_MIN;
+  for (auto price : prices) {
+    dp0 = max(dp0, dp1 + price);
+    dp1 = max(dp1, -price);
   }
-  return max_profit;
+  return dp0;
 }
+// 思路：状态转移框架
+// int maxProfit(vector<int>& prices) {
+//   int n = prices.size();
+//   // dp0[i],dp1[i]分别表示第i天手上无股票、有股票的最大收益
+//   vector<int> dp0(n), dp1(n);
+//   for (int i = 0; i < n; i++) {
+//     if (i == 0) {
+//       dp0[i] = 0;
+//       dp1[i] = -prices[i];
+//       continue;
+//     }
+//     dp0[i] = max(dp0[i - 1], dp1[i - 1] + prices[i]);
+//     dp1[i] = max(dp1[i - 1], -prices[i]);
+//   }
+//   return dp0[n - 1];
+// }
+// 改进
+// int maxProfit(vector<int>& prices) {
+//   int n = prices.size(), pre_profit = 0, max_profit = 0;
+//   for (int i = 1; i < n; i++) {
+//     pre_profit = max(0, pre_profit + prices[i] - prices[i - 1]);
+//     max_profit = max(max_profit, pre_profit);
+//   }
+//   return max_profit;
+// }
 }  // namespace LC121
 
 // LC122. 买卖股票的最佳时机 II
 namespace LC122 {
-// 思路：贪心算法
+// 思路2：状态转移框架
 int maxProfit(vector<int>& prices) {
-  int n = prices.size(), res = 0;
-  for (int i = 0, j = 0; j < n; j++) {
-    i = j;
-    while (j + 1 < n && prices[j + 1] > prices[j]) j++;
-    res += prices[j] - prices[i];
+  int n = prices.size();
+  // dp0[i],dp1[i]分别表示第i天一开始手上无股票、有股票的最大收益
+  int dp0 = 0, dp1 = INT32_MIN;
+  for (auto price : prices) {
+    int tmp = dp0;
+    dp0 = max(dp0, dp1 + price);
+    dp1 = max(dp1, tmp - price);
   }
-  return res;
+  return dp0;
 }
+// 思路：贪心算法
+// int maxProfit(vector<int>& prices) {
+//   int n = prices.size(), res = 0;
+//   for (int i = 0, j = 0; j < n; j++) {
+//     i = j;
+//     while (j + 1 < n && prices[j + 1] > prices[j]) j++;
+//     res += prices[j] - prices[i];
+//   }
+//   return res;
+// }
 }  // namespace LC122
 
 // LC123. 买卖股票的最佳时机 III
-namespace LC123 {}  // namespace LC123
+namespace LC123 {
+// 思路：状态转移框架
+int maxProfit(vector<int>& prices) {
+  // dp10 dp20分别表示共交易1/2次，手头无股票时的最大收益
+  // dp11 dp21分别表示共交易1/2次，手头有股票时的最大收益
+  int dp10 = 0, dp20 = 0, dp11 = INT32_MIN, dp21 = INT32_MIN;
+  for (auto price : prices) {
+    dp20 = max(dp20, dp21 + price);
+    dp21 = max(dp21, dp10 - price);
+    dp10 = max(dp10, dp11 + price);
+    dp11 = max(dp11, -price);
+  }
+  return dp20;
+}
+}  // namespace LC123
 
 // LC188. 买卖股票的最佳时机 IV
 namespace LC188 {}  // namespace LC188
 
 // LC714. 买卖股票的最佳时机含手续费
-namespace LC714 {}  // namespace LC714
+namespace LC714 {
+// 思路：状态转移框架
+int maxProfit(vector<int>& prices, int fee) {
+  int n = prices.size();
+  // dp0[i],dp1[i]分别表示第i天一开始手上无股票、有股票的最大收益
+  int dp0 = 0, dp1 = INT32_MIN;
+  for (auto price : prices) {
+    int tmp = dp0;
+    dp0 = max(dp0, dp1 + price);
+    dp1 = max(dp1, tmp - price - fee);
+  }
+  return dp0;
+}
+}  // namespace LC714
 
 // LC309. 最佳买卖股票时机含冷冻期
-namespace LC309 {}  // namespace LC309
+namespace LC309 {
+// 思路：状态转移框架
+int maxProfit(vector<int>& prices) {
+  int n = prices.size();
+  // dp0[i],dp1[i]分别表示第i天一开始手上无股票、有股票的最大收益
+  int dp0 = 0, dp1 = INT32_MIN, pre_dp0 = 0;
+  for (int i = 0; i < n; i++) {
+    int tmp = dp0;
+    dp0 = max(dp0, dp1 + prices[i]);
+    dp1 = max(dp1, pre_dp0 - prices[i]);
+    pre_dp0 = tmp;
+  }
+  return dp0;
+}
+}  // namespace LC309
 
 //^ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ^//
 //^ 打家劫舍问题
@@ -177,32 +258,32 @@ int rob(vector<int>& nums) {
   return max(preYes, preNo);
 }
 // 思路2
-int rob(int num[], int n) {
-  int a = 0, b = 0;
-  for (int i = 0; i < n; i++) {
-    if (i % 2 == 0) {
-      a = max(a + num[i], b);
-    } else {
-      b = max(a, b + num[i]);
-    }
-  }
-  return max(a, b);
-}
+// int rob(int num[], int n) {
+//   int a = 0, b = 0;
+//   for (int i = 0; i < n; i++) {
+//     if (i % 2 == 0) {
+//       a = max(a + num[i], b);
+//     } else {
+//       b = max(a, b + num[i]);
+//     }
+//   }
+//   return max(a, b);
+// }
 // 思路1
-int rob(vector<int>& nums) {
-  int n = nums.size();
-  if (n == 0) return 0;
-  if (n == 1) return nums[0];
-  if (n == 2) return max(nums[0], nums[1]);
-  vector<int> dp(n, 0);
-  dp[0] = nums[0];
-  dp[1] = nums[1];
-  dp[2] = nums[0] + nums[2];
-  for (int i = 3; i < n; i++) {
-    dp[i] = max(dp[i - 2], dp[i - 3]) + nums[i];
-  }
-  return max(dp[n - 1], dp[n - 2]);
-}
+// int rob(vector<int>& nums) {
+//   int n = nums.size();
+//   if (n == 0) return 0;
+//   if (n == 1) return nums[0];
+//   if (n == 2) return max(nums[0], nums[1]);
+//   vector<int> dp(n, 0);
+//   dp[0] = nums[0];
+//   dp[1] = nums[1];
+//   dp[2] = nums[0] + nums[2];
+//   for (int i = 3; i < n; i++) {
+//     dp[i] = max(dp[i - 2], dp[i - 3]) + nums[i];
+//   }
+//   return max(dp[n - 1], dp[n - 2]);
+// }
 }  // namespace LC198
 
 // LC213. 打家劫舍 II
@@ -230,17 +311,103 @@ int numWays(int n, int k) {
 
 // LC256. 粉刷房子
 namespace LC256 {
-int minCost(vector<vector<int>>& costs) {}
+int minCost(vector<vector<int>>& costs) {
+  int n = costs.size();
+  if (n == 0) return 0;
+  for (int i = 1; i < n; i++) {
+    costs[i][0] += min(costs[i - 1][1], costs[i - 1][2]);
+    costs[i][1] += min(costs[i - 1][0], costs[i - 1][2]);
+    costs[i][2] += min(costs[i - 1][0], costs[i - 1][1]);
+  }
+  return min(min(costs[n - 1][0], costs[n - 1][1]), costs[n - 1][2]);
+}
 }  // namespace LC256
 
 // LC265. 粉刷房子 II
 namespace LC265 {}  // namespace LC265
 
 // LC303. 区域和检索 - 数组不可变
-namespace LC303 {}  // namespace LC303
+namespace LC303 {
+// 思路2：
+class NumArray {
+ public:
+  vector<int> sumArray;
+
+  NumArray(vector<int>& nums) {
+    sumArray.push_back(0);
+    int last = 0;
+    for (int i : nums) sumArray.push_back(last += i);
+  }
+
+  int sumRange(int i, int j) { return sumArray[j + 1] - sumArray[i]; }
+};
+// 思路：暴力方法
+// class NumArray {
+//  public:
+//   vector<vector<int>> dp;
+//   NumArray(vector<int>& nums) {
+//     int n = nums.size();
+//     dp = vector<vector<int>>(n, vector<int>(n, 0));
+//     for (int i = 0; i < n; i++) {
+//       for (int j = i; j < n; j++) {
+//         if (j == 0)
+//           dp[i][j] = nums[0];
+//         else {
+//           dp[i][j] = dp[i][j - 1] + nums[j];
+//         }
+//       }
+//     }
+//   }
+
+//   int sumRange(int i, int j) { return dp[i][j]; }
+// };
+}  // namespace LC303
+
+// LC304. 二维区域和检索 - 矩阵不可变
+namespace LC304 {
+class NumMatrix {
+ private:
+  int row, col;
+  vector<vector<int>> sums;
+
+ public:
+  NumMatrix(vector<vector<int>>& matrix) {
+    row = matrix.size();
+    col = row > 0 ? matrix[0].size() : 0;
+    sums = vector<vector<int>>(row + 1, vector<int>(col + 1, 0));
+    for (int i = 1; i <= row; i++) {
+      for (int j = 1; j <= col; j++) {
+        sums[i][j] = matrix[i - 1][j - 1] + sums[i - 1][j] + sums[i][j - 1] -
+                     sums[i - 1][j - 1];
+      }
+    }
+  }
+
+  int sumRegion(int row1, int col1, int row2, int col2) {
+    return sums[row2 + 1][col2 + 1] - sums[row2 + 1][col1] -
+           sums[row1][col2 + 1] + sums[row1][col1];
+  }
+};
+}  // namespace LC304
+
+// LC307. 区域和检索 - 数组可修改
+namespace LC307 {}  // namespace LC307
+
+// LC308. 二维区域和检索 - 可变
+namespace LC308 {}  // namespace LC308
 
 // LC1025. 除数博弈
-namespace LC1025 {}  // namespace LC1025
+namespace LC1025 {
+bool divisorGame(int N) {
+  if (N == 1) return false;
+  vector<bool> dp(N + 1, false);
+  dp[2] = true;
+  for (int i = 3; i <= N; i++)
+    for (int j = 1; j < i; j++)
+      if (i % j == 0 && !dp[i - j]) dp[i] = true;
+  return dp[N];
+}
+}  // namespace LC1025
 
 // LC96. 不同的二叉搜索树
 namespace LC96 {
@@ -602,9 +769,6 @@ namespace LC418 {}  // namespace LC418
 
 // LC898. 子数组按位或操作
 namespace LC898 {}  // namespace LC898
-
-// LC304. 二维区域和检索 - 矩阵不可变
-namespace LC304 {}  // namespace LC304
 
 // LC1027. 最长等差数列
 namespace LC1027 {}  // namespace LC1027

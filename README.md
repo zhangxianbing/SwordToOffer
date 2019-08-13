@@ -2,11 +2,12 @@
  * @Author: zhangxianbing
  * @Date: 2019-08-11 11:29:12
  * @LastEditors: zhangxianbing
- * @LastEditTime: 2019-08-12 23:43:15
+ * @LastEditTime: 2019-08-13 13:21:06
  * @Description: file content
  -->
 
 思考1：很多时候，如果依赖各种别人做好的动图或写好的代码来理解算法，并不能很好的锻炼自己的思维！
+思考2：别人的理解不一定是对的，保持自己的思考。
 
 从leetcode摘出题目信息后正则替换
 ```
