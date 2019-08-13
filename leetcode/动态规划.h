@@ -2,7 +2,7 @@
  * @Author: zhangxianbing
  * @Date: 2019-08-09 11:37:21
  * @LastEditors: zhangxianbing
- * @LastEditTime: 2019-08-13 22:58:59
+ * @LastEditTime: 2019-08-14 00:05:15
  * @Description: file content
  */
 #pragma once
@@ -139,7 +139,7 @@ namespace LC121 {
 //<改进:如果状态转移方程中，新状态只和相邻的一个状态有关，可以不用整个dp数组，只需要一个变量储存相邻的那个状态就足够了，这样可以把空间复杂度降到O(1)
 int maxProfit(vector<int>& prices) {
   int n = prices.size();
-  // dp0,dp1[分别存储两种状态(执行操作后手头无股票、有股票)对应的最大收益
+  // dp0,dp1分别存储两种状态(执行操作后手头无股票、有股票)对应的最大收益
   int dp0 = 0, dp1 = INT32_MIN;
   for (auto price : prices) {
     dp0 = max(dp0, dp1 + price);
@@ -151,7 +151,6 @@ int maxProfit(vector<int>& prices) {
 // 思路：状态转移框架
 // int maxProfit(vector<int>& prices) {
 //   int n = prices.size();
-//   // dp0[i],dp1[i]分别表示第i天手上无股票、有股票的最大收益
 //   vector<int> dp0(n), dp1(n);
 //   for (int i = 0; i < n; i++) {
 //     if (i == 0) {
@@ -171,7 +170,7 @@ namespace LC122 {
 // 思路2：状态转移框架
 int maxProfit(vector<int>& prices) {
   int n = prices.size();
-  // dp0,dp1[分别存储两种状态(执行操作后手头无股票、有股票)对应的最大收益
+  // dp0,dp1分别存储两种状态(执行操作后手头无股票、有股票)对应的最大收益
   int dp0 = 0, dp1 = INT32_MIN;
   for (auto price : prices) {
     int tmp = dp0;
@@ -283,14 +282,18 @@ int maxProfit(vector<int>& prices) {
 //^ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ^//
 // LC198. 打家劫舍
 namespace LC198 {
+//< 采用状态转移框架. 状态有：第i家、偷与不偷
+//< dp[i][0]表示路过第i家时不偷，dp[i][1]则表示路过第i家时偷
+//< dp[i][0] = max(dp[i-1][0], dp[i-1][1])
+//< dp[i][1] = dp[i-1][0] + nums[i]
 int rob(vector<int>& nums) {
-  int preNo = 0, preYes = 0;  //分别为不打劫当前、打劫当前可获得最多的钱
+  int dp0 = 0, dp1 = 0;  //分别为不打劫当前、打劫当前可获得最多的钱
   for (auto num : nums) {
-    int temp = preNo;
-    preNo = max(preNo, preYes);
-    preYes = num + temp;
+    int temp = dp0;
+    dp0 = max(dp0, dp1);
+    dp1 = num + temp;
   }
-  return max(preYes, preNo);
+  return max(dp0, dp1);
 }
 // 思路2
 // int rob(int num[], int n) {
@@ -322,7 +325,37 @@ int rob(vector<int>& nums) {
 }  // namespace LC198
 
 // LC213. 打家劫舍 II
-namespace LC213 {}  // namespace LC213
+namespace LC213 {
+// 思路1的优化
+int rob(vector<int>& nums) {
+  if (nums.size() == 1) return nums[0];
+  int n = nums.size();
+  int a = 0, b = 0, pa = 0, pb = 0;
+  for (int i = 2; i < n + 1; i++) {
+    //< 注意此处空间O(n)优化成O(1)的操作
+    int tmp = max(a, pa + nums[i - 2]);  //[0,n-2]
+    pa = a;
+    a = tmp;
+    tmp = max(b, pb + nums[i - 1]);  // [1,n-1]
+    pb = b;
+    b = tmp;
+  }
+  return max(a, b);
+}
+// 思路1：去头去尾，当前位置n 房屋可盗窃的最大值，要么就是 n-1
+// 房屋可盗窃的最大值，要么就是 n-2
+// 房屋可盗窃的最大值加上当前房屋的值，二者之间取最大值
+// int rob(vector<int>& nums) {
+//   if (nums.size() == 1) return nums[0];
+//   int n = nums.size();
+//   vector<int> a(n + 1), b(n + 1);
+//   for (int i = 2; i < n + 1; i++) {
+//     a[i] = max(a[i - 1], a[i - 2] + nums[i - 2]);
+//     b[i] = max(b[i - 1], b[i - 2] + nums[i - 1]);
+//   }
+//   return max(a[n], b[n]);
+// }
+}  // namespace LC213
 
 // LC337. 打家劫舍 III
 namespace LC337 {}  // namespace LC337
