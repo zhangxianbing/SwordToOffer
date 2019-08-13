@@ -2,7 +2,7 @@
  * @Author: zhangxianbing
  * @Date: 2019-08-12 20:30:19
  * @LastEditors: zhangxianbing
- * @LastEditTime: 2019-08-12 21:06:15
+ * @LastEditTime: 2019-08-13 11:32:02
  * @Description: file content
  */
 #pragma once
@@ -99,9 +99,6 @@ namespace LC329 {}  // namespace LC329
 
 // LC332. 重新安排行程
 namespace LC332 {}  // namespace LC332
-
-// LC337. 打家劫舍 III
-namespace LC337 {}  // namespace LC337
 
 // LC339. 嵌套列表权重和
 namespace LC339 {}  // namespace LC339

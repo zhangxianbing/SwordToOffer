@@ -2,7 +2,7 @@
  * @Author: zhangxianbing
  * @Date: 2019-08-09 11:37:21
  * @LastEditors: zhangxianbing
- * @LastEditTime: 2019-08-12 23:42:37
+ * @LastEditTime: 2019-08-13 12:40:22
  * @Description: file content
  */
 #pragma once
@@ -12,12 +12,14 @@
 //# 动态规划
 //# 有些问题用递归会造成很多重复的计算，可利用dp改进
 //# 动态规划的关键在于如何定义状态，以让状态转移方程好写
+//#
+//#如果状态转移方程中，新状态只和相邻的一个状态有关，可以不用整个dp数组，只需要一个变量储存相邻的那个状态就足够了，这样可以把空间复杂度降到O(1)
 //# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ #//
 /*
   通常我们遍历子串或者子序列有三种遍历方式:
   1)以某个节点为开头的所有子序列:如[a][a,b],[a,b,c]...再从以b为开头的子序列开始遍历[b][b,c]..
   2)根据子序列的长度为标杆,如先遍历出子序列长度为1的子序列,在遍历出长度为2的等等**
-  3)以子序列的结束节点为基准,先遍历出以某个节点为结束的所有子序列,因为每个节点都可能会是子序列的结束节点,因此要遍历下整个序列,如:以b为结束点的所有子序列:[a,b][b]以c为结束点的所有子序列:[a,b,c][b,c][c]
+  3)(Kadane算法)以子序列的结束节点为基准,先遍历出以某个节点为结束的所有子序列,因为每个节点都可能会是子序列的结束节点,因此要遍历下整个序列,如:以b为结束点的所有子序列:[a,b][b]以c为结束点的所有子序列:[a,b,c][b,c][c]
 
   第一种遍历方式通常用于暴力解法,第二种遍历方式LC5.最长回文子串中的解法就用到了
   第三种遍历方式因为可以产生递推关系,采用动态规划时,经常通过此种遍历方式,如背包问题,最大公共子串,这里的动态规划解法也是以先遍历出以某个节点为结束节点的所有子序列的思路
@@ -25,32 +27,8 @@
 
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
 //$ 动态规划 - 入门题
+//$$经典的问题有：斐波拉契数、爬楼梯、买卖股票最佳时机、打家劫舍、粉刷房子、
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
-// LC70. 爬楼梯
-namespace LC70 {
-int climbStairs(int n) {
-  vector<long long> ret(n + 1, 1);
-  for (int i = 2; i < n + 1; i++) {
-    ret[i] = ret[i - 1] + ret[i - 2];
-  }
-  return ret[n];
-}
-}  // namespace LC70
-
-// LC746. 使用最小花费爬楼梯
-namespace LC746 {
-int minCostClimbingStairs(vector<int>& cost) {
-  int n = cost.size();
-  vector<int> dp(n + 1);
-  dp[0] = 0;
-  dp[1] = 0;
-  for (int i = 2; i <= n; i++) {
-    dp[i] = min(dp[i - 1] + cost[i - 1], dp[i - 2] + cost[i - 2]);
-  }
-  return dp[n];
-}
-}  // namespace LC746
-
 // LC509. 斐波那契数
 namespace LC509 {
 int fib(int N) {
@@ -89,6 +67,31 @@ int tribonacci(int n) {
 }
 }  // namespace LC1137
 
+// LC70. 爬楼梯
+namespace LC70 {
+int climbStairs(int n) {
+  vector<long long> ret(n + 1, 1);
+  for (int i = 2; i < n + 1; i++) {
+    ret[i] = ret[i - 1] + ret[i - 2];
+  }
+  return ret[n];
+}
+}  // namespace LC70
+
+// LC746. 使用最小花费爬楼梯
+namespace LC746 {
+int minCostClimbingStairs(vector<int>& cost) {
+  int n = cost.size();
+  vector<int> dp(n + 1);
+  dp[0] = 0;
+  dp[1] = 0;
+  for (int i = 2; i <= n; i++) {
+    dp[i] = min(dp[i - 1] + cost[i - 1], dp[i - 2] + cost[i - 2]);
+  }
+  return dp[n];
+}
+}  // namespace LC746
+
 // LC53. 最大子序和
 namespace LC53 {
 // 思路2：同思路1本质是一样的,只不过省去了存dp的内存
@@ -115,18 +118,129 @@ int maxSubArray(vector<int>& nums) {
 // }
 }  // namespace LC53
 
+//^ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ^//
+//^ 六道股票题
+//^ 通解框架：
+//^https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iii/solution/yi-ge-tong-yong-fang-fa-tuan-mie-6-dao-gu-piao-wen
+//^ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ^//
 // LC121. 买卖股票的最佳时机
 namespace LC121 {
+// 思路：动态规划
 int maxProfit(vector<int>& prices) {
-  int n = prices.size();
-  int pre_profit = 0, max_profit = 0;
-  for (int i = 0; i < n - 1; i++) {
-    pre_profit = max(0, pre_profit + prices[i + 1] - prices[i]);
+  int n = prices.size(), pre_profit = 0, max_profit = 0;
+  for (int i = 1; i < n; i++) {
+    pre_profit = max(0, pre_profit + prices[i] - prices[i - 1]);
     max_profit = max(max_profit, pre_profit);
   }
   return max_profit;
 }
 }  // namespace LC121
+
+// LC122. 买卖股票的最佳时机 II
+namespace LC122 {
+// 思路：贪心算法
+int maxProfit(vector<int>& prices) {
+  int n = prices.size(), res = 0;
+  for (int i = 0, j = 0; j < n; j++) {
+    i = j;
+    while (j + 1 < n && prices[j + 1] > prices[j]) j++;
+    res += prices[j] - prices[i];
+  }
+  return res;
+}
+}  // namespace LC122
+
+// LC123. 买卖股票的最佳时机 III
+namespace LC123 {}  // namespace LC123
+
+// LC188. 买卖股票的最佳时机 IV
+namespace LC188 {}  // namespace LC188
+
+// LC714. 买卖股票的最佳时机含手续费
+namespace LC714 {}  // namespace LC714
+
+// LC309. 最佳买卖股票时机含冷冻期
+namespace LC309 {}  // namespace LC309
+
+//^ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ^//
+//^ 打家劫舍问题
+//^ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ^//
+// LC198. 打家劫舍
+namespace LC198 {
+int rob(vector<int>& nums) {
+  int preNo = 0, preYes = 0;  //分别为不打劫当前、打劫当前可获得最多的钱
+  for (auto num : nums) {
+    int temp = preNo;
+    preNo = max(preNo, preYes);
+    preYes = num + temp;
+  }
+  return max(preYes, preNo);
+}
+// 思路2
+int rob(int num[], int n) {
+  int a = 0, b = 0;
+  for (int i = 0; i < n; i++) {
+    if (i % 2 == 0) {
+      a = max(a + num[i], b);
+    } else {
+      b = max(a, b + num[i]);
+    }
+  }
+  return max(a, b);
+}
+// 思路1
+int rob(vector<int>& nums) {
+  int n = nums.size();
+  if (n == 0) return 0;
+  if (n == 1) return nums[0];
+  if (n == 2) return max(nums[0], nums[1]);
+  vector<int> dp(n, 0);
+  dp[0] = nums[0];
+  dp[1] = nums[1];
+  dp[2] = nums[0] + nums[2];
+  for (int i = 3; i < n; i++) {
+    dp[i] = max(dp[i - 2], dp[i - 3]) + nums[i];
+  }
+  return max(dp[n - 1], dp[n - 2]);
+}
+}  // namespace LC198
+
+// LC213. 打家劫舍 II
+namespace LC213 {}  // namespace LC213
+
+// LC337. 打家劫舍 III
+namespace LC337 {}  // namespace LC337
+
+// LC276. 栅栏涂色
+namespace LC276 {
+int numWays(int n, int k) {
+  if (n == 0) return 0;
+  if (n == 1) return k;
+  if (n == 2) return k * k;
+  vector<int> dp(n + 1);
+  dp[0] = 0;
+  dp[1] = k;
+  dp[2] = k * k;
+  for (int i = 3; i <= n; i++) {
+    dp[i] = (dp[i - 1] + dp[i - 2]) * (k - 1);
+  }
+  return dp[n];
+}
+}  // namespace LC276
+
+// LC256. 粉刷房子
+namespace LC256 {
+int minCost(vector<vector<int>>& costs) {}
+}  // namespace LC256
+
+// LC265. 粉刷房子 II
+namespace LC265 {}  // namespace LC265
+
+// LC303. 区域和检索 - 数组不可变
+namespace LC303 {}  // namespace LC303
+
+// LC1025. 除数博弈
+namespace LC1025 {}  // namespace LC1025
 
 // LC96. 不同的二叉搜索树
 namespace LC96 {
@@ -189,14 +303,8 @@ namespace LC64 {}  // namespace LC64
 // LC120. 三角形最小路径和
 namespace LC120 {}  // namespace LC120
 
-// LC309. 最佳买卖股票时机含冷冻期
-namespace LC309 {}  // namespace LC309
-
 // LC351. 安卓系统手势解锁
 namespace LC351 {}  // namespace LC351
-
-// LC303. 区域和检索 - 数组不可变
-namespace LC303 {}  // namespace LC303
 
 // LC698. 划分为k个相等的子集
 namespace LC698 {}  // namespace LC698
@@ -206,9 +314,6 @@ namespace LC363 {}  // namespace LC363
 
 // LC718. 最长重复子数组
 namespace LC718 {}  // namespace LC718
-
-// LC198. 打家劫舍
-namespace LC198 {}  // namespace LC198
 
 // LC466. 统计重复个数
 namespace LC466 {}  // namespace LC466
@@ -309,9 +414,6 @@ namespace LC801 {}  // namespace LC801
 // LC546. 移除盒子
 namespace LC546 {}  // namespace LC546
 
-// LC123. 买卖股票的最佳时机 III
-namespace LC123 {}  // namespace LC123
-
 // LC741. 摘樱桃
 namespace LC741 {}  // namespace LC741
 
@@ -332,9 +434,6 @@ namespace LC410 {}  // namespace LC410
 
 // LC688. “马”在棋盘上的概率
 namespace LC688 {}  // namespace LC688
-
-// LC213. 打家劫舍 II
-namespace LC213 {}  // namespace LC213
 
 // LC322. 零钱兑换
 namespace LC322 {}  // namespace LC322
@@ -375,12 +474,6 @@ namespace LC139 {}  // namespace LC139
 // LC730. 统计不同回文子字符串
 namespace LC730 {}  // namespace LC730
 
-// LC1025. 除数博弈
-namespace LC1025 {}  // namespace LC1025
-
-// LC714. 买卖股票的最佳时机含手续费
-namespace LC714 {}  // namespace LC714
-
 // LC115. 不同的子序列
 namespace LC115 {}  // namespace LC115
 
@@ -392,9 +485,6 @@ namespace LC943 {}  // namespace LC943
 
 // LC474. 一和零
 namespace LC474 {}  // namespace LC474
-
-// LC188. 买卖股票的最佳时机 IV
-namespace LC188 {}  // namespace LC188
 
 // LC392. 判断子序列
 namespace LC392 {}  // namespace LC392
@@ -413,9 +503,6 @@ namespace LC903 {}  // namespace LC903
 
 // LC354. 俄罗斯套娃信封问题
 namespace LC354 {}  // namespace LC354
-
-// LC276. 栅栏涂色
-namespace LC276 {}  // namespace LC276
 
 // LC44. 通配符匹配
 namespace LC44 {}  // namespace LC44
@@ -476,9 +563,6 @@ namespace LC376 {}  // namespace LC376
 
 // LC975. 奇偶跳
 namespace LC975 {}  // namespace LC975
-
-// LC256. 粉刷房子
-namespace LC256 {}  // namespace LC256
 
 // LC517. 超级洗衣机
 namespace LC517 {}  // namespace LC517
@@ -545,9 +629,6 @@ namespace LC1039 {}  // namespace LC1039
 
 // LC1074. 元素和为目标值的子矩阵数量
 namespace LC1074 {}  // namespace LC1074
-
-// LC265. 粉刷房子 II
-namespace LC265 {}  // namespace LC265
 
 // LC968. 监控二叉树
 namespace LC968 {}  // namespace LC968

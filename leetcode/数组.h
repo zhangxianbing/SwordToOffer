@@ -2,7 +2,7 @@
  * @Author: zhangxianbing
  * @Date: 2019-08-09 11:42:50
  * @LastEditors: zhangxianbing
- * @LastEditTime: 2019-08-12 23:36:48
+ * @LastEditTime: 2019-08-13 10:08:06
  * @Description: file content
  */
 #pragma once
@@ -275,12 +275,6 @@ namespace LC119 {}  // namespace LC119
 
 // LC120. 三角形最小路径和
 namespace LC120 {}  // namespace LC120
-
-// LC122. 买卖股票的最佳时机 II
-namespace LC122 {}  // namespace LC122
-
-// LC123. 买卖股票的最佳时机 III
-namespace LC123 {}  // namespace LC123
 
 // LC126. 单词接龙 II
 namespace LC126 {}  // namespace LC126

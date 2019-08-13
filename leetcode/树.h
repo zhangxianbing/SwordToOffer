@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-09 11:29:43
- * @LastEditTime: 2019-08-12 21:14:09
+ * @LastEditTime: 2019-08-13 11:32:06
  * @LastEditors: zhangxianbing
  */
 #pragma once
@@ -1605,9 +1605,6 @@ namespace LC623 {}  // namespace LC623
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
 //$ 待分类
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
-// LC337. 打家劫舍 III
-namespace LC337 {}  // namespace LC337
-
 // LC662. 二叉树最大宽度
 namespace LC662 {}  // namespace LC662
 
