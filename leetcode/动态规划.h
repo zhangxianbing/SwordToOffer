@@ -2,7 +2,7 @@
  * @Author: zhangxianbing
  * @Date: 2019-08-09 11:37:21
  * @LastEditors: zhangxianbing
- * @LastEditTime: 2019-08-13 18:14:42
+ * @LastEditTime: 2019-08-13 22:58:59
  * @Description: file content
  */
 #pragma once
@@ -125,11 +125,21 @@ int maxSubArray(vector<int>& nums) {
 //^ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ^//
 // LC121. 买卖股票的最佳时机
 namespace LC121 {
-// 思路：状态转移框架
+//> 本质和状态转移框架是一致的
+// int maxProfit(vector<int>& prices) {
+//   int n = prices.size(), pre_profit = 0, max_profit = 0;
+//   for (int i = 1; i < n; i++) {
+//     pre_profit = max(0, pre_profit + prices[i] - prices[i - 1]);
+//     max_profit = max(max_profit, pre_profit);
+//   }
+//   return max_profit;
+// }
+
+// 思路：状态转移框架改进
 //<改进:如果状态转移方程中，新状态只和相邻的一个状态有关，可以不用整个dp数组，只需要一个变量储存相邻的那个状态就足够了，这样可以把空间复杂度降到O(1)
 int maxProfit(vector<int>& prices) {
   int n = prices.size();
-  // dp0[i],dp1[i]分别表示第i天一开始手上无股票、有股票的最大收益
+  // dp0,dp1[分别存储两种状态(执行操作后手头无股票、有股票)对应的最大收益
   int dp0 = 0, dp1 = INT32_MIN;
   for (auto price : prices) {
     dp0 = max(dp0, dp1 + price);
@@ -137,6 +147,7 @@ int maxProfit(vector<int>& prices) {
   }
   return dp0;
 }
+
 // 思路：状态转移框架
 // int maxProfit(vector<int>& prices) {
 //   int n = prices.size();
@@ -153,15 +164,6 @@ int maxProfit(vector<int>& prices) {
 //   }
 //   return dp0[n - 1];
 // }
-// 改进
-// int maxProfit(vector<int>& prices) {
-//   int n = prices.size(), pre_profit = 0, max_profit = 0;
-//   for (int i = 1; i < n; i++) {
-//     pre_profit = max(0, pre_profit + prices[i] - prices[i - 1]);
-//     max_profit = max(max_profit, pre_profit);
-//   }
-//   return max_profit;
-// }
 }  // namespace LC121
 
 // LC122. 买卖股票的最佳时机 II
@@ -169,7 +171,7 @@ namespace LC122 {
 // 思路2：状态转移框架
 int maxProfit(vector<int>& prices) {
   int n = prices.size();
-  // dp0[i],dp1[i]分别表示第i天一开始手上无股票、有股票的最大收益
+  // dp0,dp1[分别存储两种状态(执行操作后手头无股票、有股票)对应的最大收益
   int dp0 = 0, dp1 = INT32_MIN;
   for (auto price : prices) {
     int tmp = dp0;
@@ -194,10 +196,12 @@ int maxProfit(vector<int>& prices) {
 namespace LC123 {
 // 思路：状态转移框架
 int maxProfit(vector<int>& prices) {
-  // dp10 dp20分别表示共交易1/2次，手头无股票时的最大收益
-  // dp11 dp21分别表示共交易1/2次，手头有股票时的最大收益
   int dp10 = 0, dp20 = 0, dp11 = INT32_MIN, dp21 = INT32_MIN;
   for (auto price : prices) {
+    //<有三点需要注意的地方
+    //<1.四个dp存储每天执行完操作后对应的四种不同状态下取得的最大收益。注：操作包括：买股票(+price)、卖股票(-price)、不买不卖
+    //<2.dp后第一个数字为1表示至今为正最多进行了1次交易，言外之意即可能进行了1次，也可能进行了0次，同理，为2表示至多进行了2此交易，即可能0、1、2次
+    //<3.dp后第二个数字表示操作执行完后，手头是否有股票
     dp20 = max(dp20, dp21 + price);
     dp21 = max(dp21, dp10 - price);
     dp10 = max(dp10, dp11 + price);
@@ -208,7 +212,38 @@ int maxProfit(vector<int>& prices) {
 }  // namespace LC123
 
 // LC188. 买卖股票的最佳时机 IV
-namespace LC188 {}  // namespace LC188
+namespace LC188 {
+int maxProfit(vector<int>& prices) {
+  int n = prices.size();
+  // dp0,dp1[分别存储两种状态(执行操作后手头无股票、有股票)对应的最大收益
+  int dp0 = 0, dp1 = INT32_MIN;
+  for (auto price : prices) {
+    int tmp = dp0;
+    dp0 = max(dp0, dp1 + price);
+    dp1 = max(dp1, tmp - price);
+  }
+  return dp0;
+}
+
+int maxProfit(int k, vector<int>& prices) {
+  int n = prices.size();
+  if (k > n / 2) return maxProfit(prices);
+
+  auto dp = vector<vector<vector<int>>>(
+      n, vector<vector<int>>(k + 1, vector<int>(2, 0)));
+  for (int i = 0; i < n; i++)
+    for (int j = k; j >= 1; j--) {
+      if (i == 0) {
+        dp[i][j][0] = 0;
+        dp[i][j][1] = -prices[i];
+      } else {
+        dp[i][j][0] = max(dp[i - 1][j][0], dp[i - 1][j][1] + prices[i]);
+        dp[i][j][1] = max(dp[i - 1][j][1], dp[i - 1][j - 1][0] - prices[i]);
+      }
+    }
+  return dp[n - 1][k][0];
+}
+}  // namespace LC188
 
 // LC714. 买卖股票的最佳时机含手续费
 namespace LC714 {
