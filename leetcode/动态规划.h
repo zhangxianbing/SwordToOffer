@@ -2,7 +2,7 @@
  * @Author: zhangxianbing
  * @Date: 2019-08-09 11:37:21
  * @LastEditors: zhangxianbing
- * @LastEditTime: 2019-08-14 00:05:15
+ * @LastEditTime: 2019-08-14 08:40:51
  * @Description: file content
  */
 #pragma once
@@ -295,33 +295,6 @@ int rob(vector<int>& nums) {
   }
   return max(dp0, dp1);
 }
-// 思路2
-// int rob(int num[], int n) {
-//   int a = 0, b = 0;
-//   for (int i = 0; i < n; i++) {
-//     if (i % 2 == 0) {
-//       a = max(a + num[i], b);
-//     } else {
-//       b = max(a, b + num[i]);
-//     }
-//   }
-//   return max(a, b);
-// }
-// 思路1
-// int rob(vector<int>& nums) {
-//   int n = nums.size();
-//   if (n == 0) return 0;
-//   if (n == 1) return nums[0];
-//   if (n == 2) return max(nums[0], nums[1]);
-//   vector<int> dp(n, 0);
-//   dp[0] = nums[0];
-//   dp[1] = nums[1];
-//   dp[2] = nums[0] + nums[2];
-//   for (int i = 3; i < n; i++) {
-//     dp[i] = max(dp[i - 2], dp[i - 3]) + nums[i];
-//   }
-//   return max(dp[n - 1], dp[n - 2]);
-// }
 }  // namespace LC198
 
 // LC213. 打家劫舍 II
@@ -358,7 +331,37 @@ int rob(vector<int>& nums) {
 }  // namespace LC213
 
 // LC337. 打家劫舍 III
-namespace LC337 {}  // namespace LC337
+namespace LC337 {
+// 思路：做后序遍历，稳打稳扎套用状态转移框架
+// dp0表示不打劫当前节点能获得的最大收益
+// dp1表示打劫当前节点能获得的最大收益
+void dfs(int& dp0, int& dp1, TreeNode* root) {
+  if (!root) return;
+  int ldp0 = 0, ldp1 = 0, rdp0 = 0, rdp1 = 0;
+  dfs(ldp0, ldp1, root->left);
+  dfs(rdp0, rdp1, root->right);
+  dp0 = max(max(ldp1 + rdp1, ldp0 + rdp0), max(ldp1 + rdp0, ldp0 + rdp1));
+  dp1 = ldp0 + rdp0 + root->val;
+}
+int rob(TreeNode* root) {
+  int dp0 = 0, dp1 = 0;
+  dfs(dp0, dp1, root);
+  return max(dp0, dp1);
+}
+// 思路2：
+// 返回当前根树(return)、左右子树的最大收益(l,r)
+// int dfs(TreeNode* root, int& l, int& r) {
+//   if (!root) return 0;
+//   int ll = 0, lr = 0, rl = 0, rr = 0;
+//   l = dfs(root->left, ll, lr);
+//   r = dfs(root->right, rl, rr);
+//   return max(root->val + ll + lr + rl + rr, l + r);
+// }
+// int rob(TreeNode* root) {
+//   int l, r;
+//   return dfs(root, l, r);
+// }
+}  // namespace LC337
 
 // LC276. 栅栏涂色
 namespace LC276 {
