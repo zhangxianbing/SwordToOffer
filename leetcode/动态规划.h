@@ -2,7 +2,7 @@
  * @Author: zhangxianbing
  * @Date: 2019-08-09 11:37:21
  * @LastEditors: zhangxianbing
- * @LastEditTime: 2019-08-14 08:40:51
+ * @LastEditTime: 2019-08-16 09:45:05
  * @Description: file content
  */
 #pragma once
@@ -24,10 +24,8 @@
   第一种遍历方式通常用于暴力解法,第二种遍历方式LC5.最长回文子串中的解法就用到了
   第三种遍历方式因为可以产生递推关系,采用动态规划时,经常通过此种遍历方式,如背包问题,最大公共子串,这里的动态规划解法也是以先遍历出以某个节点为结束节点的所有子序列的思路
 */
-
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
 //$ 动态规划 - 入门题
-//$$经典的问题有：斐波拉契数、爬楼梯、买卖股票最佳时机、打家劫舍、粉刷房子、
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
 // LC509. 斐波那契数
 namespace LC509 {
@@ -117,6 +115,56 @@ int maxSubArray(vector<int>& nums) {
 //   return res;
 // }
 }  // namespace LC53
+
+// LC1025. 除数博弈
+namespace LC1025 {
+bool divisorGame(int N) {
+  if (N == 1) return false;
+  vector<bool> dp(N + 1, false);
+  dp[2] = true;
+  for (int i = 3; i <= N; i++)
+    for (int j = 1; j < i; j++)
+      if (i % j == 0 && !dp[i - j]) dp[i] = true;
+  return dp[N];
+}
+}  // namespace LC1025
+
+// LC96. 不同的二叉搜索树
+namespace LC96 {
+int numTrees(int n) {
+  if (n == 0) return 1;
+  vector<int> dp(n + 1, 0);
+  dp[0] = 1;
+  for (int i = 1; i <= n; i++)
+    for (int j = 1; j <= i; j++) dp[i] += dp[j - 1] * dp[i - j];
+  return dp[n];
+}
+}  // namespace LC96
+
+// LC95. 不同的二叉搜索树 II
+namespace LC95 {
+vector<TreeNode*> generateTrees(int start, int end) {
+  if (start > end) return {NULL};
+  if (start == end) return {new TreeNode(start)};
+  vector<TreeNode*> res;
+  for (int i = start; i <= end; i++) {
+    auto left = generateTrees(start, i - 1);
+    auto right = generateTrees(i + 1, end);
+    for (auto lnode : left)
+      for (auto rnode : right) {
+        auto root = new TreeNode(i);
+        root->left = lnode;
+        root->right = rnode;
+        res.push_back(root);
+      }
+  }
+  return res;
+}
+vector<TreeNode*> generateTrees(int n) {
+  if (n == 0) return {};
+  return generateTrees(1, n);
+}
+}  // namespace LC95
 
 //^ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ^//
 //^ 六道股票题
@@ -332,34 +380,35 @@ int rob(vector<int>& nums) {
 
 // LC337. 打家劫舍 III
 namespace LC337 {
+// 思路2：
+// 返回当前根树(return)、左右子树的最大收益(l,r)
+//> 需要返回多个值的一种处理办法
+int dfs(int& l, int& r, TreeNode* root) {
+  if (!root) return 0;
+  int ll = 0, lr = 0, rl = 0, rr = 0;
+  l = dfs(ll, lr, root->left);
+  r = dfs(rl, rr, root->right);
+  return max(root->val + ll + lr + rl + rr, l + r);
+}
+int rob(TreeNode* root) {
+  int l, r;
+  return dfs(l, r, root);
+}
 // 思路：做后序遍历，稳打稳扎套用状态转移框架
 // dp0表示不打劫当前节点能获得的最大收益
 // dp1表示打劫当前节点能获得的最大收益
-void dfs(int& dp0, int& dp1, TreeNode* root) {
-  if (!root) return;
-  int ldp0 = 0, ldp1 = 0, rdp0 = 0, rdp1 = 0;
-  dfs(ldp0, ldp1, root->left);
-  dfs(rdp0, rdp1, root->right);
-  dp0 = max(max(ldp1 + rdp1, ldp0 + rdp0), max(ldp1 + rdp0, ldp0 + rdp1));
-  dp1 = ldp0 + rdp0 + root->val;
-}
-int rob(TreeNode* root) {
-  int dp0 = 0, dp1 = 0;
-  dfs(dp0, dp1, root);
-  return max(dp0, dp1);
-}
-// 思路2：
-// 返回当前根树(return)、左右子树的最大收益(l,r)
-// int dfs(TreeNode* root, int& l, int& r) {
-//   if (!root) return 0;
-//   int ll = 0, lr = 0, rl = 0, rr = 0;
-//   l = dfs(root->left, ll, lr);
-//   r = dfs(root->right, rl, rr);
-//   return max(root->val + ll + lr + rl + rr, l + r);
+// void dfs(int& dp0, int& dp1, TreeNode* root) {
+//   if (!root) return;
+//   int ldp0 = 0, ldp1 = 0, rdp0 = 0, rdp1 = 0;
+//   dfs(ldp0, ldp1, root->left);
+//   dfs(rdp0, rdp1, root->right);
+//   dp0 = max(max(ldp1 + rdp1, ldp0 + rdp0), max(ldp1 + rdp0, ldp0 + rdp1));
+//   dp1 = ldp0 + rdp0 + root->val;
 // }
 // int rob(TreeNode* root) {
-//   int l, r;
-//   return dfs(root, l, r);
+//   int dp0 = 0, dp1 = 0;
+//   dfs(dp0, dp1, root);
+//   return max(dp0, dp1);
 // }
 }  // namespace LC337
 
@@ -395,8 +444,30 @@ int minCost(vector<vector<int>>& costs) {
 }  // namespace LC256
 
 // LC265. 粉刷房子 II
-namespace LC265 {}  // namespace LC265
+namespace LC265 {
+// 思路：很好由LC256拓展而来
+int minCostII(vector<vector<int>>& costs) {
+  int n = costs.size();
+  if (n == 0) return 0;
+  for (int i = 1; i < n; i++) {
+    for (int j = 0; j < costs[i].size(); j++) {
+      int Min = INT32_MAX;
+      for (int k = 0; k < costs[i].size(); k++) {
+        if (k == j) continue;
+        Min = min(Min, costs[i - 1][k]);
+      }
+      costs[i][j] += Min;
+    }
+  }
+  int res = INT32_MAX;
+  for (auto cost : costs.back()) res = min(res, cost);
+  return res;
+}
+}  // namespace LC265
 
+//^ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ^//
+//^ 区域和检索问题
+//^ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ^//
 // LC303. 区域和检索 - 数组不可变
 namespace LC303 {
 // 思路2：
@@ -467,64 +538,203 @@ namespace LC307 {}  // namespace LC307
 // LC308. 二维区域和检索 - 可变
 namespace LC308 {}  // namespace LC308
 
-// LC1025. 除数博弈
-namespace LC1025 {
-bool divisorGame(int N) {
-  if (N == 1) return false;
-  vector<bool> dp(N + 1, false);
-  dp[2] = true;
-  for (int i = 3; i <= N; i++)
-    for (int j = 1; j < i; j++)
-      if (i % j == 0 && !dp[i - j]) dp[i] = true;
-  return dp[N];
-}
-}  // namespace LC1025
+// LC363. 矩形区域不超过 K 的最大数值和
+namespace LC363 {}  // namespace LC363
 
-// LC96. 不同的二叉搜索树
-namespace LC96 {
-int numTrees(int n) {
-  if (n == 0) return 1;
-  vector<int> dp(n + 1, 0);
-  dp[0] = 1;
-  for (int i = 1; i <= n; i++)
-    for (int j = 1; j <= i; j++) dp[i] += dp[j - 1] * dp[i - j];
-  return dp[n];
+//^ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ^//
+//^ 回文串问题
+//^ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ^//
+// LC5. 最长回文子串
+namespace LC5 {
+// 思路：中心拓展法
+string longestPalindrome(string str) {
+  if (str.empty()) return {};
+  int n = str.size(), i = 0, j = 0, pos = 0, len = 1;
+  while (j < n) {
+    // 寻找连续相同字母子串s[i,j]
+    i = j;
+    while (j + 1 < n && str[j + 1] == str[j]) j++;
+    // 以s[i,j]为中心向两边扩散
+    int s = i, e = j;
+    while (s - 1 >= 0 && e + 1 < n && str[s - 1] == str[e + 1]) s--, e++;
+    if (e - s + 1 > len) pos = s, len = e - s + 1;
+    j++;
+  }
+  return str.substr(pos, len);
 }
-}  // namespace LC96
+// 思路：dp
+// string longestPalindrome(string s) {
+//   int n = s.length(), ls = 0, le = 0;
+//   vector<vector<bool>> dp(n, vector<bool>(n, false));
+//   for (int i = 0; i < n; i++) dp[i][i] = true;
+//   for (int len = 2; len <= n; len++) {
+//     for (int i = 0, j = len - 1; j < n; j++, i++) {
+//       dp[i][j] = (s[i] == s[j]) && (len <= 3 || dp[i + 1][j - 1]);
+//       if (dp[i][j]) ls = i, le = j;
+//     }
+//   }
+//   return s.substr(ls, le + 1 - ls);
+// }
+}  // namespace LC5
 
-// LC95. 不同的二叉搜索树 II
-namespace LC95 {
-vector<TreeNode*> generateTrees(int start, int end) {
-  if (start > end) return {NULL};
-  if (start == end) return {new TreeNode(start)};
-  vector<TreeNode*> res;
-  for (int i = start; i <= end; i++) {
-    auto left = generateTrees(start, i - 1);
-    auto right = generateTrees(i + 1, end);
-    for (auto lnode : left)
-      for (auto rnode : right) {
-        auto root = new TreeNode(i);
-        root->left = lnode;
-        root->right = rnode;
-        res.push_back(root);
-      }
+// LC516. 最长回文子序列
+namespace LC516 {
+int longestPalindromeSubseq(string s) {
+  int s_len = s.size();
+  vector<int> vec(s_len, 0);
+  for (int i = s_len - 1; i > -1; i--) {
+    int prev = 0;
+    for (int j = i; j < s_len; j++) {
+      int temp = vec[j];
+      if (i == j)
+        vec[j] = 1;
+      else if (s[i] == s[j]) {
+        if (j - i == 1)
+          vec[j] = 2;
+        else
+          vec[j] = 2 + prev;
+      } else
+        vec[j] = max(vec[j], vec[j - 1]);
+      prev = temp;
+    }
+  }
+  return vec[s_len - 1];
+}
+// 思路：dp
+// int longestPalindromeSubseq(string s) {
+//   int len = s.size();
+//   if (len == 0) return 0;
+//   // dp[i][j]表示从下标i到下标j的元素序列中的最长回文子序列的长度
+//   int dp[len + 1][len + 1];
+//   memset(dp, 0, sizeof(dp));
+//   for (int i = len - 1; i >= 0; i--) {
+//     dp[i][i] = 1;
+//     for (int j = i + 1; j < len; j++) {
+//       if (s[i] == s[j])
+//         dp[i][j] = dp[i + 1][j - 1] + 2;
+//       else
+//         dp[i][j] = max(dp[i + 1][j], dp[i][j - 1]);
+//     }
+//   }
+//   return dp[0][len - 1];
+// }
+}  // namespace LC516
+
+// LC647. 回文子串
+namespace LC647 {
+// 思路：中心扩散
+int countSubstrings(string str) {
+  if (str.empty()) return 0;
+  int n = str.size(), i = 0, j = 0, res = 0;
+  while (j < n) {
+    i = j;
+    while (j + 1 < n && str[j + 1] == str[j]) j++;
+    res += (j - i + 2) * (j - i + 1) / 2;
+    int s = i, e = j;
+    while (s - 1 >= 0 && e + 1 < n && str[s - 1] == str[e + 1]) res++, s--, e++;
+    j++;
   }
   return res;
 }
-vector<TreeNode*> generateTrees(int n) {
-  if (n == 0) return {};
-  return generateTrees(1, n);
-}
-}  // namespace LC95
+// 思路：dp 略
+}  // namespace LC647
 
-// LC5. 最长回文子串
-namespace LC5 {}  // namespace LC5
+// LC132. 分割回文串 II
+namespace LC132 {}  // namespace LC132
+
+// LC1147. 段式回文
+namespace LC1147 {}  // namespace LC1147
+
+// LC730. 统计不同回文子字符串
+namespace LC730 {}  // namespace LC730
+
+//$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
+//$ 动态规划 - 进阶题
+//$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
+// LC10. 正则表达式匹配
+namespace LC10 {
+// 思路：dp
+bool isMatch(string s, string p) {
+  int m = s.size(), n = p.size();
+  vector<vector<bool>> dp(m + 1, vector<bool>(n + 1, false));
+  dp[0][0] = true;
+  for (int i = 0; i <= m; i++) {
+    for (int j = 1; j <= n; j++) {
+      if (p[j - 1] == '*')
+        dp[i][j] = dp[i][j - 2] || (i && dp[i - 1][j] &&
+                                    (p[j - 2] == s[i - 1] || p[j - 2] == '.'));
+      else
+        dp[i][j] =
+            i && dp[i - 1][j - 1] && (p[j - 1] == s[i - 1] || p[j - 1] == '.');
+    }
+  }
+
+  return dp[m][n];
+}
+// 思路：递归(C语言)
+// bool match(char* str, char* pattern) {
+//   if (pattern[0] == 0 && str[0] == 0) return true;
+//   if (pattern[0] != 0 && pattern[1] == '*')
+//     if (match(str, pattern + 2)) return true;
+
+//   if ((pattern[0] == '.' && str[0]) || str[0] == pattern[0]) {
+//     if (match(str + 1, pattern + 1)) return true;
+//     if (pattern[1] == '*' && match(str + 1, pattern)) {
+//       return true;
+//     }
+//   }
+//   return false;
+// }
+}  // namespace LC10
+
+// LC871. 最低加油次数
+namespace LC871 {
+// 思路2:栈
+// 每驶过一个加油站，记住这个加油站有多少油。不需要立即决定要不要在这个加油站加油，如果后面有油量更多的加油站显然优先选择后面的加油。如果当前油量不够抵达下一个加油站，必须得从之前的加油站中找一个来加油，贪心选择最大油量储备的加油站就好了。
+int minRefuelStops(int target, int cur, vector<vector<int>> s) {
+  int i = 0, res;
+  priority_queue<int> pq;
+  for (res = 0; cur < target; res++) {
+    while (i < s.size() && s[i][0] <= cur) pq.push(s[i++][1]);
+    if (pq.empty()) return -1;
+    cur += pq.top(), pq.pop();
+  }
+  return res;
+}
+// dp简化版
+// int minRefuelStops(int target, int startFuel, vector<vector<int>> s) {
+//   long dp[501] = {startFuel};
+//   for (int i = 0; i < s.size(); ++i)
+//     for (int t = i; t >= 0 && dp[t] >= s[i][0]; --t)  //注意此处的简化
+//       dp[t + 1] = max(dp[t + 1], dp[t] + s[i][1]);
+//   for (int t = 0; t <= s.size(); ++t)
+//     if (dp[t] >= target) return t;
+//   return -1;
+// }
+// 思路：dp
+// dp[i]为加i次油能走的最远距离，需要满足dp[i]>=target的最小i
+// int minRefuelStops(int target, int startFuel, vector<vector<int>>& stations)
+// {
+//   int n = stations.size();
+//   auto dp = vector<long>(n + 1, 0);
+//   dp[0] = startFuel;
+//   for (int i = 0; i < n; i++)
+//     for (int j = i; j >= 0; j--)
+//       if (dp[j] >= stations[i][0])
+//         dp[j + 1] = max(dp[j + 1], dp[j] + (long)stations[i][1]);
+//   for (int i = 0; i <= n; i++)
+//     if (dp[i] >= target) return i;
+//   return -1;
+// }
+}  // namespace LC871
+
+// LC471. 编码最短长度的字符串
+namespace LC471 {
+string encode(string s) {}
+}  // namespace LC471
 
 // LC85. 最大矩形
 namespace LC85 {}  // namespace LC85
-
-// LC10. 正则表达式匹配
-namespace LC10 {}  // namespace LC10
 
 // LC72. 编辑距离
 namespace LC72 {}  // namespace LC72
@@ -547,9 +757,6 @@ namespace LC351 {}  // namespace LC351
 // LC698. 划分为k个相等的子集
 namespace LC698 {}  // namespace LC698
 
-// LC363. 矩形区域不超过 K 的最大数值和
-namespace LC363 {}  // namespace LC363
-
 // LC718. 最长重复子数组
 namespace LC718 {}  // namespace LC718
 
@@ -567,9 +774,6 @@ namespace LC629 {}  // namespace LC629
 
 // LC847. 访问所有节点的最短路径
 namespace LC847 {}  // namespace LC847
-
-// LC647. 回文子串
-namespace LC647 {}  // namespace LC647
 
 // LC300. 最长上升子序列
 namespace LC300 {}  // namespace LC300
@@ -607,12 +811,6 @@ namespace LC174 {}  // namespace LC174
 // LC357. 计算各个位数不同的数字个数
 namespace LC357 {}  // namespace LC357
 
-// LC516. 最长回文子序列
-namespace LC516 {}  // namespace LC516
-
-// LC132. 分割回文串 II
-namespace LC132 {}  // namespace LC132
-
 // LC321. 拼接最大数
 namespace LC321 {}  // namespace LC321
 
@@ -636,9 +834,6 @@ namespace LC712 {}  // namespace LC712
 
 // LC279. 完全平方数
 namespace LC279 {}  // namespace LC279
-
-// LC471. 编码最短长度的字符串
-namespace LC471 {}  // namespace LC471
 
 // LC650. 只有两个键的键盘
 namespace LC650 {}  // namespace LC650
@@ -694,9 +889,6 @@ namespace LC879 {}  // namespace LC879
 // LC1012. 至少有 1 位重复的数字
 namespace LC1012 {}  // namespace LC1012
 
-// LC871. 最低加油次数
-namespace LC871 {}  // namespace LC871
-
 // LC808. 分汤
 namespace LC808 {}  // namespace LC808
 
@@ -708,9 +900,6 @@ namespace LC91 {}  // namespace LC91
 
 // LC139. 单词拆分
 namespace LC139 {}  // namespace LC139
-
-// LC730. 统计不同回文子字符串
-namespace LC730 {}  // namespace LC730
 
 // LC115. 不同的子序列
 namespace LC115 {}  // namespace LC115
@@ -876,9 +1065,6 @@ namespace LC1024 {}  // namespace LC1024
 
 // LC967. 连续差相同的数字
 namespace LC967 {}  // namespace LC967
-
-// LC1147. 段式回文
-namespace LC1147 {}  // namespace LC1147
 
 // LC1067. 范围内的数字计数
 namespace LC1067 {}  // namespace LC1067
