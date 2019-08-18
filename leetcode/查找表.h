@@ -2,7 +2,7 @@
  * @Author: zhangxianbing
  * @Date: 2019-08-09 11:42:34
  * @LastEditors: zhangxianbing
- * @LastEditTime: 2019-08-12 21:01:57
+ * @LastEditTime: 2019-08-18 15:12:15
  * @Description: file content
  */
 #pragma once
@@ -229,9 +229,6 @@ namespace LC535 {}  // namespace LC535
 
 // LC771. 宝石与石头
 namespace LC771 {}  // namespace LC771
-
-// LC3. 无重复字符的最长子串
-namespace LC3 {}  // namespace LC3
 
 // LC85. 最大矩形
 namespace LC85 {}  // namespace LC85

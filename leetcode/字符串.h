@@ -2,7 +2,7 @@
  * @Author: zhangxianbing
  * @Date: 2019-08-12 20:39:16
  * @LastEditors: zhangxianbing
- * @LastEditTime: 2019-08-12 21:07:00
+ * @LastEditTime: 2019-08-18 15:07:42
  * @Description: file content
  */
 #pragma once
@@ -10,9 +10,6 @@
 //# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ #//
 //# 字符串
 //# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ #//
-// LC3. 无重复字符的最长子串
-namespace LC3 {}  // namespace LC3
-
 // LC5. 最长回文子串
 namespace LC5 {}  // namespace LC5
 

@@ -2,7 +2,7 @@
  * @Author: zhangxianbing
  * @Date: 2019-08-09 11:42:45
  * @LastEditors: zhangxianbing
- * @LastEditTime: 2019-08-12 21:05:40
+ * @LastEditTime: 2019-08-18 15:11:19
  * @Description: file content
  */
 
@@ -17,6 +17,7 @@
 //$ 哈希表+滑动窗口
 //$ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ $//
 // LC3.无重复字符的最长子串
+// 推荐度：★★★★☆
 namespace LC3 {
 //* 思路1：哈希表记录每个元素最新出现的位置（序号）
 int lengthOfLongestSubstring1(string s) {
