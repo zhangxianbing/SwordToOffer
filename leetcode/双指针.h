@@ -2,7 +2,7 @@
  * @Author: zhangxianbing
  * @Date: 2019-08-12 20:24:17
  * @LastEditors: zhangxianbing
- * @LastEditTime: 2019-08-18 15:28:07
+ * @LastEditTime: 2019-08-18 15:52:30
  * @Description: file content
  */
 #pragma once
@@ -11,20 +11,38 @@
 //# 双指针
 //# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ #//
 
-// LC3. 无重复字符的最长子串
-namespace LC3 {}  // namespace LC3
+// LC11. 盛最多水的容器
+namespace LC11 {
+int maxArea(vector<int>& height) {
+  int l = 0, lMax = l, r = height.size() - 1, rMax = r;
+  int V = min(height[lMax], height[rMax]) * (rMax - lMax);
+  while (l < r) {
+    if (height[lMax] > height[rMax]) {
+      do {
+        r--;
+      } while (r > l && height[r] <= height[rMax]);
+      rMax = r;
+    } else {
+      do {
+        l++;
+      } while (l < r && height[l] <= height[lMax]);
+      lMax = l;
+    }
+    V = max(V, min(height[lMax], height[rMax]) * (rMax - lMax));
+  }
+  return V;
+}  // namespace LC11
 
 // LC42. 接雨水
-namespace LC42 {}  // namespace LC42
+namespace LC42 {
+int trap(vector<int>& height) {}
+}  // namespace LC42
 
 // LC15. 三数之和
 namespace LC15 {}  // namespace LC15
 
 // LC713. 乘积小于K的子数组
 namespace LC713 {}  // namespace LC713
-
-// LC11. 盛最多水的容器
-namespace LC11 {}  // namespace LC11
 
 // LC1004. 最大连续1的个数 III
 namespace LC1004 {}  // namespace LC1004
