@@ -31,6 +31,7 @@ int maxArea(vector<int>& height) {
     V = max(V, min(height[lMax], height[rMax]) * (rMax - lMax));
   }
   return V;
+}
 }  // namespace LC11
 
 // LC42. 接雨水

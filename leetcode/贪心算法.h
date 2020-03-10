@@ -20,7 +20,18 @@ namespace LC45 {}  // namespace LC45
 namespace LC55 {}  // namespace LC55
 
 // LC122. 买卖股票的最佳时机 II
-namespace LC122 {}  // namespace LC122
+namespace LC122 {
+// 思路：贪心算法
+int maxProfit(vector<int>& prices) {
+  int n = prices.size(), res = 0;
+  for (int i = 0, j = 0; j < n; j++) {
+    i = j;
+    while (j + 1 < n && prices[j + 1] > prices[j]) j++;
+    res += prices[j] - prices[i];
+  }
+  return res;
+}
+}  // namespace LC122
 
 // LC134. 加油站
 namespace LC134 {}  // namespace LC134
