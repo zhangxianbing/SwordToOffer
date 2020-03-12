@@ -252,7 +252,22 @@ namespace LC63 {} // namespace LC63
 namespace LC64 {} // namespace LC64
 
 // LC66. 加一
-namespace LC66 {} // namespace LC66
+namespace LC66 {
+vector<int> plusOne(vector<int> &digits) {
+  vector<int> ret;
+  int carry = 1;
+  int n = digits.size();
+  for (int i = 0; i < n; i++) {
+    int tmp = digits[n - 1 - i] + carry;
+    ret.push_back(tmp % 10);
+    carry = tmp / 10;
+  }
+  if (carry)
+    ret.push_back(1);
+  reverse(ret.begin(), ret.end());
+  return ret;
+}
+} // namespace LC66
 
 // LC73. 矩阵置零
 namespace LC73 {} // namespace LC73
