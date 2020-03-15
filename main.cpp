@@ -11,6 +11,6 @@
 #include "问题归类/贪心算法_集合覆盖问题.h"
 int main() {
   // LC189::test();
-  猎头简历问题::test();
+  HeadhuntingWithResumes::test();
   return 0;
 }

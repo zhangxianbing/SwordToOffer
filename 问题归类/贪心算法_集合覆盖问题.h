@@ -16,7 +16,7 @@
  * E -> 1 4 6
  * result: [A, D]
  */
-namespace 猎头简历问题 {
+namespace HeadhuntingWithResumes {
 vector<char> solution(map<char, vector<int>> &hrs) {
   vector<char> res;
   unordered_set<int> resumes, record;
@@ -53,6 +53,7 @@ void test() {
   hrs['E'] = {1, 4, 6};
   auto res = solution(hrs);
   for (auto r : res)
-    cout << r << endl;
+    cout << r << ' ';
+  cout << endl;
 }
-} // namespace 猎头简历问题
+} // namespace HeadhuntingWithResumes
