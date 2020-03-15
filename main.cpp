@@ -8,8 +8,9 @@
 // #include "leetcode/include.h"
 // #include "在线笔试/include.h"
 // #include "算法面试/include.h"
-#include "leetcode/数组.h"
+#include "问题归类/贪心算法_集合覆盖问题.h"
 int main() {
   // LC189::test();
+  猎头简历问题::test();
   return 0;
 }
